@@ -1,0 +1,317 @@
+<style>
+    .map-container {
+        overflow: hidden;
+        padding-bottom: 56.25%;
+        position: relative;
+        height: 0;
+    }
+
+    .map-container iframe {
+        left: 0;
+        top: 0;
+        height: 100%;
+        width: 100%;
+        position: absolute;
+    }
+</style>
+
+<div class="section-body mt-3">
+    <div class="container-fluid">
+        <div class="row clearfix">
+            <div class="col-lg-12">
+                <div class="card">
+                    <div class="card-body">
+                        <div class="d-md-flex justify-content-between mb-2">
+                            <ul class="nav nav-tabs b-none">
+                                <li class="nav-item"><a class="nav-link active" data-toggle="tab" href="#list"><i
+                                            class="fa fa-list-ul"></i> Airport List</a></li>
+                            </ul>
+                        </div>
+                        <div class="row">
+                            <div class="col-lg-8 col-md-8 col-sm-12">
+                                <div class="input-group mb-1">
+                                    <input type="text" class="form-control" placeholder="Airport Name">
+                                </div>
+                            </div>
+                            <div class="col-lg-4 col-md-4 col-sm-12">
+                                <a href="javascript:void(0);" class="btn btn-primary btn-block mb-1" title="">Search</a>
+                            </div>
+                        </div>
+                    </div>
+                </div>
+            </div>
+        </div>
+    </div>
+</div>
+
+<div class="section-body">
+    <div class="tab-pane fade show active" id="list" role="tabpanel">
+        <div class="row clearfix">
+            <div class="col-xl-12 col-lg-12 col-md-12">
+                <div class="card">
+                    <div class="card-body text-center">
+                        <div class="container-lg">
+                            <div class="table-responsive">
+                                <div class="table-wrapper">
+                                    <div class="table-title">
+                                        <div class="row">
+                                            <div class="col-sm-12 col-md-12 col-lg-12">
+                                                <h2><b>Live Airport Location</b></h2>
+                                                <button data-toggle="tab" href="#addnew"
+                                                    class=" text-center btn btn-info " style="margin-top: 20px;"><i
+                                                        class="fa fa-plus" style="padding: 3px;"></i>Add New</button>
+
+                                            </div>
+
+                                        </div>
+                                    </div>
+                                    <table class="table table-bordered" id="airport_listing_table">
+                                        <thead>
+                                            <tr>
+                                                <th>Name</th>
+                                                <th>Address</th>
+                                                <th>Zip Code</th>
+                                                <th>Tel</th>
+                                                <th>Fax</th>
+                                                <th>Email</th>
+                                                <th>Site</th>
+                                                <th>Latitude</th>
+                                                <th>Longitude</th>
+                                                <th>Action</th>
+
+                                            </tr>
+                                        </thead>
+                                        <tbody>
+                                            <tr data-ng-repeat="airport in airports">
+                                                <td>{{airport.name}}</td>
+                                                <td>{{airport.address}}</td>
+                                                <td>{{airport.zipCode}}</td>
+                                                <td>{{airport.TEL}}</td>
+                                                <td>{{airport.FAX}}</td>
+                                                <td>{{airport.email}}</td>
+                                                <td>{{airport.site}}</td>
+                                                <td>{{airport.latitude}}°</td>
+                                                <td>{{airport.longitude}}°</td>
+                                                <td>
+                                                    <a class="text-danger" title="Delete" data-toggle="tooltip"><i
+                                                            data-ng-click="delete($index,airport)"
+                                                            class="material-icons">&#xE872;</i></a>
+                                                    <a data-toggle="tab" title="Edit" class="edit"
+                                                        data-ng-click="edit($index,airport)"><i
+                                                            class="fa fa-pencil material-icons"></i></a>
+
+                                                </td>
+                                            </tr>
+
+
+                                        </tbody>
+                                    </table>
+                                </div>
+                            </div>
+                        </div>
+                    </div>
+                </div>
+            </div>
+        </div>
+    </div>
+</div>
+
+<div class="section-body">
+    <div class="container-fluid">
+        <div class="tab-pane " id="addnewairport" role="tabpanel">
+            <div class="row">
+                <div class="col-sm-12">
+                    <div class="card">
+                        <div class="card-header">
+                            <h3 class="card-title">Add Airport Location</h3>
+                        </div>
+                        <form class="card-body">
+                            <div class="row clearfix">
+                                <div class="col-12">
+
+                                    <div class="form-group">
+                                        <input type="text" class="form-control" data-ng-model="airport.name"
+                                            placeholder="Airport Name">
+                                    </div>
+
+                                    <div class="form-group">
+                                        <input type="text" class="form-control" data-ng-model="airport.address"
+                                            placeholder="Airport Address">
+                                    </div>
+                                    <div class="form-group">
+                                        <input type="text" class="form-control" data-ng-model="airport.email"
+                                            placeholder="Airport Email Address">
+                                    </div>
+                                    <div class="form-group">
+                                        <input type="text" class="form-control" data-ng-model="airport.site"
+                                            placeholder="Airport Site">
+                                    </div>
+
+
+                                </div>
+
+
+                                <div class="col-md-12 col-sm-12">
+                                    <div id="airport-map-container-google" class="z-depth-1-half map-container"
+                                        style="height: 500px;">
+
+                                    </div>
+                                </div>
+                                <div class="col-md-4" style="margin-top: 10px;">
+                                    <div class="form-group">
+                                        <label>Zip Code</label>
+                                        <input type="text" data-ng-model="airport.zipCode" class="form-control">
+                                    </div>
+                                </div>
+                                <div class="col-md-4" style="margin-top: 10px;">
+                                    <div class="form-group">
+                                        <label>Tel Number</label>
+                                        <input type="text" data-ng-model="airport.TEL" class="form-control">
+                                    </div>
+                                </div>
+                                <div class="col-md-4" style="margin-top: 10px;">
+                                    <div class="form-group">
+                                        <label>Fax Number</label>
+                                        <input type="text" data-ng-model="airport.FAX" class="form-control">
+                                    </div>
+                                </div>
+
+                                <div class="col-md-6" style="margin-top: 10px;">
+                                    <div class="form-group">
+                                        <label>Longitude</label>
+                                        <input type="text" class="form-control" readonly
+                                            data-ng-model="airport.longitude">
+                                    </div>
+                                </div>
+                                <div class="col-md-6" style="margin-top: 10px;">
+                                    <div class="form-group">
+                                        <label>Latitude</label>
+                                        <input type="text" class="form-control" readonly
+                                            data-ng-model="airport.latitude">
+                                    </div>
+                                </div>
+
+                                <div class="col-sm-6">
+                                    <div class="form-group mt-3">
+                                        <button type="submit" data-ng-click="submit()"
+                                            class="btn btn-success">Submit</button>
+                                    </div>
+                                </div>
+
+
+                                <div class="col-sm-6">
+                                    <div class="form-group mt-3" style="margin-left: 400px;">
+                                        <button type="submit" class="btn btn-success">Cancel</button>
+                                    </div>
+                                </div>
+
+                            </div>
+                        </form>
+                    </div>
+                </div>
+            </div>
+        </div>
+    </div>
+</div>
+
+
+
+
+<div class="section-body">
+    <div class="container-fluid">
+        <div class="tab-pane " id="updateairport" role="tabpanel">
+            <div class="row">
+                <div class="col-sm-12">
+                    <div class="card">
+                        <div class="card-header">
+                            <h3 class="card-title">Update Airport Location</h3>
+                        </div>
+                        <form class="card-body">
+                            <div class="row clearfix">
+                                <div class="col-12">
+
+                                    <div class="form-group">
+                                        <input type="text" class="form-control" data-ng-model="editing.name"
+                                            placeholder="Airport Name">
+                                    </div>
+
+                                    <div class="form-group">
+                                        <input type="text" class="form-control" data-ng-model="editing.address"
+                                            placeholder="Airport Address">
+                                    </div>
+                                    <div class="form-group">
+                                        <input type="text" class="form-control" data-ng-model="editing.email"
+                                            placeholder="Airport Email Address">
+                                    </div>
+                                    <div class="form-group">
+                                        <input type="text" class="form-control" data-ng-model="editing.site"
+                                            placeholder="Airport Site">
+                                    </div>
+
+
+                                </div>
+
+
+                                <div class="col-md-12 col-sm-12">
+                                    <div id="update-airport-map-container" class="z-depth-1-half map-container"
+                                        style="height: 500px;">
+
+                                    </div>
+                                </div>
+                                <div class="col-md-4" style="margin-top: 10px;">
+                                    <div class="form-group">
+                                        <label>Zip Code</label>
+                                        <input type="text" data-ng-model="editing.zipCode" class="form-control">
+                                    </div>
+                                </div>
+                                <div class="col-md-4" style="margin-top: 10px;">
+                                    <div class="form-group">
+                                        <label>Tel Number</label>
+                                        <input type="text" data-ng-model="editing.TEL" class="form-control">
+                                    </div>
+                                </div>
+                                <div class="col-md-4" style="margin-top: 10px;">
+                                    <div class="form-group">
+                                        <label>Fax Number</label>
+                                        <input type="text" data-ng-model="editing.FAX" class="form-control">
+                                    </div>
+                                </div>
+
+                                <div class="col-md-6" style="margin-top: 10px;">
+                                    <div class="form-group">
+                                        <label>Longitude</label>
+                                        <input type="text" class="form-control" readonly
+                                            data-ng-model="editing.longitude" id="editing_airport_longitude">
+                                    </div>
+                                </div>
+                                <div class="col-md-6" style="margin-top: 10px;">
+                                    <div class="form-group">
+                                        <label>Latitude</label>
+                                        <input type="text" class="form-control" readonly
+                                            data-ng-model="editing.latitude" id="editing_airport_latitude">
+                                    </div>
+                                </div>
+
+                                <div class="col-sm-6">
+                                    <div class="form-group mt-3">
+                                        <button type="submit" data-ng-click="save()"
+                                            class="btn btn-success">Save</button>
+                                    </div>
+                                </div>
+
+
+                                <div class="col-sm-6">
+                                    <div class="form-group mt-3" style="margin-left: 400px;">
+                                        <button type="submit" class="btn btn-success"
+                                            data-ng-click="hide()">Cancel</button>
+                                    </div>
+                                </div>
+
+                            </div>
+                        </form>
+                    </div>
+                </div>
+            </div>
+        </div>
+    </div>
+</div>

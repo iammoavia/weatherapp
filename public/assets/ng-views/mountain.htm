@@ -1,0 +1,203 @@
+<style>
+    .map-container {
+        overflow: hidden;
+        padding-bottom: 56.25%;
+        position: relative;
+        height: 0;
+    }
+
+    .map-container iframe {
+        left: 0;
+        top: 0;
+        height: 100%;
+        width: 100%;
+        position: absolute;
+    }
+</style>
+
+<div class="section-body mt-3">
+    <div class="container-fluid">
+        <div class="row clearfix">
+            <div class="col-lg-12">
+                <div class="card">
+                    <div class="card-body">
+                        <div class="d-md-flex justify-content-between mb-2">
+                            <ul class="nav nav-tabs b-none">
+                                <li class="nav-item"><a class="nav-link active" data-toggle="tab" href="#list"><i
+                                            class="fa fa-list-ul"></i> Mountains Shelter List</a></li>
+                            </ul>
+                        </div>
+                        <div class="row">
+                            <div class="col-lg-8 col-md-8 col-sm-12">
+                                <div class="input-group mb-1">
+                                    <input type="text" class="form-control" placeholder="Mountain Shelter Name">
+                                </div>
+                            </div>
+                            <div class="col-lg-4 col-md-4 col-sm-12">
+                                <a href="javascript:void(0);" class="btn btn-primary btn-block mb-1" title="">Search</a>
+                            </div>
+                        </div>
+                    </div>
+                </div>
+            </div>
+        </div>
+    </div>
+</div>
+
+<div class="section-body">
+    <div class="container-fluid">
+        <div class="tab-content">
+            <div class="tab-pane fade show active" id="list" role="tabpanel">
+                <div class="row clearfix">
+                    <div class="col-xl-12 col-lg-12 col-md-12">
+                        <div class="card">
+                            <div class="card-body text-center">
+                                <div class="container-lg">
+                                    <div class="table-responsive">
+                                        <div class="table-wrapper">
+                                            <div class="table-title">
+                                                <div class="row">
+                                                    <div class="col-sm-12 col-md-12 col-lg-12">
+                                                        <h2><b>Live Mountain Shelter Location</b></h2>
+                                                        <button data-toggle="tab" href="#addnew"
+                                                            class=" text-center btn btn-info "
+                                                            style="margin-top: 20px;"><i class="fa fa-plus"
+                                                                style="padding: 3px;"></i>Add New</button>
+
+                                                    </div>
+
+                                                </div>
+                                            </div>
+                                            <table class="table table-bordered">
+                                                <thead>
+                                                    <tr>
+                                                        <th>Name</th>
+                                                        <th>Altitude</th>
+                                                        <th>Tel</th>
+                                                        <th>Seats</th>
+                                                        <th>Latitude</th>
+                                                        <th>Longitude</th>
+                                                        <th>Action</th>
+
+                                                    </tr>
+                                                </thead>
+                                                <tbody>
+                                                    <tr>
+                                                        <td>Poseidon</td>
+                                                        <td>31.4504°</td>
+                                                        <td>+302296051492</td>
+                                                        <td>21</td>
+                                                        <td>31.4504°</td>
+                                                        <td>73.1350°</td>
+                                                        <td>
+                                                            <a class="delete" title="Delete" data-toggle="tooltip"><i
+                                                                    class="material-icons">&#xE872;</i></a>
+                                                            <a data-toggle="tab" title="Edit" class="edit"
+                                                                href="#addnew"><i
+                                                                    class="fa fa-pencil material-icons"></i></a>
+
+                                                        </td>
+                                                    </tr>
+
+                                                </tbody>
+                                            </table>
+                                        </div>
+                                    </div>
+                                </div>
+                            </div>
+                        </div>
+                    </div>
+
+
+                </div>
+            </div>
+        </div>
+    </div>
+</div>
+
+<div class="section-body">
+    <div class="container-fluid">
+        <div class="tab-pane fade" id="addnew" role="tabpanel">
+            <div class="row">
+                <div class="col-sm-12">
+                    <div class="card">
+                        <div class="card-header">
+                            <h3 class="card-title">Add Mountain Location</h3>
+                        </div>
+                        <form class="card-body">
+                            <div class="row clearfix">
+                                <div class="col-12">
+                                    <div class="form-group">
+                                        <input type="text" class="form-control" id="exampleInputPassword1"
+                                            placeholder="Enter Location Name">
+                                    </div>
+                                </div>
+
+
+                                <div class="col-md-12 col-sm-12">
+                                    <div id="map-container-google-1" class="z-depth-1-half map-container"
+                                        style="height: 500px;">
+                                        <iframe
+                                            src="https://maps.google.com/maps?q=manhatan&t=&z=13&ie=UTF8&iwloc=&output=embed"
+                                            frameborder="0" style="border:0" allowfullscreen></iframe>
+                                    </div>
+                                </div>
+
+
+
+                                <div class="col-md-6" style="margin-top: 10px;">
+                                    <div class="form-group">
+                                        <label>Longitude</label>
+                                        <input type="text" class="form-control">
+                                    </div>
+                                </div>
+                                <div class="col-md-6" style="margin-top: 10px;">
+                                    <div class="form-group">
+                                        <label>Latitude</label>
+                                        <input type="text" class="form-control">
+                                    </div>
+                                </div>
+                                <div class="col-md-4" style="margin-top: 10px;">
+                                    <div class="form-group">
+                                        <label>Altitude</label>
+                                        <input type="number" class="form-control">
+                                    </div>
+                                </div>
+                                <div class="col-md-4" style="margin-top: 10px;">
+                                    <div class="form-group">
+                                        <label>Telephone Numbers</label>
+                                        <input type="number" class="form-control">
+                                    </div>
+                                </div>
+
+                                <div class="col-md-4" style="margin-top: 10px;">
+                                    <div class="form-group">
+                                        <label>Total Seats</label>
+                                        <input type="number" class="form-control">
+                                    </div>
+                                </div>
+
+
+
+
+                                <div class="col-sm-6">
+                                    <div class="form-group mt-3">
+                                        <button type="submit" class="btn btn-success">Submit</button>
+                                    </div>
+                                </div>
+
+
+                                <div class="col-sm-6">
+                                    <div class="form-group mt-3" style="margin-left: 400px;">
+                                        <button type="submit" class="btn btn-success">Cancel</button>
+                                    </div>
+                                </div>
+
+                            </div>
+                        </form>
+                    </div>
+                </div>
+            </div>
+        </div>
+    </div>
+</div>
