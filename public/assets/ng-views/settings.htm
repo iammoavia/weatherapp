@@ -5,11 +5,13 @@
                 <div class="d-lg-flex justify-content-between">
                     <ul class="nav nav-tabs page-header-tab">
 
-                        <li class="nav-item"><a class="nav-link" data-toggle="tab" href="#Language">LanguageSetting </a>
+                        <li class="nav-item"><a class="nav-link" data-toggle="tab"
+                                data-target="#Language">LanguageSetting </a>
                         </li>
-                        <li class="nav-item"><a class="nav-link" data-toggle="tab" href="#Change_Password">Change
+                        <li class="nav-item"><a class="nav-link" data-toggle="tab" data-target="#Change_Password">Change
                                 Password </a></li>
-                        <li class="nav-item"><a class="nav-link" data-toggle="tab" href="#Access">Access </a></li>
+                        <li class="nav-item"><a class="nav-link" data-toggle="tab" data-target="#Access">Access </a>
+                        </li>
 
                     </ul>
                 </div>
@@ -27,39 +29,26 @@
 
                         <div class="card">
                             <div class="card-header">
-                                <h3 class="card-title">Language Setting</h3>
+                                <h3 class="card-title">Language Setting - {{lang}}</h3>
                             </div>
                             <div class="card-body">
                                 <div class="form-check">
-                                    <input class="form-check-input" type="radio" name="flexRadioDefault"
-                                        id="flexRadioDefault1">
+                                    <input data-ng-model="lang" value="E" class="form-check-input" type="radio"
+                                        name="flexRadioDefault" id="flexRadioDefault1">
                                     <label class="form-check-label" for="flexRadioDefault1">
-                                        German
-                                    </label>
-                                </div>
-                                <div class="form-check">
-                                    <input class="form-check-input" type="radio" name="flexRadioDefault"
-                                        id="flexRadioDefault2" checked>
-                                    <label class="form-check-label" for="flexRadioDefault2">
                                         English
                                     </label>
                                 </div>
                                 <div class="form-check">
-                                    <input class="form-check-input" type="radio" name="flexRadioDefault"
-                                        id="flexRadioDefault2" checked>
-                                    <label class="form-check-label" for="flexRadioDefault2">
-                                        French
-                                    </label>
-                                </div>
-                                <div class="form-check">
-                                    <input class="form-check-input" type="radio" name="flexRadioDefault"
-                                        id="flexRadioDefault2" checked>
+                                    <input data-ng-model="lang" value="G" class="form-check-input" type="radio"
+                                        name="flexRadioDefault" id="flexRadioDefault2" checked>
                                     <label class="form-check-label" for="flexRadioDefault2">
                                         Greek
                                     </label>
                                 </div>
                                 <div class="col-sm-12 mt-20">
-                                    <button type="button" class="btn btn-primary">SAVE</button>
+                                    <button type="button" data-ng-click="changelang()"
+                                        class="btn btn-primary">SAVE</button>
                                 </div>
                             </div>
                         </div>
@@ -111,23 +100,26 @@
                             <div class="row clear fix">
                                 <div class="col-lg-6 col-md-6">
                                     <div class="form-group">
-                                        <input type="text" class="form-control" placeholder="Enter User Name">
+                                        <input type="text" data-ng-model="access.username" class="form-control"
+                                            placeholder="Enter User Name">
                                     </div>
                                 </div>
                                 <div class="col-lg-6 col-md-6">
                                     <div class="form-group">
-                                        <input type="email" class="form-control" placeholder="Enter Email ID">
+                                        <input type="email" data-ng-model="access.email" class="form-control"
+                                            placeholder="Enter Email ID">
                                     </div>
                                 </div>
                                 <div class="col-lg-6 col-md-6">
                                     <div class="form-group">
-                                        <input type="password" class="form-control" placeholder="Enter Password">
+                                        <input type="password" data-ng-model="access.password" class="form-control"
+                                            placeholder="Enter Password">
                                     </div>
                                 </div>
                                 <div class="col-lg-6 col-md-6">
                                     <div class="form-group">
-                                        <input type="password" class="form-control"
-                                            placeholder="Enter Confrim Password">
+                                        <input type="password" data-ng-model="access.confirm_password"
+                                            class="form-control" placeholder="Enter Confrim Password">
                                     </div>
                                 </div>
                             </div>
@@ -142,7 +134,7 @@
                                         Live Camera
                                         <div class="float-right">
                                             <label class="custom-control custom-checkbox">
-                                                <input type="checkbox" class="custom-control-input" />
+                                                <input type="checkbox" value="1" class="custom-control-input" />
                                                 <span class="custom-control-label">&nbsp;</span>
                                             </label>
                                         </div>
@@ -151,7 +143,7 @@
                                         Hospitals
                                         <div class="float-right">
                                             <label class="custom-control custom-checkbox">
-                                                <input type="checkbox" class="custom-control-input" />
+                                                <input type="checkbox" value="2" class="custom-control-input" />
                                                 <span class="custom-control-label">&nbsp;</span>
                                             </label>
                                         </div>
@@ -160,7 +152,7 @@
                                         Air Ports
                                         <div class="float-right">
                                             <label class="custom-control custom-checkbox">
-                                                <input type="checkbox" class="custom-control-input" />
+                                                <input type="checkbox" value="3" class="custom-control-input" />
                                                 <span class="custom-control-label">&nbsp;</span>
                                             </label>
                                         </div>
@@ -170,7 +162,7 @@
                                         Weather Station
                                         <div class="float-right">
                                             <label class="custom-control custom-checkbox">
-                                                <input type="checkbox" class="custom-control-input" />
+                                                <input type="checkbox" value="4" class="custom-control-input" />
                                                 <span class="custom-control-label">&nbsp;</span>
                                             </label>
                                         </div>
@@ -180,7 +172,7 @@
                                         Passenger Port
                                         <div class="float-right">
                                             <label class="custom-control custom-checkbox">
-                                                <input type="checkbox" class="custom-control-input" />
+                                                <input type="checkbox" value="5" class="custom-control-input" />
                                                 <span class="custom-control-label">&nbsp;</span>
                                             </label>
                                         </div>
@@ -190,7 +182,7 @@
                                         Subways
                                         <div class="float-right">
                                             <label class="custom-control custom-checkbox">
-                                                <input type="checkbox" class="custom-control-input" />
+                                                <input type="checkbox" value="6" class="custom-control-input" />
                                                 <span class="custom-control-label">&nbsp;</span>
                                             </label>
                                         </div>
@@ -200,7 +192,7 @@
                                         Port Authority
                                         <div class="float-right">
                                             <label class="custom-control custom-checkbox">
-                                                <input type="checkbox" class="custom-control-input" />
+                                                <input type="checkbox" value="7" class="custom-control-input" />
                                                 <span class="custom-control-label">&nbsp;</span>
                                             </label>
                                         </div>
@@ -210,7 +202,7 @@
                                         Moons
                                         <div class="float-right">
                                             <label class="custom-control custom-checkbox">
-                                                <input type="checkbox" class="custom-control-input" />
+                                                <input type="checkbox" value="8" class="custom-control-input" />
                                                 <span class="custom-control-label">&nbsp;</span>
                                             </label>
                                         </div>
@@ -220,7 +212,7 @@
                                         Slip Ways
                                         <div class="float-right">
                                             <label class="custom-control custom-checkbox">
-                                                <input type="checkbox" class="custom-control-input" />
+                                                <input type="checkbox" value="9" class="custom-control-input" />
                                                 <span class="custom-control-label">&nbsp;</span>
                                             </label>
                                         </div>
@@ -230,7 +222,7 @@
                                         Ski Center
                                         <div class="float-right">
                                             <label class="custom-control custom-checkbox">
-                                                <input type="checkbox" class="custom-control-input" />
+                                                <input type="checkbox" value="10" class="custom-control-input" />
                                                 <span class="custom-control-label">&nbsp;</span>
                                             </label>
                                         </div>
@@ -240,7 +232,7 @@
                                         Kite Surfing
                                         <div class="float-right">
                                             <label class="custom-control custom-checkbox">
-                                                <input type="checkbox" class="custom-control-input" />
+                                                <input type="checkbox" value="11" class="custom-control-input" />
                                                 <span class="custom-control-label">&nbsp;</span>
                                             </label>
                                         </div>
@@ -250,7 +242,7 @@
                                         Mountain Shelter
                                         <div class="float-right">
                                             <label class="custom-control custom-checkbox">
-                                                <input type="checkbox" class="custom-control-input" />
+                                                <input type="checkbox" value="12" class="custom-control-input" />
                                                 <span class="custom-control-label">&nbsp;</span>
                                             </label>
                                         </div>
@@ -261,7 +253,7 @@
                                         Camping
                                         <div class="float-right">
                                             <label class="custom-control custom-checkbox">
-                                                <input type="checkbox" class="custom-control-input" />
+                                                <input type="checkbox" value="13" class="custom-control-input" />
                                                 <span class="custom-control-label">&nbsp;</span>
                                             </label>
                                         </div>
@@ -271,7 +263,7 @@
                                         Fishing Shelter
                                         <div class="float-right">
                                             <label class="custom-control custom-checkbox">
-                                                <input type="checkbox" class="custom-control-input" />
+                                                <input type="checkbox" value="14" class="custom-control-input" />
                                                 <span class="custom-control-label">&nbsp;</span>
                                             </label>
                                         </div>
@@ -281,7 +273,7 @@
                                         User Profile
                                         <div class="float-right">
                                             <label class="custom-control custom-checkbox">
-                                                <input type="checkbox" class="custom-control-input" />
+                                                <input type="checkbox" value="15" class="custom-control-input" />
                                                 <span class="custom-control-label">&nbsp;</span>
                                             </label>
                                         </div>
@@ -291,7 +283,7 @@
                                         Block Accounts
                                         <div class="float-right">
                                             <label class="custom-control custom-checkbox">
-                                                <input type="checkbox" class="custom-control-input" />
+                                                <input type="checkbox" value="16" class="custom-control-input" />
                                                 <span class="custom-control-label">&nbsp;</span>
                                             </label>
                                         </div>
@@ -301,7 +293,7 @@
                                         Payments
                                         <div class="float-right">
                                             <label class="custom-control custom-checkbox">
-                                                <input type="checkbox" class="custom-control-input" />
+                                                <input type="checkbox" value="17" class="custom-control-input" />
                                                 <span class="custom-control-label">&nbsp;</span>
                                             </label>
                                         </div>
@@ -309,8 +301,8 @@
                                 </ul>
                                 <div class="text-center col-12">
                                     <div class="row">
-
-                                        <button type="button" class="btn btn-primary">Create</button>
+                                        <button type="button" data-ng-click="create()"
+                                            class="btn btn-primary">Create</button>
                                     </div>
                                 </div>
                             </div>

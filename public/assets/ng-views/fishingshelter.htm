@@ -68,7 +68,7 @@
 
                                                 </div>
                                             </div>
-                                            <table class="table table-bordered">
+                                            <table class="table table-bordered" id="fs_listing_table">
                                                 <thead>
                                                     <tr>
 
@@ -81,17 +81,17 @@
                                                     </tr>
                                                 </thead>
                                                 <tbody>
-                                                    <tr>
-                                                        <td>Clifton Beach Resort</td>
-                                                        <td><img src="views/images/fishingshelter.png"
-                                                                style="height: 50px;" /></td>
-                                                        <td>31.4504°</td>
-                                                        <td>73.1350°</td>
+                                                    <tr data-ng-repeat="f in fss">
+                                                        <td>{{f.name}}</td>
+                                                        <td><img src="{{URL}}/{{f.image}}" style="height: 50px;" /></td>
+                                                        <td>{{f.latitude}}°</td>
+                                                        <td>{{f.longitude}}°</td>
                                                         <td>
-                                                            <a class="delete" title="Delete" data-toggle="tooltip"><i
-                                                                    class="material-icons">&#xE872;</i></a>
+                                                            <a class="text-danger" title="Delete"
+                                                                data-toggle="tooltip"><i class="material-icons"
+                                                                    data-ng-click="delete($index,f)">&#xE872;</i></a>
                                                             <a data-toggle="tab" title="Edit" class="edit"
-                                                                href="#addnew"><i
+                                                                data-ng-click="edit($index,f)"><i
                                                                     class="fa fa-pencil material-icons"></i></a>
 
                                                         </td>
@@ -126,7 +126,7 @@
                             <div class="row clearfix">
                                 <div class="col-12">
                                     <div class="form-group">
-                                        <input type="text" class="form-control" id="exampleInputPassword1"
+                                        <input type="text" class="form-control" data-ng-model="fs.name"
                                             placeholder="Enter Fishing Shelter Location Name">
                                     </div>
 
@@ -136,18 +136,16 @@
 
 
                                 <div class="col-md-12 col-sm-12">
-                                    <div id="map-container-google-1" class="z-depth-1-half map-container"
+                                    <div id="fs-map-container-google" class="z-depth-1-half map-container"
                                         style="height: 500px;">
-                                        <iframe
-                                            src="https://maps.google.com/maps?q=manhatan&t=&z=13&ie=UTF8&iwloc=&output=embed"
-                                            frameborder="0" style="border:0" allowfullscreen></iframe>
+
                                     </div>
                                 </div>
 
                                 <div class="col-md-4" style="margin-top: 10px;">
 
                                     <div class="form-group mt-2 mb-3">
-                                        <input type="file" class="dropify">
+                                        <input type="file" class="dropify" file-model="myFile">
 
                                     </div>
 
@@ -156,13 +154,13 @@
                                 <div class="col-md-4" style="margin-top: 10px;">
                                     <div class="form-group">
                                         <label>Longitude</label>
-                                        <input type="text" class="form-control">
+                                        <input type="text" class="form-control" readonly>
                                     </div>
                                 </div>
                                 <div class="col-md-4" style="margin-top: 10px;">
                                     <div class="form-group">
                                         <label>Latitude</label>
-                                        <input type="text" class="form-control">
+                                        <input type="text" class="form-control" readonly>
                                     </div>
                                 </div>
 
@@ -172,7 +170,85 @@
 
                                 <div class="col-sm-6">
                                     <div class="form-group mt-3">
-                                        <button type="submit" class="btn btn-success">Submit</button>
+                                        <button data-ng-click="submit()" type="submit"
+                                            class="btn btn-success">Submit</button>
+                                    </div>
+                                </div>
+
+
+                                <div class="col-sm-6">
+                                    <div class="form-group mt-3" style="margin-left: 400px;">
+                                        <button type="submit" class="btn btn-success">Cancel</button>
+                                    </div>
+                                </div>
+
+                            </div>
+                        </form>
+                    </div>
+                </div>
+            </div>
+        </div>
+    </div>
+</div>
+
+<div class="section-body">
+    <div class="container-fluid">
+        <div class="tab-pane" style="display: none;" id="updatefs" role="tabpanel">
+            <div class="row">
+                <div class="col-sm-12">
+                    <div class="card">
+                        <div class="card-header">
+                            <h3 class="card-title">Update Fishing Location</h3>
+                        </div>
+                        <form class="card-body">
+                            <div class="row clearfix">
+                                <div class="col-12">
+                                    <div class="form-group">
+                                        <input type="text" class="form-control" data-ng-model="editing.name"
+                                            placeholder="Enter Fishing Shelter Location Name">
+                                    </div>
+
+
+
+                                </div>
+
+
+                                <div class="col-md-12 col-sm-12">
+                                    <div id="update-fs-map-container" class="z-depth-1-half map-container"
+                                        style="height: 500px;">
+
+                                    </div>
+                                </div>
+
+                                <div class="col-md-4" style="margin-top: 10px;">
+
+                                    <div class="form-group mt-2 mb-3">
+                                        <input type="file" class="dropify" file-model="myFile">
+                                    </div>
+
+                                </div>
+
+                                <div class="col-md-4" style="margin-top: 10px;">
+                                    <div class="form-group">
+                                        <label>Longitude</label>
+                                        <input type="text" class="form-control" readonly>
+                                    </div>
+                                </div>
+                                <div class="col-md-4" style="margin-top: 10px;">
+                                    <div class="form-group">
+                                        <label>Latitude</label>
+                                        <input type="text" class="form-control" readonly>
+                                    </div>
+                                </div>
+
+
+
+
+
+                                <div class="col-sm-6">
+                                    <div class="form-group mt-3">
+                                        <button data-ng-click="save()" type="submit"
+                                            class="btn btn-success">Update</button>
                                     </div>
                                 </div>
 
