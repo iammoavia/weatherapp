@@ -15,7 +15,7 @@
     }
 </style>
 
-<div class="section-body mt-3">
+<!-- <div class="section-body mt-3">
     <div class="container-fluid">
         <div class="row clearfix">
             <div class="col-lg-12">
@@ -42,9 +42,9 @@
             </div>
         </div>
     </div>
-</div>
+</div> -->
 
-<div class="section-body">
+<div class="section-body mt-3">
     <div class="container-fluid">
         <div class="tab-content">
             <div class="tab-pane fade show active" id="list" role="tabpanel">
@@ -68,7 +68,7 @@
 
                                                 </div>
                                             </div>
-                                            <table class="table table-bordered">
+                                            <table class="table table-bordered" id="mountain_listing_table">
                                                 <thead>
                                                     <tr>
                                                         <th>Name</th>
@@ -82,18 +82,18 @@
                                                     </tr>
                                                 </thead>
                                                 <tbody>
-                                                    <tr>
-                                                        <td>Poseidon</td>
-                                                        <td>31.4504°</td>
-                                                        <td>+302296051492</td>
-                                                        <td>21</td>
-                                                        <td>31.4504°</td>
-                                                        <td>73.1350°</td>
+                                                    <tr data-ng-repeat="mountain in mountains">
+                                                        <td>{{mountain.name}}</td>
+                                                        <td>{{mountain.altitude}}°</td>
+                                                        <td>{{mountain.TEL}}</td>
+                                                        <td>{{mountain.seats}}</td>
+                                                        <td>{{mountain.latitude}}°</td>
+                                                        <td>{{mountain.longitude}}°</td>
                                                         <td>
-                                                            <a class="delete" title="Delete" data-toggle="tooltip"><i
+                                                            <a class="text-danger" data-ng-click="delete($index,mountain)" title="Delete" data-toggle="tooltip"><i
                                                                     class="material-icons">&#xE872;</i></a>
                                                             <a data-toggle="tab" title="Edit" class="edit"
-                                                                href="#addnew"><i
+                                                                data-ng-click="edit($index,mountain)"><i
                                                                     class="fa fa-pencil material-icons"></i></a>
 
                                                         </td>
@@ -128,68 +128,138 @@
                             <div class="row clearfix">
                                 <div class="col-12">
                                     <div class="form-group">
-                                        <input type="text" class="form-control" id="exampleInputPassword1"
+                                        <input type="text" class="form-control" data-ng-model="mountain.name"
                                             placeholder="Enter Location Name">
                                     </div>
                                 </div>
 
-
                                 <div class="col-md-12 col-sm-12">
-                                    <div id="map-container-google-1" class="z-depth-1-half map-container"
+                                    <div id="mountain-map-container" class="z-depth-1-half map-container"
                                         style="height: 500px;">
-                                        <iframe
-                                            src="https://maps.google.com/maps?q=manhatan&t=&z=13&ie=UTF8&iwloc=&output=embed"
-                                            frameborder="0" style="border:0" allowfullscreen></iframe>
+                                        
                                     </div>
                                 </div>
-
-
 
                                 <div class="col-md-6" style="margin-top: 10px;">
                                     <div class="form-group">
                                         <label>Longitude</label>
-                                        <input type="text" class="form-control">
+                                        <input type="text" readonly class="form-control" data-ng-model="mountain.longitude">
                                     </div>
                                 </div>
                                 <div class="col-md-6" style="margin-top: 10px;">
                                     <div class="form-group">
                                         <label>Latitude</label>
-                                        <input type="text" class="form-control">
+                                        <input type="text" readonly class="form-control" data-ng-model="mountain.latitude">
                                     </div>
                                 </div>
                                 <div class="col-md-4" style="margin-top: 10px;">
                                     <div class="form-group">
                                         <label>Altitude</label>
-                                        <input type="number" class="form-control">
+                                        <input type="text" class="form-control" data-ng-model="mountain.altitude">
                                     </div>
                                 </div>
                                 <div class="col-md-4" style="margin-top: 10px;">
                                     <div class="form-group">
                                         <label>Telephone Numbers</label>
-                                        <input type="number" class="form-control">
+                                        <input type="text" class="form-control" data-ng-model="mountain.TEL">
                                     </div>
                                 </div>
 
                                 <div class="col-md-4" style="margin-top: 10px;">
                                     <div class="form-group">
                                         <label>Total Seats</label>
-                                        <input type="number" class="form-control">
+                                        <input type="text" class="form-control" data-ng-model="mountain.seats">
                                     </div>
                                 </div>
-
-
-
 
                                 <div class="col-sm-6">
                                     <div class="form-group mt-3">
-                                        <button type="submit" class="btn btn-success">Submit</button>
+                                        <button type="submit" data-ng-click="submit()" class="btn btn-success">Submit</button>
                                     </div>
                                 </div>
-
 
                                 <div class="col-sm-6">
                                     <div class="form-group mt-3" style="margin-left: 400px;">
                                         <button type="submit" class="btn btn-success">Cancel</button>
+                                    </div>
+                                </div>
+
+                            </div>
+                        </form>
+                    </div>
+                </div>
+            </div>
+        </div>
+    </div>
+</div>
+
+
+<div class="section-body">
+    <div class="container-fluid">
+        <div class="tab-pane" style="display: none;" id="updatemountain" role="tabpanel">
+            <div class="row">
+                <div class="col-sm-12">
+                    <div class="card">
+                        <div class="card-header">
+                            <h3 class="card-title">Update Mountain Location</h3>
+                        </div>
+                        <form class="card-body">
+                            <div class="row clearfix">
+                                <div class="col-12">
+                                    <div class="form-group">
+                                        <input type="text" class="form-control" data-ng-model="editing.name"
+                                            placeholder="Enter Location Name">
+                                    </div>
+                                </div>
+
+                                <div class="col-md-12 col-sm-12">
+                                    <div id="update-mountain-map-container" class="z-depth-1-half map-container"
+                                        style="height: 500px;">
+                                        
+                                    </div>
+                                </div>
+
+                                <div class="col-md-6" style="margin-top: 10px;">
+                                    <div class="form-group">
+                                        <label>Longitude</label>
+                                        <input type="text" readonly class="form-control" data-ng-model="editing.longitude">
+                                    </div>
+                                </div>
+                                <div class="col-md-6" style="margin-top: 10px;">
+                                    <div class="form-group">
+                                        <label>Latitude</label>
+                                        <input type="text" readonly class="form-control" data-ng-model="editing.latitude">
+                                    </div>
+                                </div>
+                                <div class="col-md-4" style="margin-top: 10px;">
+                                    <div class="form-group">
+                                        <label>Altitude</label>
+                                        <input type="text" class="form-control" data-ng-model="editing.altitude">
+                                    </div>
+                                </div>
+                                <div class="col-md-4" style="margin-top: 10px;">
+                                    <div class="form-group">
+                                        <label>Telephone Numbers</label>
+                                        <input type="text" class="form-control" data-ng-model="editing.TEL">
+                                    </div>
+                                </div>
+
+                                <div class="col-md-4" style="margin-top: 10px;">
+                                    <div class="form-group">
+                                        <label>Total Seats</label>
+                                        <input type="text" class="form-control" data-ng-model="editing.seats">
+                                    </div>
+                                </div>
+
+                                <div class="col-sm-6">
+                                    <div class="form-group mt-3">
+                                        <button type="submit" data-ng-click="save()" class="btn btn-success">Submit</button>
+                                    </div>
+                                </div>
+
+                                <div class="col-sm-6">
+                                    <div class="form-group mt-3" style="margin-left: 400px;">
+                                        <button type="submit" data-ng-click="hide('updatemountain')" class="btn btn-success">Cancel</button>
                                     </div>
                                 </div>
 

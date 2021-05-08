@@ -9,10 +9,8 @@ const app = express();
 const bcrypt = require("bcrypt");
 var Promise = require("bluebird");
 // const { req } = require('node:http');
-var mysql = Promise.promisifyAll(require('mysql'))
-var engines = require('consolidate');
-
-
+var mysql = require('mysql');//Promise.promisifyAll()
+var cons = require('consolidate');
 
 app.use(session({
   secret: 'secret',
@@ -53,7 +51,7 @@ app.use(upload.array());
 app.use(express.static('public'));
 // app.use(express.static(__dirname + 'public/views'));
 
-app.engine('html', require('ejs').renderFile);
+app.engine('html', cons.ejs);
 app.set('view engine', 'html');
 
 const server = app.listen(7000, () => {
@@ -65,8 +63,19 @@ app.use(express.static(path.join(__dirname, 'public')));
 app.get('/', (req, res) => {
 
   if (req.session.loggedin) {
+    console.log('Loading Language', req.session.lan);
+    res.render(path.join(__dirname + '/public/views/dashboard.html'), {
+      lan: req.session.lan,
+      access: req.session.access,
+      username: req.session.username
+    }, function (err, html) {
 
-    res.sendFile(path.join(__dirname + '/public/views/dashboard.html'));
+      if (err) {
+        throw err;
+      }
+
+      res.send(html)
+    });
   } else {
     res.redirect('/login');
   }
@@ -95,38 +104,126 @@ app.get('/logout', (req, res) => {
   return res.redirect('/login');
 });
 
+app.post('/lang', (req, res) => {
 
-app.post('/access',(req,res)=>{
+  // if (typeof req.session.loggedin != 'undefined' && req.session.loggedin) {
+  //   return res.redirect('/login');
+  // }
 
+  arg = req.body;
+
+  connection.query("UPDATE tbladmins SET tbladmins.language=? WHERE tbladmins.username=?;", [arg.lan, req.session.username], function (err, res_in) {
+    if (err) {
+      console.log(err);
+      res.setHeader('Content-Type', 'application/json');
+      res.end(JSON.stringify({ status: false, error: 'No changes' }));
+    }
+
+    req.session.lan = arg.lan;
+    res.setHeader('Content-Type', 'application/json');
+    res.end(JSON.stringify({ status: true, data: arg }));
+  });
+
+});
+
+app.post('/password', (req, res) => {
+
+  // for parsing multipart/form-data
+  // app.use(upload.array());
+  arg = req.body;
+
+  arg.password = bcrypt.hashSync(arg.password, 10);
+
+  $query = "UPDATE tbladmins SET tbladmins.password = ? WHERE tbladmins.username = ?;";
+
+  connection.query($query, [arg.password, req.session.username], function (err, res_in) {
+
+    if (err) {
+      res.setHeader('Content-Type', 'application/json');
+      res.end(JSON.stringify({ status: false, error: 'Unable to update password' }));
+    }
+
+    res.setHeader('Content-Type', 'application/json');
+    res.end(JSON.stringify({ status: true, data: arg }));
+
+
+  });
+
+
+});
+
+
+app.delete('/access/:id', (req, res) => {
+
+  if (req.session.loggedin) {
+    connection.query("DELETE FROM tbladmins WHERE tbladmins.id=?;", [req.params.id], function (err, res_in) {
+
+      if (err) {
+        console.log(err);
+        res.setHeader('Content-Type', 'application/json');
+        res.end(JSON.stringify({ status: false }));
+        return;
+      }
+
+      res.setHeader('Content-Type', 'application/json');
+      res.end(JSON.stringify({ status: true, data: res_in }));
+    });
+
+  } else {
+    res.redirect('/login');
+  }
+
+});
+
+app.get('/access', (req, res) => {
+  if (req.session.loggedin) {
+    connection.query("SELECT id,name,username,email FROM tbladmins ORDER BY tbladmins.name;", [], function (err, res_in) {
+
+      if (err) {
+        console.log(err);
+        res.setHeader('Content-Type', 'application/json');
+        res.end(JSON.stringify({ status: false }));
+        return;
+      }
+
+      res.setHeader('Content-Type', 'application/json');
+      res.end(JSON.stringify({ status: true, data: res_in }));
+    });
+
+  } else {
+    res.redirect('/login');
+  }
+})
+
+app.post('/access', (req, res) => {
+
+  // for parsing multipart/form-data
+  // app.use(upload.array());
   arg = req.body;
   arg.access = JSON.stringify(arg.access);
 
-  $query = "INSERT INTO tbladmins(name,username,password,language,access) VALUES (?,?,?,?);";
+  console.log('recieved', arg);
 
-  connection.query($query, [arg.name,arg.username,arg.password,arg.access], function (res,err) {
-    
+  arg.password = bcrypt.hashSync(arg.password, 10);
+
+  $query = "INSERT INTO tbladmins(username,password,email,access,language) VALUES (?,?,?,?,'E');";
+
+  connection.query($query, [arg.username, arg.password, arg.email, arg.access], function (err, res_in) {
+
     if (err) {
-      res.setHeader('Content-Type', 'application/json');
-      res.end(JSON.stringify({ status: false, error : err }));
-
-      return;
+      throw err;
     }
-    
-    arg.id = res.insertId;
+
+    arg.id = res_in.insertId;
     if (arg.id) {
-     
+
       res.setHeader('Content-Type', 'application/json');
-      res.end(JSON.stringify({ status: true, data : arg }));
-      return ; 
+      res.end(JSON.stringify({ status: true, data: arg }));
     } else {
-
       res.setHeader('Content-Type', 'application/json');
-      res.end(JSON.stringify({ status: false, error : 'Unable to insert record' }));
-
-      return;
+      res.end(JSON.stringify({ status: false, error: 'Unable to insert record' }));
     }
 
-    res.redirect('/login');
   });
 
 
@@ -156,19 +253,16 @@ app.post('/login', (req, res) => {
         req.session.loggedin = true;
         req.session.username = arg.username;
         req.session.lan = $data.language;
-        req.session.access = $data.access;
+        req.session.access = JSON.parse($data.access);
+        console.log(req.session.access);
         res.redirect('/');
         return;
 
       } else {
-
         req.session.error = 'Incorrect Username and/or Password !';
       }
     } else {
-
       req.session.error = 'Invalid Username !';
-
-      return;
     }
 
     res.redirect('/login');

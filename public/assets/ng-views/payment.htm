@@ -9,7 +9,7 @@
                     </div>
                     <div class="card-body">
                         <div class="table-responsive">
-                            <table class="table table-hover table-striped text-nowrap table-vcenter mb-0">
+                            <table class="table table-hover table-striped text-nowrap table-vcenter mb-0" id='payment-table-1'>
                                 <thead>
                                     <tr>
                                         <th>User Name</th>
@@ -19,25 +19,13 @@
                                     </tr>
                                 </thead>
                                 <tbody>
-                                    <tr>
-                                        <td>Sean Black</td>
-                                        <td style="text-align: center;">21 Jan 2021</td>
-                                        <td style="text-align: center;">21 Jan 2022</td>
 
+                                    <tr data-ng-repeat="pt in payments">
+                                        <td>{{pt.user.firstname}}&nbsp;{{pt.user.lastname}}</td>
+                                        <td style="text-align: center;">{{pt.paidOn}}</td>
+                                        <td style="text-align: center;">{{pt.expireAt}}</td>
                                     </tr>
 
-                                    <tr>
-                                        <td>Merri Diamond</td>
-                                        <td style="text-align: center;">21 Feb 2021</td>
-                                        <td style="text-align: center;">21 Feb 2022</td>
-
-                                    </tr>
-                                    <tr>
-                                        <td>Allen Collins</td>
-                                        <td style="text-align: center;">1 Apr 2021</td>
-                                        <td style="text-align: center;">1 Apr 2022</td>
-
-                                    </tr>
                                 </tbody>
                             </table>
                         </div>
@@ -62,18 +50,10 @@
                                     </tr>
                                 </thead>
                                 <tbody>
-                                    <tr>
-                                        <td>Sean Black</td>
-                                        <td style="text-align: center;">21 Jan 2021</td>
-                                    </tr>
-
-                                    <tr>
-                                        <td>Merri Diamond</td>
-                                        <td style="text-align: center;">21 Feb 2021</td>
-                                    </tr>
-                                    <tr>
-                                        <td>Allen Collins</td>
-                                        <td style="text-align: center;">1 Apr 2021</td>
+                                    <tr data-ng-repeat="ptt in trials">
+                                        <td>{{pt.user.firstname}}&nbsp;{{ptt.user.lastname}}</td>
+                                        <td style="text-align: center;">{{ptt.trailStartedOn}}</td>
+                                        <!-- <td style="text-align: center;">{{ptt.trialExpiration}}</td> -->
                                     </tr>
                                 </tbody>
                             </table>

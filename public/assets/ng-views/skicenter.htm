@@ -16,7 +16,7 @@
 </style>
 
 
-<div class="section-body mt-3">
+<!-- <div class="section-body mt-3">
     <div class="container-fluid">
         <div class="row clearfix">
             <div class="col-lg-12">
@@ -43,7 +43,7 @@
             </div>
         </div>
     </div>
-</div>
+</div> -->
 
 <div class="section-body">
     <div class="container-fluid">
@@ -69,7 +69,7 @@
 
                                                 </div>
                                             </div>
-                                            <table class="table table-bordered">
+                                            <table class="table table-bordered" id="skicenter-listing-table">
                                                 <thead>
                                                     <tr>
                                                         <th>Name</th>
@@ -84,20 +84,22 @@
                                                     </tr>
                                                 </thead>
                                                 <tbody>
-                                                    <tr>
-                                                        <td>Bacchus</td>
-                                                        <td>Lavriou-Souniou Avenue (61st km)</td>
-                                                        <td>63072</td>
-                                                        <td>+302375091487</td>
-                                                        <td>www.campingbacchus.gr</td>
-                                                        <td>31.4504°</td>
-                                                        <td>73.1350°</td>
+                                                    <tr data-ng-repeat="skicenter in skicenters">
+                                                        <td>{{skicenter.name}}</td>
+                                                        <td>{{skicenter.address}}</td>
+                                                        <td>{{skicenter.zipCode}}</td>
+                                                        <td>{{skicenter.TEL}}</td>
+                                                        <td>{{skicenter.site}}</td>
+                                                        <td>{{skicenter.longitude}}°</td>
+                                                        <td>{{skicenter.latitude}}°</td>
                                                         <td>
-                                                            <a class="delete" title="Delete" data-toggle="tooltip"><i
+                                                            <a class="text-danger"
+                                                                data-ng-click="delete($index,skicenter)" title="Delete"
+                                                                data-toggle="tooltip"><i
                                                                     class="material-icons">&#xE872;</i></a>
 
                                                             <a data-toggle="tab" title="Edit" class="edit"
-                                                                href="#addnew"><i
+                                                                data-ng-click="edit($index,skicenter)"><i
                                                                     class="fa fa-pencil material-icons"></i></a>
                                                         </td>
                                                     </tr>
@@ -131,16 +133,16 @@
                             <div class="row clearfix">
                                 <div class="col-12">
                                     <div class="form-group">
-                                        <input type="text" class="form-control" id="exampleInputPassword1"
+                                        <input type="text" class="form-control" data-ng-model="skicenter.name"
                                             placeholder="Enter Location  Name">
                                     </div>
 
                                     <div class="form-group">
-                                        <input type="text" class="form-control" id="exampleInputPassword1"
+                                        <input type="text" class="form-control" data-ng-model="skicenter.address"
                                             placeholder="Enter Location  Address">
                                     </div>
                                     <div class="form-group">
-                                        <input type="text" class="form-control" id="exampleInputPassword1"
+                                        <input type="text" class="form-control" data-ng-model="skicenter.site"
                                             placeholder="Enter Website Address">
                                     </div>
 
@@ -150,11 +152,8 @@
 
 
                                 <div class="col-md-12 col-sm-12">
-                                    <div id="map-container-google-1" class="z-depth-1-half map-container"
+                                    <div id="skicenter-map-container-google" class="z-depth-1-half map-container"
                                         style="height: 500px;">
-                                        <iframe
-                                            src="https://maps.google.com/maps?q=manhatan&t=&z=13&ie=UTF8&iwloc=&output=embed"
-                                            frameborder="0" style="border:0" allowfullscreen></iframe>
                                     </div>
                                 </div>
 
@@ -163,42 +162,136 @@
                                 <div class="col-md-6" style="margin-top: 10px;">
                                     <div class="form-group">
                                         <label>Longitude</label>
-                                        <input type="text" class="form-control">
+                                        <input readonly type="text" class="form-control"
+                                            data-ng-model="skicenter.longitude">
                                     </div>
                                 </div>
                                 <div class="col-md-6" style="margin-top: 10px;">
                                     <div class="form-group">
                                         <label>Latitude</label>
-                                        <input type="text" class="form-control">
+                                        <input readonly type="text" class="form-control"
+                                            data-ng-model="skicenter.latitude">
                                     </div>
                                 </div>
-
-
 
                                 <div class="col-md-6" style="margin-top: 10px;">
                                     <div class="form-group">
                                         <label>ZipCode</label>
-                                        <input type="number" class="form-control">
+                                        <input type="text" class="form-control" data-ng-model="skicenter.zipCode">
                                     </div>
                                 </div>
                                 <div class="col-md-6" style="margin-top: 10px;">
                                     <div class="form-group">
                                         <label>Telephone Number</label>
-                                        <input type="number" class="form-control">
+                                        <input type="text" class="form-control" data-ng-model="skicenter.TEL">
                                     </div>
                                 </div>
 
 
                                 <div class="col-sm-6">
                                     <div class="form-group mt-3">
-                                        <button type="submit" class="btn btn-success">Submit</button>
+                                        <button type="submit" data-ng-click="submit()"
+                                            class="btn btn-success">Submit</button>
                                     </div>
                                 </div>
 
 
                                 <div class="col-sm-6">
                                     <div class="form-group mt-3" style="margin-left: 400px;">
-                                        <button type="submit" class="btn btn-success">Cancel</button>
+                                        <button type="submit" onclick="scrollto('skicenter-listing-table')"
+                                            class="btn btn-success">Cancel</button>
+                                    </div>
+                                </div>
+
+                            </div>
+                        </form>
+                    </div>
+                </div>
+            </div>
+        </div>
+    </div>
+</div>
+
+<div class="section-body">
+    <div class="container-fluid">
+        <div class="tab-pane " style="display: none;" id="updateskicenter" role="tabpanel">
+            <div class="row">
+                <div class="col-sm-12">
+                    <div class="card">
+                        <div class="card-header">
+                            <h3 class="card-title">Update Ski Center Location</h3>
+                        </div>
+                        <form class="card-body">
+                            <div class="row clearfix">
+                                <div class="col-12">
+                                    <div class="form-group">
+                                        <input type="text" class="form-control" data-ng-model="editing.name"
+                                            placeholder="Enter Location  Name">
+                                    </div>
+
+                                    <div class="form-group">
+                                        <input type="text" class="form-control" data-ng-model="editing.address"
+                                            placeholder="Enter Location  Address">
+                                    </div>
+                                    <div class="form-group">
+                                        <input type="text" class="form-control" data-ng-model="editing.site"
+                                            placeholder="Enter Website Address">
+                                    </div>
+
+
+
+                                </div>
+
+
+                                <div class="col-md-12 col-sm-12">
+                                    <div id="update-skicenter-map-container" class="z-depth-1-half map-container"
+                                        style="height: 500px;">
+                                    </div>
+                                </div>
+
+
+
+                                <div class="col-md-6" style="margin-top: 10px;">
+                                    <div class="form-group">
+                                        <label>Longitude</label>
+                                        <input readonly type="text" class="form-control"
+                                            data-ng-model="editing.longitude">
+                                    </div>
+                                </div>
+                                <div class="col-md-6" style="margin-top: 10px;">
+                                    <div class="form-group">
+                                        <label>Latitude</label>
+                                        <input readonly type="text" class="form-control"
+                                            data-ng-model="editing.latitude">
+                                    </div>
+                                </div>
+
+                                <div class="col-md-6" style="margin-top: 10px;">
+                                    <div class="form-group">
+                                        <label>ZipCode</label>
+                                        <input type="text" class="form-control" data-ng-model="editing.zipCode">
+                                    </div>
+                                </div>
+                                <div class="col-md-6" style="margin-top: 10px;">
+                                    <div class="form-group">
+                                        <label>Telephone Number</label>
+                                        <input type="text" class="form-control" data-ng-model="editing.TEL">
+                                    </div>
+                                </div>
+
+
+                                <div class="col-sm-6">
+                                    <div class="form-group mt-3">
+                                        <button type="submit" data-ng-click="save()"
+                                            class="btn btn-success">Save</button>
+                                    </div>
+                                </div>
+
+
+                                <div class="col-sm-6">
+                                    <div class="form-group mt-3" style="margin-left: 400px;">
+                                        <button type="submit"
+                                            class="btn btn-success" data-ng-click="hide()">Cancel</button>
                                     </div>
                                 </div>
 

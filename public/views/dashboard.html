@@ -4,40 +4,39 @@
 <!-- soccer/project/  07 Jan 2020 03:36:49 GMT -->
 
 <head>
+    <meta charset="UTF-8">
+    <meta name="viewport"
+        content="width=device-width, user-scalable=no, initial-scale=1.0, maximum-scale=1.0, minimum-scale=1.0">
+    <meta http-equiv="X-UA-Compatible" content="ie=edge">
+    <link rel="icon" href="favicon.ico" type="image/x-icon" />
 
+    <title>Admin Panel | Weather Meteology</title>
 
-    <head>
-        <meta charset="UTF-8">
-        <meta name="viewport"
-            content="width=device-width, user-scalable=no, initial-scale=1.0, maximum-scale=1.0, minimum-scale=1.0">
-        <meta http-equiv="X-UA-Compatible" content="ie=edge">
+    <!-- Bootstrap Core and vandor -->
+    <!-- <link rel="stylesheet" href="plugins/bootstrap/css/bootstrap.min.css" /> -->
+    <link rel="stylesheet" href="https://fonts.googleapis.com/css?family=Roboto|Varela+Round|Open+Sans">
+    <link rel="stylesheet" href="https://stackpath.bootstrapcdn.com/bootstrap/4.5.0/css/bootstrap.min.css">
+    <link rel="stylesheet" href="https://fonts.googleapis.com/icon?family=Material+Icons">
+    <link rel="stylesheet" href="https://maxcdn.bootstrapcdn.com/font-awesome/4.7.0/css/font-awesome.min.css">
+    <link rel="stylesheet" href="views/plugins/sweetalert2/sweetalert2.min.css">
 
-        <link rel="icon" href="favicon.ico" type="image/x-icon" />
+    <!-- Dropify -->
+    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/Dropify/0.2.2/css/dropify.min.css" />
+    <!-- Core css -->
+    <link rel="stylesheet" href="views/css/main.css" />
+    <link rel="stylesheet" href="views/css/theme1.css" />
+    <link rel="stylesheet" href="views/css/table.css" />
 
-        <title>Admin Panel | Weather Meteology</title>
+    <link rel="icon" type="image/png" sizes="16x16" href="views/images/favicon-16x16.png">
 
-        <!-- Bootstrap Core and vandor -->
-        <!-- <link rel="stylesheet" href="plugins/bootstrap/css/bootstrap.min.css" /> -->
-        <link rel="stylesheet" href="https://fonts.googleapis.com/css?family=Roboto|Varela+Round|Open+Sans">
-        <link rel="stylesheet" href="https://stackpath.bootstrapcdn.com/bootstrap/4.5.0/css/bootstrap.min.css">
-        <link rel="stylesheet" href="https://fonts.googleapis.com/icon?family=Material+Icons">
-        <link rel="stylesheet" href="https://maxcdn.bootstrapcdn.com/font-awesome/4.7.0/css/font-awesome.min.css">
-        <link rel="stylesheet" href="views/plugins/sweetalert2/sweetalert2.min.css">
+    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/4.7.0/css/font-awesome.min.css">
 
-        <!-- Dropify -->
-        <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/Dropify/0.2.2/css/dropify.min.css" />
-        <!-- Core css -->
-        <link rel="stylesheet" href="views/css/main.css" />
-        <link rel="stylesheet" href="views/css/theme1.css" />
-        <link rel="stylesheet" href="views/css/table.css" />
+    <!-- DataTables -->
+    <link rel="stylesheet" href="views/plugins/sweetalert2-theme-bootstrap-4/bootstrap-4.min.css">
+    <link rel="stylesheet" href="views/plugins/datatables-bs4/css/dataTables.bootstrap4.min.css">
+    <link rel="stylesheet" href="views/plugins/datatables-responsive/css/responsive.bootstrap4.min.css">
+    <link rel="stylesheet" href="views/plugins/datatables-buttons/css/buttons.bootstrap4.min.css">
 
-        <link rel="icon" type="image/png" sizes="16x16" href="views/images/favicon-16x16.png">
-
-        <link rel="stylesheet"
-            href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/4.7.0/css/font-awesome.min.css">
-
-
-    </head>
 </head>
 
 <body class="font-montserrat" data-ng-app="mainapp">
@@ -60,7 +59,147 @@
 
     <div class="page">
 
-        <div w3-include-html="views/navlinks.html"></div>
+        <div>
+            <div id="left-sidebar" class="sidebar ">
+                <p> <b>Weather Meteology</b></p>
+                <nav id="left-sidebar-nav" class="sidebar-nav">
+                    <ul class="metismenu">
+                        <li class="g_heading">
+                            <span data-ng-if="lan == 'E'">Menus</span>
+                            <span data-ng-if="lan == 'G'">Μενού</span>
+                        </li>
+                        
+                        <li><a href="#!dashboard">
+                                <span data-ng-if="lan == 'E'">Dashboard</span>
+                                <span data-ng-if="lan == 'G'">Ταμπλό</span>
+                            </a></li>
+                            <% if (access.includes('1')) { %>
+                        <li><a href="#!cameras">
+                                <span data-ng-if="lan == 'E'">Live Camera</span>
+                                <span data-ng-if="lan == 'G'">Ζωντανή Κάμερα</span>
+                            </a></li>
+                            <% } %>
+                            <% if (access.includes('2')) { %>
+                        <li><a href="#!hospital">
+                                <span data-ng-if="lan == 'E'">Hospitals</span>
+                                <span data-ng-if="lan == 'G'">Νοσοκομεία</span>
+                            </a></i>
+                            <% } %>
+                            <% if (access.includes('3')) { %>
+                        <li><a href="#!airport">
+                                <span data-ng-if="lan == 'E'">Air Ports</span>
+                                <span data-ng-if="lan == 'G'">Αεροδρόμια</span>
+                            </a></i>
+                            <% } %>
+                            <% if (access.includes('4')) { %>
+                        <li><a href="#!weatherstation">
+                                <span data-ng-if="lan == 'E'">Weather Stations</span>
+                                <span data-ng-if="lan == 'G'">Μετεωρολογικοί Σταθμοί</span>
+                            </a></i>
+                            <% } %>
+                            <% if (access.includes('5')) { %>
+                        <li><a href="#!passenger">
+                                <span data-ng-if="lan == 'E'">Passenger Ports</span>
+                                <span data-ng-if="lan == 'G'">Επιβατικά Λιμάνια</span>
+                            </a></i>
+                            <% } %>
+                            <% if (access.includes('6')) { %>
+                        <li><a href="#!subways">
+                                <span data-ng-if="lan == 'E'">Subways</span>
+                                <span data-ng-if="lan == 'G'">Σταθμοί Τρένων</span>
+                            </a></i>
+                            <% } %>
+                            <% if (access.includes('7')) { %>
+                        <li><a href="#!ports">
+                                <span data-ng-if="lan == 'E'">Port Authority</span>
+                                <span data-ng-if="lan == 'G'">Λιμεναρχεία</span>
+                            </a></i>
+                            <% } %>
+                            <% if (access.includes('8')) { %>
+                        <li><a href="#!moon">
+                                <span data-ng-if="lan == 'E'">Moons</span>
+                                <span data-ng-if="lan == 'G'">Φάσεις Φεγγαριού</span>
+                            </a></i>
+                            <% } %>
+                            <% if (access.includes('9')) { %>
+                        <li><a href="#!slipways">
+                                <span data-ng-if="lan == 'E'">Slip Ways</span>
+                                <span data-ng-if="lan == 'G'">Ράμπες Σκαφών</span>
+                            </a></i>
+                            <% } %>
+                            <% if (access.includes('10')) { %>
+                        <li><a href="#!skicenter">
+                                <span data-ng-if="lan == 'E'">Ski Center</span>
+                                <span data-ng-if="lan == 'G'">Χιονοδρομικά Κέντρα</span>
+                            </a></i>
+                            <% } %>
+                            <% if (access.includes('11')) { %>
+                        <li><a href="#!kite">
+                                <span data-ng-if="lan == 'E'">Kite Surfing</span>
+                                <span data-ng-if="lan == 'G'">Kite Surfing</span>
+                            </a></i>
+                            <% } %>
+                            <% if (access.includes('12')) { %>
+                        <li><a href="#!mountain">
+                                <span data-ng-if="lan == 'E'">Mountain Shelter</span>
+                                <span data-ng-if="lan == 'G'">Ορεινά Καταφύγια</span>
+                            </a></i>
+                            <%  } %>
+
+                            <% if (access.includes('13')) { %>
+
+                        <li><a href="#!camping">
+                                <span data-ng-if="lan == 'E'">Camping</span>
+                                <span data-ng-if="lan == 'G'">Camping</span>
+                            </a></i>
+                            <% } %>
+
+                            <% if (access.includes('14')) { %>
+                        <li><a href="#!fishingshelter">
+                                <span data-ng-if="lan == 'E'">Fishing Shelter</span>
+                                <span data-ng-if="lan == 'G'">Αλιευτικά Καταφύγια</span>
+                            </a></i>
+                            <% } %>
+
+                            <% if (access.includes('17')) { %>
+
+                        <li><a href="#!payment">
+                                <span data-ng-if="lan == 'E'">Payment</span>
+                                <span data-ng-if="lan == 'G'">Πληρωμή</span>
+                            </a></i>
+                            <% } %>
+                            <% if (access.includes('15')) { %>
+
+                        <li><a href="#!userprofiles">
+                                <span data-ng-if="lan == 'E'">User Profile</span>
+                                <span data-ng-if="lan == 'G'">Προφίλ Χρήστη</span>
+                            </a></i>
+                            <% } %>
+
+                            <% if (access.includes('16')) { %>
+
+                        <li><a href="#!blockuser">
+                                <span data-ng-if="lan == 'E' ">Block Accounts</span>
+                                <span data-ng-if="lan == 'G' ">Μπλοκαρισμένοι Λογαριασμοί</span>
+                            </a></i>
+                            <% } %>
+
+                            <% if (access.includes('0')) { %>
+                        <li><a href="#!access">
+                                <span data-ng-if="lan == 'E' ">Access</span>
+                                <span data-ng-if="lan == 'G' ">Access</span>
+                            </a></i>
+                            <% } %>
+                        <li><a href="#!settings">
+                                <span data-ng-if="lan == 'E' ">Setting</span>
+                                <span data-ng-if="lan == 'G' ">Ρύθμιση</span>
+                            </a></i>
+                        <li><a href="/logout"><span>Logout</a></i>
+
+                </nav>
+                <input type="hidden" id="uname" value="<%= username %>">
+            </div>
+        </div>
 
         <div id="page_top" class="section-body top_dark">
             <div class="container-fluid">
@@ -72,7 +211,6 @@
                 </div>
             </div>
         </div>
-
         <div data-ng-view="">
 
         </div>
@@ -97,17 +235,35 @@
 
     <script src="views/plugins/angular-1.8.0/angular.min.js"></script>
     <script src="views/plugins/angular-1.8.0/angular-route.min.js"></script>
-    <script src="views/script/mainapp.js"></script>
+
     <script src="views/js/core.js"></script>
 
+    <!-- DataTables  & Plugins -->
+    <script src="views/plugins/datatables/jquery.dataTables.min.js"></script>
+    <script src="views/plugins/datatables-bs4/js/dataTables.bootstrap4.min.js"></script>
+    <script src="views/plugins/datatables-responsive/js/dataTables.responsive.min.js"></script>
+    <script src="views/plugins/datatables-responsive/js/responsive.bootstrap4.min.js"></script>
+    <script src="views/plugins/datatables-buttons/js/dataTables.buttons.min.js"></script>
+    <script src="views/plugins/datatables-buttons/js/buttons.bootstrap4.min.js"></script>
+    <script src="views/plugins/jszip/jszip.min.js"></script>
+    <script src="views/plugins/pdfmake/pdfmake.min.js"></script>
+    <script src="views/plugins/pdfmake/vfs_fonts.js"></script>
+    <script src="views/plugins/datatables-buttons/js/buttons.html5.min.js"></script>
+    <script src="views/plugins/datatables-buttons/js/buttons.print.min.js"></script>
+    <script src="views/plugins/datatables-buttons/js/buttons.colVis.min.js"></script>
+    <!-- Angular Datatable -->
+    <script src="views/plugins/angular-datatables/angular-datatables.min.js"></script>
+    <!-- Angular Roues -->
+
     <!-- Dropify -->
-    <script src="https://cdnjs.cloudflare.com/ajax/libs/Dropify/0.2.2/js/dropify.min.js" ></script>
+    <script src="https://cdnjs.cloudflare.com/ajax/libs/Dropify/0.2.2/js/dropify.min.js"></script>
     <!-- Google Map -->
     <script src="https://maps.googleapis.com/maps/api/js?key=AIzaSyC2W6JUfpCjNolL1KHvdFL9GOVEAp4I-ec" async></script>
     <script src="views/plugins/sweetalert2/sweetalert2.min.js"></script>
     <script>
         includeHTML();
-
+        var lan = "<%= lan %>";
+        console.log("<%= access %>");
         const Toast = Swal.mixin({
             toast: true,
             position: 'top-end',
@@ -122,7 +278,7 @@
 
 
     </script>
-
+    <script src="views/script/mainapp.js"></script>
 </body>
 
 <!-- soccer/project/  07 Jan 2020 03:37:22 GMT -->

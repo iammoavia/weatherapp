@@ -15,7 +15,7 @@
     }
 </style>
 
-<div class="section-body mt-3">
+<!-- <div class="section-body mt-3">
     <div class="container-fluid">
         <div class="row clearfix">
             <div class="col-lg-12">
@@ -44,12 +44,12 @@
             </div>
         </div>
     </div>
-</div>
+</div> -->
 
-<div class="section-body">
+<div class="section-body mt-3">
     <div class="container-fluid">
         <div class="tab-content">
-            <div class="tab-pane fade show active" id="list" role="tabpanel">
+            <div class="tab-pane show active"  id="list" role="tabpanel">
                 <div class="row clearfix">
                     <div class="col-xl-12 col-lg-12 col-md-12">
                         <div class="card">
@@ -70,7 +70,7 @@
 
                                                 </div>
                                             </div>
-                                            <table class="table table-bordered">
+                                            <table datatable="ng" class="table table-bordered" id="kite_listing_table">
                                                 <thead>
                                                     <tr>
                                                         <th>Name</th>
@@ -85,19 +85,20 @@
                                                     </tr>
                                                 </thead>
                                                 <tbody>
-                                                    <tr>
-                                                        <td>Bahdur Bazar Multan</td>
-                                                        <td>Kriopigi, Halkidiki</td>
-                                                        <td>www.kouyoni.gr</td>
-                                                        <td>63077</td>
-                                                        <td>+302374051100</td>
-                                                        <td>31.4504°</td>
-                                                        <td>73.1350°</td>
+                                                    <tr data-ng-repeat="kite in kites">
+                                                        <td>{{kite.name}}</td>
+                                                        <td>{{kite.address}}</td>
+                                                        <td>{{kite.site}}</td>
+                                                        <td>{{kite.zipCode}}</td>
+                                                        <td>{{kite.TEL}}</td>
+                                                        <td>{{kite.latitude}}°</td>
+                                                        <td>{{kite.longitude}}°</td>
                                                         <td>
-                                                            <a class="delete" title="Delete" data-toggle="tooltip"><i
+                                                            <a class="text-danger" data-ng-click="delete($index,kite)"
+                                                                data-toggle="tooltip"><i
                                                                     class="material-icons">&#xE872;</i></a>
                                                             <a data-toggle="tab" title="Edit" class="edit"
-                                                                href="#addnew"><i
+                                                                data-ng-click="edit($index,kite)"><i
                                                                     class="fa fa-pencil material-icons"></i></a>
 
                                                         </td>
@@ -121,7 +122,7 @@
 
 <div class="section-body">
     <div class="container-fluid">
-        <div class="tab-pane fade" id="addnew" role="tabpanel">
+        <div class="tab-pane  active fade" id="addnew" role="tabpanel">
             <div class="row">
                 <div class="col-sm-12">
                     <div class="card">
@@ -132,16 +133,16 @@
                             <div class="row clearfix">
                                 <div class="col-12">
                                     <div class="form-group">
-                                        <input type="text" class="form-control" id="exampleInputPassword1"
+                                        <input type="text" class="form-control" data-ng-model="kite.name"
                                             placeholder="Enter Kite Surfing Location Name">
                                     </div>
 
                                     <div class="form-group">
-                                        <input type="text" class="form-control" id="exampleInputPassword1"
+                                        <input type="text" class="form-control" data-ng-model="kite.address"
                                             placeholder="Enter Kite Surfing Location Address">
                                     </div>
                                     <div class="form-group">
-                                        <input type="text" class="form-control" id="exampleInputPassword1"
+                                        <input type="text" class="form-control" data-ng-model="kite.site"
                                             placeholder="Enter Kite Surfing Website">
                                     </div>
 
@@ -150,11 +151,9 @@
 
 
                                 <div class="col-md-12 col-sm-12">
-                                    <div id="map-container-google-1" class="z-depth-1-half map-container"
+                                    <div id="kite-map-container-google" class="z-depth-1-half map-container"
                                         style="height: 500px;">
-                                        <iframe
-                                            src="https://maps.google.com/maps?q=manhatan&t=&z=13&ie=UTF8&iwloc=&output=embed"
-                                            frameborder="0" style="border:0" allowfullscreen></iframe>
+
                                     </div>
                                 </div>
 
@@ -162,26 +161,26 @@
                                 <div class="col-md-6" style="margin-top: 10px;">
                                     <div class="form-group">
                                         <label>Longitude</label>
-                                        <input type="text" class="form-control">
+                                        <input type="text" class="form-control" data-ng-model="kite.longitude" readonly>
                                     </div>
                                 </div>
                                 <div class="col-md-6" style="margin-top: 10px;">
                                     <div class="form-group">
                                         <label>Latitude</label>
-                                        <input type="text" class="form-control">
+                                        <input type="text" class="form-control" data-ng-model="kite.latitude" readonly>
                                     </div>
                                 </div>
 
                                 <div class="col-md-6" style="margin-top: 10px;">
                                     <div class="form-group">
                                         <label>ZipCode</label>
-                                        <input type="number" class="form-control">
+                                        <input type="text" class="form-control" data-ng-model="kite.zipCode">
                                     </div>
                                 </div>
                                 <div class="col-md-6" style="margin-top: 10px;">
                                     <div class="form-group">
                                         <label>Telephone Number</label>
-                                        <input type="number" class="form-control">
+                                        <input type="text" class="form-control" data-ng-model="kite.TEL">
                                     </div>
                                 </div>
 
@@ -190,7 +189,97 @@
 
                                 <div class="col-sm-6">
                                     <div class="form-group mt-3">
-                                        <button type="submit" class="btn btn-success">Submit</button>
+                                        <button type="submit" data-ng-click="submit()"
+                                            class="btn btn-success">Submit</button>
+                                    </div>
+                                </div>
+
+
+                                <div class="col-sm-6">
+                                    <div class="form-group mt-3" style="margin-left: 400px;">
+                                        <button type="submit" class="btn btn-success">Cancel</button>
+                                    </div>
+                                </div>
+
+                            </div>
+                        </form>
+                    </div>
+                </div>
+            </div>
+        </div>
+    </div>
+</div>
+
+
+<!-- Update -->
+<div class="section-body">
+    <div class="container-fluid">
+        <div class="tab-pane " style="display: none;" id="updatekite" role="tabpanel">
+            <div class="row">
+                <div class="col-sm-12">
+                    <div class="card">
+                        <div class="card-header">
+                            <h3 class="card-title">Update Kite Surfing Location</h3>
+                        </div>
+                        <form class="card-body">
+                            <div class="row clearfix">
+                                <div class="col-12">
+                                    <div class="form-group">
+                                        <input type="text" class="form-control" data-ng-model="editing.name"
+                                            placeholder="Enter Kite Surfing Location Name">
+                                    </div>
+
+                                    <div class="form-group">
+                                        <input type="text" class="form-control" data-ng-model="editing.address"
+                                            placeholder="Enter Kite Surfing Location Address">
+                                    </div>
+                                    <div class="form-group">
+                                        <input type="text" class="form-control" data-ng-model="editing.site"
+                                            placeholder="Enter Kite Surfing Website">
+                                    </div>
+
+
+                                </div>
+
+
+                                <div class="col-md-12 col-sm-12">
+                                    <div id="editing-kite-map-container-google" class="z-depth-1-half map-container"
+                                        style="height: 500px;">
+
+                                    </div>
+                                </div>
+
+
+                                <div class="col-md-6" style="margin-top: 10px;">
+                                    <div class="form-group">
+                                        <label>Longitude</label>
+                                        <input type="text" id="editing_kite_longitude" class="form-control" data-ng-model="editing.longitude" readonly>
+                                    </div>
+                                </div>
+                                <div class="col-md-6" style="margin-top: 10px;">
+                                    <div class="form-group">
+                                        <label>Latitude</label>
+                                        <input type="text" id="editing_kite_latitude" class="form-control" data-ng-model="editing.latitude" readonly>
+                                    </div>
+                                </div>
+
+                                <div class="col-md-6" style="margin-top: 10px;">
+                                    <div class="form-group">
+                                        <label>ZipCode</label>
+                                        <input type="text" class="form-control" data-ng-model="editing.zipCode">
+                                    </div>
+                                </div>
+                                <div class="col-md-6" style="margin-top: 10px;">
+                                    <div class="form-group">
+                                        <label>Telephone Number</label>
+                                        <input type="text" class="form-control" data-ng-model="editing.TEL">
+                                    </div>
+                                </div>
+
+                                <div class="col-sm-6">
+                                    <div class="form-group mt-3">
+                                        <button type="submit" data-ng-click="save()"
+                                            class="btn btn-success">Save</button>
                                     </div>
                                 </div>
 

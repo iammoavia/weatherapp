@@ -16,7 +16,7 @@
 </style>
 
 
-<div class="section-body mt-3">
+<!-- <div class="section-body mt-3">
     <div class="container-fluid">
         <div class="row clearfix">
             <div class="col-lg-12">
@@ -43,9 +43,9 @@
             </div>
         </div>
     </div>
-</div>
+</div> -->
 
-<div class="section-body">
+<div class="section-body mt-3">
     <div class="container-fluid">
         <div class="tab-content">
             <div class="tab-pane fade show active" id="list" role="tabpanel">
@@ -56,7 +56,7 @@
                                 <div class="container-lg">
                                     <div class="table-responsive">
                                         <div class="table-wrapper">
-                                            <div class="table-title">
+                                            <div class="table-title text-center">
                                                 <div class="row">
                                                     <div class="col-sm-12 col-md-12 col-lg-12">
                                                         <h2><b>Live Passenger Port Location</b></h2>
@@ -69,7 +69,7 @@
 
                                                 </div>
                                             </div>
-                                            <table class="table table-bordered">
+                                            <table class="table table-bordered" id="pport_listing_table">
                                                 <thead>
                                                     <tr>
                                                         <th>Name</th>
@@ -86,21 +86,21 @@
                                                     </tr>
                                                 </thead>
                                                 <tbody>
-                                                    <tr>
-                                                        <td>Aigeas</td>
-                                                        <td>18th km of Athens-Lamia National Road, Nea Kifissia,</td>
-                                                        <td>19009</td>
-                                                        <td> +302399022420</td>
-                                                        <td>+302399023871</td>
-                                                        <td>dionissotis@hol.gr</td>
-                                                        <td>www.aigeas-camp.gr</td>
-                                                        <td>31.4504°</td>
-                                                        <td>73.1350°</td>
+                                                    <tr data-ng-repeat="pport in pports">
+                                                        <td>{{pport.name}}</td>
+                                                        <td>{{pport.address}}</td>
+                                                        <td>{{pport.zipCode}}</td>
+                                                        <td>{{pport.TEL}}</td>
+                                                        <td>{{pport.FAX}}</td>
+                                                        <td>{{pport.email}}</td>
+                                                        <td>{{pport.site}}</td>
+                                                        <td>{{pport.latitude}}°</td>
+                                                        <td>{{pport.longitude}}°</td>
                                                         <td>
-                                                            <a class="delete" title="Delete" data-toggle="tooltip"><i
+                                                            <a class="text-danger" data-ng-click="delete($index,pport)" title="Delete" data-toggle="tooltip"><i
                                                                     class="material-icons">&#xE872;</i></a>
                                                             <a data-toggle="tab" title="Edit" class="edit"
-                                                                href="#addnew"><i
+                                                                data-ng-click="edit($index,pport)"><i
                                                                     class="fa fa-pencil material-icons"></i></a>
 
                                                         </td>
@@ -135,21 +135,21 @@
                             <div class="row clearfix">
                                 <div class="col-12">
                                     <div class="form-group">
-                                        <input type="text" class="form-control" id="exampleInputPassword1"
+                                        <input type="text" class="form-control" data-ng-model="pport.name"
                                             placeholder="Enter Location   Name">
                                     </div>
 
                                     <div class="form-group">
-                                        <input type="text" class="form-control" id="exampleInputPassword1"
+                                        <input type="text" class="form-control" data-ng-model="pport.address"
                                             placeholder="Enter Location Address ">
                                     </div>
                                     <div class="form-group">
-                                        <input type="text" class="form-control" id="exampleInputPassword1"
+                                        <input type="text" class="form-control" data-ng-model="pport.email"
                                             placeholder="Enter Email Address">
                                     </div>
 
                                     <div class="form-group">
-                                        <input type="text" class="form-control" id="exampleInputPassword1"
+                                        <input type="text" class="form-control" data-ng-model="pport.site"
                                             placeholder="Enter WebSite Address">
                                     </div>
 
@@ -157,11 +157,9 @@
 
 
                                 <div class="col-md-12 col-sm-12">
-                                    <div id="map-container-google-1" class="z-depth-1-half map-container"
+                                    <div id="pport-map-container-google" class="z-depth-1-half map-container"
                                         style="height: 500px;">
-                                        <iframe
-                                            src="https://maps.google.com/maps?q=manhatan&t=&z=13&ie=UTF8&iwloc=&output=embed"
-                                            frameborder="0" style="border:0" allowfullscreen></iframe>
+                                       
                                     </div>
                                 </div>
 
@@ -169,13 +167,13 @@
                                 <div class="col-md-6" style="margin-top: 10px;">
                                     <div class="form-group">
                                         <label>Longitude</label>
-                                        <input type="text" class="form-control">
+                                        <input type="text" readonly data-ng-model="pport.longitude" class="form-control">
                                     </div>
                                 </div>
                                 <div class="col-md-6" style="margin-top: 10px;">
                                     <div class="form-group">
                                         <label>Latitude</label>
-                                        <input type="text" class="form-control">
+                                        <input type="text" readonly data-ng-model="pport.latitude" class="form-control">
                                     </div>
                                 </div>
 
@@ -183,20 +181,20 @@
                                 <div class="col-md-4" style="margin-top: 10px;">
                                     <div class="form-group">
                                         <label>Telephone Number</label>
-                                        <input type="number" class="form-control">
+                                        <input type="text" class="form-control" data-ng-model="pport.TEL">
                                     </div>
                                 </div>
                                 <div class="col-md-4" style="margin-top: 10px;">
                                     <div class="form-group">
                                         <label>Fax Number</label>
-                                        <input type="number" class="form-control">
+                                        <input type="text" class="form-control" data-ng-model="pport.FAX">
                                     </div>
                                 </div>
 
                                 <div class="col-md-4" style="margin-top: 10px;">
                                     <div class="form-group">
                                         <label>ZipCode</label>
-                                        <input type="number" class="form-control">
+                                        <input type="text" class="form-control" data-ng-model="pport.zipCode">
                                     </div>
                                 </div>
 
@@ -204,7 +202,7 @@
 
                                 <div class="col-sm-6">
                                     <div class="form-group mt-3">
-                                        <button type="submit" class="btn btn-success">Submit</button>
+                                        <button data-ng-click="submit()" type="submit" class="btn btn-success">Submit</button>
                                     </div>
                                 </div>
 
@@ -212,6 +210,106 @@
                                 <div class="col-sm-6">
                                     <div class="form-group mt-3" style="margin-left: 400px;">
                                         <button type="submit" class="btn btn-success">Cancel</button>
+                                    </div>
+                                </div>
+
+                            </div>
+                        </form>
+                    </div>
+                </div>
+            </div>
+        </div>
+    </div>
+</div>
+
+<div class="section-body">
+    <div class="container-fluid">
+        <div class="tab-pane " style="display: none;" id="updatepport" role="tabpanel">
+            <div class="row">
+                <div class="col-sm-12">
+                    <div class="card">
+                        <div class="card-header">
+                            <h3 class="card-title">Update Passenger Port Location</h3>
+                        </div>
+                        <form class="card-body">
+                            <div class="row clearfix">
+                                <div class="col-12">
+                                    <div class="form-group">
+                                        <input type="text" class="form-control" data-ng-model="editing.name"
+                                            placeholder="Enter Location   Name">
+                                    </div>
+
+                                    <div class="form-group">
+                                        <input type="text" class="form-control" data-ng-model="editing.address"
+                                            placeholder="Enter Location Address ">
+                                    </div>
+                                    <div class="form-group">
+                                        <input type="text" class="form-control" data-ng-model="editing.email"
+                                            placeholder="Enter Email Address">
+                                    </div>
+
+                                    <div class="form-group">
+                                        <input type="text" class="form-control" data-ng-model="editing.site"
+                                            placeholder="Enter WebSite Address">
+                                    </div>
+
+                                </div>
+
+
+                                <div class="col-md-12 col-sm-12">
+                                    <div id="update-pport-map-container-google" class="z-depth-1-half map-container"
+                                        style="height: 500px;">
+                                       
+                                    </div>
+                                </div>
+
+
+                                <div class="col-md-6" style="margin-top: 10px;">
+                                    <div class="form-group">
+                                        <label>Longitude</label>
+                                        <input type="text" readonly data-ng-model="editing.longitude" class="form-control">
+                                    </div>
+                                </div>
+                                <div class="col-md-6" style="margin-top: 10px;">
+                                    <div class="form-group">
+                                        <label>Latitude</label>
+                                        <input type="text" readonly data-ng-model="editing.latitude" class="form-control">
+                                    </div>
+                                </div>
+
+
+                                <div class="col-md-4" style="margin-top: 10px;">
+                                    <div class="form-group">
+                                        <label>Telephone Number</label>
+                                        <input type="text" class="form-control" data-ng-model="editing.TEL">
+                                    </div>
+                                </div>
+                                <div class="col-md-4" style="margin-top: 10px;">
+                                    <div class="form-group">
+                                        <label>Fax Number</label>
+                                        <input type="text" class="form-control" data-ng-model="editing.FAX">
+                                    </div>
+                                </div>
+
+                                <div class="col-md-4" style="margin-top: 10px;">
+                                    <div class="form-group">
+                                        <label>ZipCode</label>
+                                        <input type="text" class="form-control" data-ng-model="editing.zipCode">
+                                    </div>
+                                </div>
+
+
+
+                                <div class="col-sm-6">
+                                    <div class="form-group mt-3">
+                                        <button data-ng-click="save()" type="submit" class="btn btn-success">Submit</button>
+                                    </div>
+                                </div>
+
+
+                                <div class="col-sm-6">
+                                    <div class="form-group mt-3" style="margin-left: 400px;">
+                                        <button type="submit" class="btn btn-success" data-ng-click="hide()">Cancel</button>
                                     </div>
                                 </div>
 

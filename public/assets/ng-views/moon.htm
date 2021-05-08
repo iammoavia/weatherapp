@@ -6,7 +6,8 @@
                     <div class="card-body">
                         <div class="d-md-flex justify-content-between mb-2">
                             <ul class="nav nav-tabs b-none">
-                                <li class="nav-item"><a class="nav-link active" data-toggle="tab" href="#list"><i class="fa fa-list-ul"></i> Moon Calender Phases List</a></li>
+                                <li class="nav-item"><a class="nav-link active" data-toggle="tab" href="#list"><i
+                                            class="fa fa-list-ul"></i> Moon Calender Phases List</a></li>
                             </ul>
                         </div>
                         <div class="row">
@@ -41,21 +42,23 @@
                                                 <div class="row">
                                                     <div class="col-sm-12 col-md-12 col-lg-12">
                                                         <h2><b>Moon Phases Calender</b></h2>
-                                                        <button data-toggle="tab" href="#addnew" class=" text-center btn btn-info " style="margin-top: 20px;"><i class="fa fa-plus" style="padding: 3px;"></i>Add New</button>
+                                                        <button data-toggle="tab" href="#addnew"
+                                                            class=" text-center btn btn-info "
+                                                            style="margin-top: 20px;"><i class="fa fa-plus"
+                                                                style="padding: 3px;"></i>Add New</button>
 
                                                     </div>
 
                                                 </div>
                                             </div>
                                             <div class="row clearfix row-deck" style="margin-top: 20px;">
-                                                <div class="col-xl-12 col-lg-12 col-md-12">
+                                                <div class="col-xl-12 col-lg-12 col-md-12"
+                                                    data-ng-repeat="moon in moons">
 
                                                     <div class="card">
                                                         <div class="card-body">
-                                                            <img src="views/images/moons.png" />
-
-
-
+                                                            <img
+                                                                src="https://livecamsapi.herokuapp.com/{{moon.image}}" />
                                                         </div>
 
                                                     </div>
@@ -93,7 +96,7 @@
                                 <div class="row clearfix">
                                     <div class="col-md-12 col-sm-12">
                                         <div class="form-group mt-2 mb-3">
-                                            <input type="file" class="dropify">
+                                            <input type="file" class="dropify" file-model="myFile">
                                             <small id="fileHelp" class="form-text text-muted">Upload
                                                 Moon Images</small>
                                         </div>
@@ -102,7 +105,8 @@
 
                                     <div class="col-sm-6">
                                         <div class="form-group mt-3">
-                                            <button type="submit" class="btn btn-success">Submit</button>
+                                            <button type="submit" data-ng-click="submit()"
+                                                class="btn btn-success">Submit</button>
                                         </div>
                                     </div>
 

@@ -59,6 +59,9 @@ app.config(function ($routeProvider) {
         }).when("/settings", {
             templateUrl: "assets/ng-views/settings.htm",
             controller: "settingsCtrl"
+        }).when("/access", {
+            templateUrl: "assets/ng-views/admins.htm",
+            controller: "accessCtrl"
         })
         .otherwise({ redirectTo: '/dashboard' });
 });
@@ -85,6 +88,20 @@ let airpot_map;
 let airpot_update_map;
 let airport_marker;
 let update_airport_marker;
+
+// Kite Surfing
+let kite_map;
+let kite_map_update;
+let kite_marker;
+let update_kite_marker;
+let marker_kite_update;
+
+// Kite Surfing
+let pport_map;
+let pport_map_update;
+let pport_marker;
+let update_pport_marker;
+let marker_pport_update;
 
 // Port Auth
 let port_auth_map;
@@ -113,6 +130,19 @@ let camp_marker;
 let update_camp_marker;
 let marker_camp_update;
 
+
+// Wstation
+let wstation_map;
+let wstation_update_map;
+let wstation_marker;
+let update_wstation_marker;
+
+// Wstation
+let skicenter_map;
+let skicenter_update_map;
+let skicenter_marker;
+let update_skicenter_marker;
+
 // File Upload Service
 app.service('fileUpload', function ($http) {
     this.uploadFileToUrl = function (file, uploadUrl) {
@@ -130,13 +160,16 @@ app.service('fileUpload', function ($http) {
                         icon: 'error',
                         title: response.data.message
                     });
+                    return false;
                 }
 
+                return true;
             }, function () {
                 Toast.fire({
                     icon: 'error',
                     title: "Error uploading attachment !"
                 });
+                return false;
             });
     }
 });
@@ -565,14 +598,150 @@ function placeMarkerCampUpdate(location) {
 
 
 
+
+
+// kite
+function initMapKite($id) {
+
+    kite_map = new google.maps.Map(document.getElementById($id), {
+        center: { lat: 40.7590403, lng: -74.0392714 },
+        zoom: 8,
+    });
+
+    google.maps.event.addListener(kite_map, 'click', function (event) {
+        placeMarkerKite(event.latLng);
+    });
+
+    console.log('Init. Google Map (kite)');
+}
+
+
+function initMapKiteUpdate($id) {
+
+    kite_map_update = new google.maps.Map(document.getElementById($id), {
+        center: { lat: 40.7590403, lng: -74.0392714 },
+        zoom: 8,
+    });
+
+    google.maps.event.addListener(kite_map_update, 'click', function (event) {
+        placeMarkerKiteUpdate(event.latLng);
+    });
+
+    console.log('Init. Google Map (Update kite)');
+
+}
+
+function placeMarkerKite(location) {
+
+    if (typeof kite_marker != 'undefined' && kite_marker != null) {
+        kite_marker.setPosition(location);
+    } else {
+        kite_marker = new google.maps.Marker({
+            position: location,
+            map: kite_map
+        });
+    }
+
+    console.log('Init. Marker Function');
+
+}
+
+function placeMarkerKiteUpdate(location) {
+
+    if (typeof marker_kite_update != 'undefined' && marker_kite_update != null) {
+        marker_kite_update.setPosition(location);
+    } else {
+        marker_kite_update = new google.maps.Marker({
+            position: location,
+            map: kite_map_update
+        });
+    }
+
+    $('#editing_kite_latitude').val(location.lat());
+    $('#editing_kite_longitude').val(location.lng());
+
+
+    console.log('Init. Marker Function (update)');
+
+}
+// End kite
+
+
+// wstation
+function initMapWstation($id) {
+
+    wstation_map = new google.maps.Map(document.getElementById($id), {
+        center: { lat: 40.7590403, lng: -74.0392714 },
+        zoom: 8,
+    });
+
+    google.maps.event.addListener(wstation_map, 'click', function (event) {
+        placeMarkerWstation(event.latLng);
+    });
+
+    console.log('Init. Google Map (wstation)');
+}
+
+
+function initMapWstationUpdate($id) {
+
+    wstation_map_update = new google.maps.Map(document.getElementById($id), {
+        center: { lat: 40.7590403, lng: -74.0392714 },
+        zoom: 8,
+    });
+
+    google.maps.event.addListener(wstation_map_update, 'click', function (event) {
+        placeMarkerWstationUpdate(event.latLng);
+    });
+
+    console.log('Init. Google Map (Update wstation)');
+
+}
+
+function placeMarkerWstation(location) {
+
+    if (typeof wstation_marker != 'undefined' && wstation_marker != null) {
+        wstation_marker.setPosition(location);
+    } else {
+        wstation_marker = new google.maps.Marker({
+            position: location,
+            map: wstation_map
+        });
+    }
+
+    console.log('Init. Marker Function');
+
+}
+
+function placeMarkerWstationUpdate(location) {
+
+    if (typeof marker_wstation_update != 'undefined' && marker_wstation_update != null) {
+        marker_wstation_update.setPosition(location);
+    } else {
+        marker_wstation_update = new google.maps.Marker({
+            position: location,
+            map: wstation_map_update
+        });
+    }
+
+    $('#editing_wstation_latitude').val(location.lat());
+    $('#editing_wstation_longitude').val(location.lng());
+
+
+    console.log('Init. Marker Function (update)');
+
+}
+// End wstation
+
+
 // portsCtrl
-app.controller('portsCtrl', function ($scope, $http) {
+app.controller('portsCtrl', function ($scope, $rootScope, $http) {
 
     $('.dimmer').show();
     $scope.page_title = '';
     port_auth_marker = null;
     marker_port_auth_update = null;
-
+    $rootScope.lan = lan;
     $scope.hide = (id) => {
         $('#' + id).hide();
         console.log('hiding');
@@ -726,10 +895,10 @@ app.controller('portsCtrl', function ($scope, $http) {
             if (response.data.success) {
                 $scope.port_auths = response.data.Data;
                 initMapPort_auth('port_auth-map-container-google');
-
-                // Hospitalss-update-map-container
-
                 initMapPort_authUpdate('editing-port_auth-map-container-google');
+                jQuery(document).ready(function ($) {
+                    $('#port_auth_listing_table').DataTable();
+                });
             } else {
                 console.log(message);
             }
@@ -744,11 +913,134 @@ app.controller('portsCtrl', function ($scope, $http) {
 
 });
 
-app.controller('dashboardCtrl', function ($scope, $http) {
+
+// pport
+function initMapPport($id) {
+
+    pport_map = new google.maps.Map(document.getElementById($id), {
+        center: { lat: 40.7590403, lng: -74.0392714 },
+        zoom: 8,
+    });
+
+    google.maps.event.addListener(pport_map, 'click', function (event) {
+        placeMarkerPport(event.latLng);
+    });
+
+    console.log('Init. Google Map (pport)');
+}
+
+
+function initMapPportUpdate($id) {
+
+    pport_map_update = new google.maps.Map(document.getElementById($id), {
+        center: { lat: 40.7590403, lng: -74.0392714 },
+        zoom: 8,
+    });
+
+    google.maps.event.addListener(pport_map_update, 'click', function (event) {
+        placeMarkerPportUpdate(event.latLng);
+    });
+
+    console.log('Init. Google Map (Update pport)');
+
+}
+
+function placeMarkerPport(location) {
+
+    if (typeof pport_marker != 'undefined' && pport_marker != null) {
+        pport_marker.setPosition(location);
+    } else {
+        pport_marker = new google.maps.Marker({
+            position: location,
+            map: pport_map
+        });
+    }
+
+    console.log('Init. Marker Function');
+
+}
+
+function placeMarkerPportUpdate(location) {
+
+    if (typeof marker_pport_update != 'undefined' && marker_pport_update != null) {
+        marker_pport_update.setPosition(location);
+    } else {
+        marker_pport_update = new google.maps.Marker({
+            position: location,
+            map: pport_map_update
+        });
+    }
+
+    $('#editing_pport_latitude').val(location.lat());
+    $('#editing_pport_longitude').val(location.lng());
+
+
+    console.log('Init. Marker Function (update)');
+
+}
+// End Airport
+
+
+app.controller('accessCtrl', function ($scope, $rootScope, $http) {
+    $rootScope.lan = lan;
+    $scope.delete = (ind, acc) => {
+        $http.delete('access/' + acc.id, {}).then(function (response) {
+            if (response.data.status) {
+                $scope.admins.splice(ind, 1);
+                Toast.fire({
+                    icon: 'success',
+                    title: 'access deleted'
+                });
+            } else {
+                Toast.fire({
+                    icon: 'error',
+                    title: 'something went wrong'
+                });
+            }
+            $('.dimmer').hide();
+        }, function (response) {
+            console.log('something went wrong', response);
+            $('.dimmer').hide();
+            Toast.fire({
+                icon: 'error',
+                title: 'something went wrong'
+            });
+        });
+    };
+
+
+    $scope.$on('$viewContentLoaded', function () {
+        //Here your view content is fully loaded !!
+        $http.get('access', {}).then(function (response) {
+            if (response.data.status) {
+                $scope.admins = response.data.data;
+
+            } else {
+                Toast.fire({
+                    icon: 'error',
+                    title: 'something went wrong'
+                });
+            }
+            $('.dimmer').hide();
+        }, function (response) {
+            console.log('something went wrong', response);
+            $('.dimmer').hide();
+            Toast.fire({
+                icon: 'error',
+                title: 'something went wrong'
+            });
+        });
+
+
+    });
+
+});
+
+
+app.controller('dashboardCtrl', function ($scope, $rootScope, $http) {
 
     $('.dimmer').show();
-    $scope.dashboard_loaded = false;
-
+    $rootScope.lan = lan;
     $scope.$on('$viewContentLoaded', function () {
         //Here your view content is fully loaded !!
         $http.get('https://livecamsapi.herokuapp.com/get-counts', {}).then(function (response) {
@@ -769,28 +1061,23 @@ app.controller('dashboardCtrl', function ($scope, $http) {
 
 });
 
-app.controller('settingsCtrl', function ($scope, $http) {
+app.controller('settingsCtrl', function ($scope, $rootScope, $http) {
+    $rootScope.lan = lan;
+    $scope.access = { access: [] };
+    $scope.username = $('#uname').val();
+    $scope.lan = $rootScope.lan;
 
-    $scope.create = () => {
+    $scope.changepass = () => {
+        $http.post('/password', JSON.stringify({ password: $scope.password })).then(function (response) {
 
-        $('.dimmer').show();
-
-        $scope.access.access = $('input:checked').map(function () {
-            return $(this).val();
-        });
-
-        $scope.access.access = $scope.access.access.get();
-
-        postData = $.param($scope.access);
-
-        $http.post('/access', postData).then(function (response) {
-
-            if (response.data.success) {
+            if (response.data.status) {
                 Toast.fire({
                     icon: 'success',
-                    title: 'access created'
+                    title: 'password changes'
                 });
-               
+
+                $scope.password = $scope.cpassword = null;
+
             } else {
                 Toast.fire({
                     icon: 'error',
@@ -800,7 +1087,84 @@ app.controller('settingsCtrl', function ($scope, $http) {
             $('.dimmer').hide();
 
 
-        },function (response) {
+        }, function (response) {
+            Toast.fire({
+                icon: 'error',
+                title: 'something went wrong !'
+            });
+        });
+    };
+
+    $scope.changelang = () => {
+        $http.post('/lang', JSON.stringify({ lan: $scope.lan })).then(function (response) {
+
+            if (response.data.status) {
+                // Toast.fire({
+                //     icon: 'success',
+                //     title: 'language switched'
+                // });
+
+                window.location.reload();
+
+            } else {
+                Toast.fire({
+                    icon: 'error',
+                    title: 'something went wrong !'
+                });
+            }
+            $('.dimmer').hide();
+
+
+        }, function (response) {
+            Toast.fire({
+                icon: 'error',
+                title: 'something went wrong !'
+            });
+        });
+    };
+
+    $scope.create = () => {
+
+
+
+        $scope.access.access = $('input:checked').map(function () {
+            return $(this).val();
+        });
+
+        $scope.access.access = $scope.access.access.get();
+
+        console.log($scope.access.access.length);
+
+        if ($scope.access.access.length == 0) {
+            Toast.fire({
+                icon: 'error',
+                title: 'please select proper access'
+            });
+            return;
+        }
+
+        $('.dimmer').show();
+        // postData = $.param();
+
+        $http.post('/access', JSON.stringify($scope.access)).then(function (response) {
+
+            if (response.data.status) {
+                Toast.fire({
+                    icon: 'success',
+                    title: 'access created'
+                });
+                $scope.access = null;
+                scrollto('Access');
+            } else {
+                Toast.fire({
+                    icon: 'error',
+                    title: 'something went wrong !'
+                });
+            }
+            $('.dimmer').hide();
+
+
+        }, function (response) {
             Toast.fire({
                 icon: 'error',
                 title: 'something went wrong !'
@@ -810,25 +1174,143 @@ app.controller('settingsCtrl', function ($scope, $http) {
     }
 });
 
-app.controller('blockuserCtrl', function ($scope, $http) {
+app.controller('blockuserCtrl', function ($scope, $rootScope, $http) {
+    $rootScope.lan = lan;
+    $scope.$on('$viewContentLoaded', function () {
+        $('.dimmer').show();
+        $http.get('https://livecamsapi.herokuapp.com/user/get-block-users', {}).then(function (response) {
+            if (response.data.success) {
+                $scope.users = response.data.data;
 
-    console.log('App Initialized');
+            } else {
+                console.log(response.data);
+            }
+            $('.dimmer').hide();
+        }, function (response) {
+            console.log('something went wrong', response);
+            $('.dimmer').hide();
+        });
+
+    });
 
 });
 
-app.controller('userprofilesCtrl', function ($scope, $http) {
+app.controller('userprofilesCtrl', function ($scope, $rootScope, $http) {
+    $rootScope.lan = lan;
 
-    console.log('App Initialized');
+    $scope.block = (ind, user) => {
+
+        Swal.fire({
+            title: 'Submit reasong to block ' + user.firstname + ' ' + user.lastname,
+            input: 'text',
+            inputAttributes: {
+                autocapitalize: 'off'
+            },
+            showCancelButton: true,
+            confirmButtonText: 'Block',
+            showLoaderOnConfirm: true,
+            allowOutsideClick: () => !Swal.isLoading()
+        }).then((result) => {
+            if (result.isConfirmed) {
+                if (result.value == null || result.value.length == 0) {
+                    Toast.fire({
+                        icon: 'error',
+                        title: 'Plz provide proper reason'
+                    });
+                } else {
+                    $http.patch('https://livecamsapi.herokuapp.com/user/block-user/' + user._id, { reason: result.value }).then(function (response) {
+                        if (response.data.success) {
+
+                            $scope.users[ind].status = 'BLOCKED';
+
+                            Toast.fire({
+                                icon: 'success',
+                                title: 'user blocked'
+                            });
+
+                        } else {
+                            console.log(response.data);
+                        }
+                        $('.dimmer').hide();
+                    }, function (response) {
+                        console.log('something went wrong', response);
+                        $('.dimmer').hide();
+                    });
+                }
+            }
+        })
+
+
+    };
+
+    $scope.unblock = (ind, user) => {
+        $('.dimmer').show();
+        $http.patch('https://livecamsapi.herokuapp.com/user/unblock-user/' + user._id, {}).then(function (response) {
+            if (response.data.success) {
+                $scope.users[ind].status = 'ACTIVE';
+
+            } else {
+                console.log(response.data);
+            }
+            $('.dimmer').hide();
+        }, function (response) {
+            console.log('something went wrong', response);
+            $('.dimmer').hide();
+        });
+    };
+
+    $scope.applyfilter = () => {
+        $scope.comp = angular.copy($scope.comp_c);
+    };
+
+    $scope.$on('$viewContentLoaded', function () {
+        $('.dimmer').show();
+        $('.dropify').dropify();
+        $http.get('https://livecamsapi.herokuapp.com/user/users', {}).then(function (response) {
+            if (response.data.status == 'Success') {
+                $scope.users = response.data.data;
+
+            } else {
+                console.log(message);
+            }
+            $('.dimmer').hide();
+        }, function (response) {
+            console.log('something went wrong', response);
+            $('.dimmer').hide();
+        });
+
+    });
 
 });
 
-app.controller('paymentCtrl', function ($scope, $http) {
+app.controller('paymentCtrl', function ($scope, $rootScope, $http) {
+    $rootScope.lan = lan;
 
-    console.log('App Initialized');
+    // Fetch  FS On Content Load
+    $scope.$on('$viewContentLoaded', function () {
 
+        $http.get('https://livecamsapi.herokuapp.com/payment/get-payments', {}).then(function (response) {
+            if (response.data.success) {
+                $scope.payments = response.data.payments;
+                $scope.trials = response.data.trials;
+                // $.noConflict();
+                jQuery(document).ready(function ($) {
+                    $('#fs_listing_table').DataTable();
+                });
+            } else {
+                console.log(message);
+            }
+            $('.dimmer').hide();
+        }, function (response) {
+            console.log('something went wrong', response);
+            $('.dimmer').hide();
+        });
+
+    });
 });
 
-app.controller('fishingshelterCtrl', function ($scope, fileUpload, $http) {
+app.controller('fishingshelterCtrl', function ($scope, $rootScope, fileUpload, $http) {
+    $rootScope.lan = lan;
     $scope.URL = 'https://livecamsapi.herokuapp.com';
     $('.dimmer').show();
     $scope.page_title = '';
@@ -844,6 +1326,7 @@ app.controller('fishingshelterCtrl', function ($scope, fileUpload, $http) {
 
 
     $scope.edit = (index, fs) => {
+        $rootScope.lan = lan;
         $scope.editing = angular.copy(fs);
         $scope.editing_fs_index = index;
 
@@ -1004,7 +1487,10 @@ app.controller('fishingshelterCtrl', function ($scope, fileUpload, $http) {
         $http.get('https://livecamsapi.herokuapp.com/fishing-shelters/get-all-fishing-shelters', {}).then(function (response) {
             if (response.data.success) {
                 $scope.fss = response.data.Data;
-
+                // $.noConflict();
+                jQuery(document).ready(function ($) {
+                    $('#fs_listing_table').DataTable();
+                });
             } else {
                 console.log(message);
             }
@@ -1018,8 +1504,8 @@ app.controller('fishingshelterCtrl', function ($scope, fileUpload, $http) {
 
 });
 
-app.controller('campingCtrl', function ($scope, $http) {
-
+app.controller('campingCtrl', function ($scope, $rootScope, $http) {
+    $rootScope.lan = lan;
     $('.dimmer').show();
     $scope.page_title = '';
     $scope.page_title = '';
@@ -1177,6 +1663,10 @@ app.controller('campingCtrl', function ($scope, $http) {
 
                 initMapCamp('camp-map-container');
                 initMapCampUpdate('update-camp-map');
+                // $.noConflict();
+                jQuery(document).ready(function ($) {
+                    $('#camping_listing_table').DataTable();
+                });
 
             } else {
                 console.log(message);
@@ -1191,56 +1681,1462 @@ app.controller('campingCtrl', function ($scope, $http) {
 
 });
 
-app.controller('mountainCtrl', function ($scope, $http) {
+app.controller('mountainCtrl', function ($scope, $rootScope, $http, fileUpload) {
+    $rootScope.lan = lan;
+    $('.dimmer').show();
+    $scope.page_title = '';
+    marker = null;
+    marker_camera_update = null;
 
-    console.log('App Initialized');
+
+
+    $scope.hide = (id) => {
+        $('#' + id).hide();
+        console.log('hiding');
+        scrollto('mountain_listing_table');
+    };
+
+
+    $scope.edit = (index, mountain) => {
+        $scope.editing = angular.copy(mountain);
+        $scope.editing_mountain_index = index;
+
+
+
+        newlatlng = new google.maps.LatLng(parseFloat(mountain.latitude), parseFloat(mountain.longitude));
+        // console.log(newlatlng);
+        if (marker_camera_update != null && typeof marker_camera_update != 'undefined') {
+            marker_camera_update.setPosition(newlatlng);
+        } else {
+            // Add Marker
+            marker_camera_update = new google.maps.Marker({
+                position: { lat: parseFloat(mountain.latitude), lng: parseFloat(mountain.longitude) },
+                map: camera_map_update
+            });
+        }
+
+        camera_map_update.setCenter({ lat: parseFloat(mountain.latitude), lng: parseFloat(mountain.longitude) });
+
+        $('#updatemountain').show();
+        scrollto('updatemountain');
+
+    };
+
+    $scope.save = function () {
+
+        // Sending PUT Request for update
+        $('.dimmer').show();
+        // var postData = $.param($scope.camera);
+        // console.log($scope.camera);
+        $id = angular.copy($scope.editing._id);
+
+        $scope.editing.longitude = "" + marker_camera_update.position.lng();
+
+        $scope.editing.latitude = "" + marker_camera_update.position.lat();
+
+        // delete $scope.editing_camera._id;
+        $http.patch('https://livecamsapi.herokuapp.com/mount-shelters/' + $id, $scope.editing).then(function (response) {
+
+            if (response.data.success) {
+                $scope.mountains[$scope.editing_mountain_index] = angular.copy($scope.editing);
+                $scope.mountains[$scope.editing_mountain_index]._id = $id;
+
+
+                // var file = $scope.myFile;
+                // if (file) {
+                //     Toast.fire({
+                //         icon: 'error',
+                //         title: 'Plz Select a image'
+                //     });
+                //     var uploadUrl = "https://livecamsapi.herokuapp.com/livecamera/upload-live-camera-image/" + response.data.Data._id;
+                //     fileUpload.uploadFileToUrl(file, uploadUrl);
+                // }
+
+
+                $scope.hide();
+
+                Toast.fire({
+                    icon: 'success',
+                    title: 'Camera updated successfully'
+                });
+
+                $scope.hide('updatemountain');
+
+            } else {
+                // alert(response.data.message);
+                Toast.fire({
+                    icon: 'error',
+                    title: response.data.message
+                });
+            }
+            $('.dimmer').hide();
+        }, function (response) {
+            Toast.fire({
+                icon: 'error',
+                title: 'Something went wrong !'
+            })
+            $('.dimmer').hide();
+        });
+
+    };
+
+    // Fetch Live Camera's On Content Load
+    $scope.$on('$viewContentLoaded', function () {
+        //Here your view content is fully loaded !!
+        $http.get('https://livecamsapi.herokuapp.com/mount-shelters/get-all-mount-shelters', {}).then(function (response) {
+            if (response.data.success) {
+                $scope.mountains = response.data.Data;
+                $('.dropify').dropify();
+                // $.noConflict();
+                jQuery(document).ready(function ($) {
+                    $scope.dt = $('#mountain_listing_table').DataTable();
+                });
+            } else {
+                console.log(message);
+            }
+            $('.dimmer').hide();
+        }, function (response) {
+            console.log('something went wrong', response);
+            $('.dimmer').hide();
+        });
+
+
+        initMapCamera('mountain-map-container');
+
+        // cameras-update-map-container
+
+        initMapCameraUpdate('update-mountain-map-container');
+
+
+
+    });
+
+    $scope.delete = (index, mountain) => {
+
+        $('.dimmer').show();
+
+        $http.delete('https://livecamsapi.herokuapp.com/mount-shelters/' + mountain._id, {}).then(function (response) {
+
+            if (response.data.success) {
+                $scope.mountains.splice(index, 1);
+            } else {
+                Toast.fire({
+                    icon: 'error',
+                    title: response.data.message
+                });
+                $scope.dt.ajax.reload();
+            }
+            $('.dimmer').hide();
+        }, function (response) {
+            Toast.fire({
+                icon: 'error',
+                title: 'Something went wrong !'
+            })
+        });
+
+    };
+
+    $scope.submit = () => {
+
+        // https://livecamsapi.herokuapp.com/livecamera/upload-live-camera-image/:liveCameraId
+
+        $scope.mountain.longitude = "" + marker.position.lng();
+
+        $scope.mountain.latitude = "" + marker.position.lat();
+
+        $scope.mountain.TEL = $scope.mountain.TEL.toString();
+
+        // var file = $scope.myFile;
+        // if (!file) {
+        //     Toast.fire({
+        //         icon: 'error',
+        //         title: 'Plz Select a image'
+        //     });
+        //     return;
+        // }
+
+
+        $('.dimmer').show();
+        // var postData = $.param($scope.mountain);
+        console.log($scope.mountain);
+        $http.post('https://livecamsapi.herokuapp.com/mount-shelters/create-mount-shelter', $scope.mountain).then(function (response) {
+
+            if (response.data.success) {
+                $scope.mountain._id = response.data.Data._id;
+
+                // var uploadUrl = "https://livecamsapi.herokuapp.com/mount-shelters/upload-mount-shelter-image/" + response.data.Data._id;
+                // fileUpload.uploadFileToUrl(file, uploadUrl)
+
+                $scope.mountains.push($scope.mountain);
+                // alert(response.data.message);
+                $scope.mountain = null;
+                Toast.fire({
+                    icon: 'success',
+                    title: response.data.message
+                });
+                scrollto('mountain_listing_table');
+            } else {
+                alert(response.data.message);
+            }
+            $('.dimmer').hide();
+        }, function (response) {
+            console.log(response);
+            $('.dimmer').hide();
+        });
+
+
+    };
 
 });
 
-app.controller('kiteCtrl', function ($scope, $http) {
+app.controller('kiteCtrl', function ($scope, $rootScope, $http) {
+    $rootScope.lan = lan;
 
-    console.log('App Initialized');
+    $('.dimmer').show();
+    $scope.page_title = '';
+    port_auth_marker = null;
+    marker_port_auth_update = null;
+
+    $scope.hide = (id) => {
+        $('#' + id).hide();
+        console.log('hiding');
+        scrollto('kite_listing_table');
+    };
+
+
+    $scope.edit = (index, kite) => {
+        $scope.editing = angular.copy(kite);
+        $scope.editing_kite_index = index;
+
+
+
+        newlatlng = new google.maps.LatLng(parseFloat(kite.latitude), parseFloat(kite.longitude));
+        // console.log(newlatlng);
+        if (typeof marker_kite_update != 'undefined' && marker_kite_update != null) {
+            marker_kite_update.setPosition(newlatlng);
+        } else {
+            // Add Marker
+            marker_kite_update = new google.maps.Marker({
+                position: { lat: parseFloat(kite.latitude), lng: parseFloat(kite.longitude) },
+                map: kite_map_update
+            });
+        }
+
+        kite_map_update.setCenter({ lat: parseFloat(kite.latitude), lng: parseFloat(kite.longitude) });
+
+        $('#updatekite').show();
+        scrollto('updatekite');
+
+    };
+
+    $scope.save = function () {
+
+        // Sending PUT Request for update
+        $('.dimmer').show();
+        // var postData = $.param($scope.camera);
+        // console.log($scope.camera);
+        $id = angular.copy($scope.editing._id);
+
+        $scope.editing.longitude = "" + marker_kite_update.position.lng();
+
+        $scope.editing.latitude = "" + marker_kite_update.position.lat();
+
+        // delete $scope.editing._id;
+        $http.patch('https://livecamsapi.herokuapp.com/kite-surfings/' + $id, $scope.editing).then(function (response) {
+
+            if (response.data.success) {
+                $scope.kites[$scope.editing_kite_index] = angular.copy($scope.editing);
+                $scope.kites[$scope.editing_kite_index]._id = $id;
+                marker_kite_update.setMap(null);
+                marker_kite_update = null;
+                $scope.hide();
+
+                Toast.fire({
+                    icon: 'success',
+                    title: 'Porth Authority updated successfully'
+                });
+
+                scrollto('kite_listing_table');
+
+            } else {
+                // alert(response.data.message);
+                Toast.fire({
+                    icon: 'error',
+                    title: response.data.message
+                });
+            }
+            $('.dimmer').hide();
+
+        }, function (response) {
+            Toast.fire({
+                icon: 'error',
+                title: 'Something went wrong !'
+            })
+            $('.dimmer').hide();
+        });
+
+    };
+
+    // Delete port_auth
+    $scope.delete = (index, kite) => {
+
+        $('.dimmer').show();
+
+        $http.delete('https://livecamsapi.herokuapp.com/kite-surfings/' + kite._id, {}).then(function (response) {
+
+            if (response.data.success) {
+                $scope.kites.splice(index, 1);
+                Toast.fire({
+                    icon: 'success',
+                    title: response.data.message
+                });
+                scrollto('kite_listing_table');
+            } else {
+                Toast.fire({
+                    icon: 'error',
+                    title: response.data.message
+                });
+            }
+            $('.dimmer').hide();
+        }, function (response) {
+            Toast.fire({
+                icon: 'error',
+                title: 'Something went wrong !'
+            })
+        });
+
+    };
+
+    // Add New port_auth
+    $scope.submit = () => {
+
+        $scope.kite.longitude = "" + kite_marker.position.lng();
+
+        $scope.kite.latitude = "" + kite_marker.position.lat();
+
+        $('.dimmer').show();
+        console.log($scope.kite);
+        $http.post('https://livecamsapi.herokuapp.com/kite-surfings/create-kitesurfing', $scope.kite).then(function (response) {
+
+            if (response.data.success) {
+                $scope.kite._id = response.data.Data._id;
+                $scope.kites.push($scope.kite);
+                // alert(response.data.message);
+                $scope.kite = null;
+                kite_marker.setMap(null);
+                kite_marker = null;
+                Toast.fire({
+                    icon: 'success',
+                    title: response.data.message
+                });
+                scrollto('kite_listing_table');
+            } else {
+                alert(response.data.message);
+            }
+            $('.dimmer').hide();
+        }, function (response) {
+            console.log(response);
+            $('.dimmer').hide();
+        });
+
+
+    };
+
+
+    $scope.$on('$viewContentLoaded', function () {
+        //Here your view content is fully loaded !!
+        $http.get('https://livecamsapi.herokuapp.com/kite-surfings/get-all-kitesurfings', {}).then(function (response) {
+            if (response.data.success) {
+
+                $scope.kites = response.data.Data;
+                initMapKite('kite-map-container-google');
+                initMapKiteUpdate('editing-kite-map-container-google');
+
+                // $.noConflict();
+                jQuery(document).ready(function ($) {
+                    $('#kite_listing_table').DataTable();
+                });
+
+            } else {
+                console.log(message);
+            }
+            $('.dimmer').hide();
+        }, function (response) {
+            console.log('something went wrong', response);
+            $('.dimmer').hide();
+        });
+
+
+    });
 
 });
 
-app.controller('skicenterCtrl', function ($scope, $http) {
+app.controller('skicenterCtrl', function ($scope, $rootScope, $http) {
+    $rootScope.lan = lan;
+    $('.dimmer').show();
+    $scope.page_title = '';
+    airport_marker = null;
+    marker_airport_update = null;
 
-    console.log('App Initialized');
+    $scope.hide = (id) => {
+        $('#' + id).hide();
+        console.log('hiding');
+        scrollto('skicenter-listing-table');
+    };
+
+
+    $scope.edit = (index, skicenter) => {
+        $scope.editing = angular.copy(skicenter);
+        $scope.editing_skicenter_index = index;
+
+
+
+        newlatlng = new google.maps.LatLng(parseFloat(skicenter.latitude), parseFloat(skicenter.longitude));
+        // console.log(newlatlng);
+        if (marker_airport_update != null && typeof marker_airport_update != 'undefined') {
+            marker_airport_update.setPosition(newlatlng);
+        } else {
+            // Add Marker
+            marker_airport_update = new google.maps.Marker({
+                position: { lat: parseFloat(skicenter.latitude), lng: parseFloat(skicenter.longitude) },
+                map: airport_map_update
+            });
+        }
+
+        airport_map_update.setCenter({ lat: parseFloat(skicenter.latitude), lng: parseFloat(skicenter.longitude) });
+
+        $('#updateskicenter').show();
+        scrollto('updateskicenter');
+
+    };
+
+    $scope.save = function () {
+
+        // Sending PUT Request for update
+        $('.dimmer').show();
+        // var postData = $.param($scope.camera);
+        // console.log($scope.camera);
+        $id = angular.copy($scope.editing._id);
+
+        $scope.editing.longitude = "" + marker_airport_update.position.lng();
+
+        $scope.editing.latitude = "" + marker_airport_update.position.lat();
+
+        // delete $scope.editing._id;
+        $http.patch('https://livecamsapi.herokuapp.com/ski-centers/' + $id, $scope.editing).then(function (response) {
+
+            if (response.data.success) {
+                $scope.skicenters[$scope.editing_skicenter_index] = angular.copy($scope.editing);
+                $scope.skicenters[$scope.editing_skicenter_index]._id = $id;
+                marker_airport_update.setMap(null);
+                marker_airport_update = null;
+                $scope.hide();
+
+                Toast.fire({
+                    icon: 'success',
+                    title: 'ski center updated successfully'
+                });
+                // scrollto('skicenter-listing-table');
+            } else {
+                // alert(response.data.message);
+                Toast.fire({
+                    icon: 'error',
+                    title: response.data.message
+                });
+            }
+            $('.dimmer').hide();
+        }, function (response) {
+            Toast.fire({
+                icon: 'error',
+                title: 'Something went wrong !'
+            })
+            $('.dimmer').hide();
+        });
+
+    };
+
+    // Delete skicenter
+    $scope.delete = (index, skicenter) => {
+
+        $('.dimmer').show();
+
+        $http.delete('https://livecamsapi.herokuapp.com/ski-centers/' + skicenter._id, {}).then(function (response) {
+
+            if (response.data.success) {
+                $scope.skicenters.splice(index, 1);
+                Toast.fire({
+                    icon: 'success',
+                    title: response.data.message
+                })
+            } else {
+                Toast.fire({
+                    icon: 'error',
+                    title: response.data.message
+                });
+            }
+            scrollto('skicenter-listing-table');
+            $('.dimmer').hide();
+        }, function (response) {
+            Toast.fire({
+                icon: 'error',
+                title: 'Something went wrong !'
+            })
+        });
+
+    };
+
+    // Add New skicenter
+    $scope.submit = () => {
+
+        $scope.skicenter.longitude = "" + airport_marker.position.lng();
+
+        $scope.skicenter.latitude = "" + airport_marker.position.lat();
+
+        // $scope.skicenter.TEL = $scope.skicenter.TEL.toString();
+        $('.dimmer').show();
+        // var postData = $.param($scope.skicenter);
+        console.log($scope.skicenter);
+        $http.post('https://livecamsapi.herokuapp.com/ski-centers/create-skicenter', $scope.skicenter).then(function (response) {
+
+            if (response.data.success) {
+                $scope.skicenter._id = response.data.Data._id;
+                $scope.skicenters.push($scope.skicenter);
+                // alert(response.data.message);
+                $scope.skicenter = null;
+                airport_marker.setMap(null);
+                airport_marker = null;
+                Toast.fire({
+                    icon: 'success',
+                    title: response.data.message
+                });
+                scrollto('skicenter_listing_table');
+            } else {
+                alert(response.data.message);
+            }
+            $('.dimmer').hide();
+        }, function (response) {
+            console.log(response);
+            $('.dimmer').hide();
+        });
+
+
+    };
+
+
+
+    // Fetch Live Hospitals On Content Load
+    $scope.$on('$viewContentLoaded', function () {
+        //Here your view content is fully loaded !!
+        $http.get('https://livecamsapi.herokuapp.com/ski-centers/get-all-skicenters', {}).then(function (response) {
+            if (response.data.success) {
+                $scope.skicenters = response.data.Data;
+
+                initMapAirport('skicenter-map-container-google');
+                initMapAirportUpdate('update-skicenter-map-container');
+
+                // $.noConflict();
+                jQuery(document).ready(function ($) {
+                    $('#skicenter-listing-table').DataTable();
+                });
+
+            } else {
+                Toast.fire({
+                    icon: 'success',
+                    title: response.data.message
+                });
+            }
+            $('.dimmer').hide();
+        }, function (response) {
+            Toast.fire({
+                icon: 'success',
+                title: 'Something went wrong !'
+            });
+            $('.dimmer').hide();
+        });
+
+    });
+
+
+
 
 });
 
-app.controller('subwayCtrl', function ($scope, $http) {
+app.controller('subwayCtrl', function ($scope, $rootScope, $http) {
+    $rootScope.lan = lan;
+    $('.dimmer').show();
+    $scope.page_title = '';
+    airport_marker = null;
+    marker_airport_update = null;
 
-    console.log('App Initialized');
+    $scope.hide = (id) => {
+        $('#' + id).hide();
+        console.log('hiding');
+        scrollto('subway-listing-table');
+    };
+
+
+    $scope.edit = (index, subway) => {
+        $scope.editing = angular.copy(subway);
+        $scope.editing_subway_index = index;
+
+
+
+        newlatlng = new google.maps.LatLng(parseFloat(subway.latitude), parseFloat(subway.longitude));
+        // console.log(newlatlng);
+        if (marker_airport_update != null && typeof marker_airport_update != 'undefined') {
+            marker_airport_update.setPosition(newlatlng);
+        } else {
+            // Add Marker
+            marker_airport_update = new google.maps.Marker({
+                position: { lat: parseFloat(subway.latitude), lng: parseFloat(subway.longitude) },
+                map: airport_map_update
+            });
+        }
+
+        airport_map_update.setCenter({ lat: parseFloat(subway.latitude), lng: parseFloat(subway.longitude) });
+
+        $('#updatesubway').show();
+        scrollto('updatesubway');
+
+    };
+
+    $scope.save = function () {
+
+        // Sending PUT Request for update
+        $('.dimmer').show();
+        // var postData = $.param($scope.camera);
+        // console.log($scope.camera);
+        $id = angular.copy($scope.editing._id);
+
+        $scope.editing.longitude = "" + marker_airport_update.position.lng();
+
+        $scope.editing.latitude = "" + marker_airport_update.position.lat();
+
+        // delete $scope.editing._id;
+        $http.patch('https://livecamsapi.herokuapp.com/subways/' + $id, $scope.editing).then(function (response) {
+
+            if (response.data.success) {
+                $scope.subways[$scope.editing_subway_index] = angular.copy($scope.editing);
+                $scope.subways[$scope.editing_subway_index]._id = $id;
+                marker_airport_update.setMap(null);
+                marker_airport_update = null;
+                $scope.hide();
+
+                Toast.fire({
+                    icon: 'success',
+                    title: 'ski center updated successfully'
+                });
+                // scrollto('subway-listing-table');
+            } else {
+                // alert(response.data.message);
+                Toast.fire({
+                    icon: 'error',
+                    title: response.data.message
+                });
+            }
+            $('.dimmer').hide();
+        }, function (response) {
+            Toast.fire({
+                icon: 'error',
+                title: 'Something went wrong !'
+            })
+            $('.dimmer').hide();
+        });
+
+    };
+
+    // Delete skicenter
+    $scope.delete = (index, subway) => {
+        $('.dimmer').show();
+        $http.delete('https://livecamsapi.herokuapp.com/subways/' + subway._id, {}).then(function (response) {
+
+            if (response.data.success) {
+                $scope.subways.splice(index, 1);
+                Toast.fire({
+                    icon: 'success',
+                    title: response.data.message
+                })
+            } else {
+                Toast.fire({
+                    icon: 'error',
+                    title: response.data.message
+                });
+            }
+            scrollto('subway-listing-table');
+            $('.dimmer').hide();
+        }, function (response) {
+            Toast.fire({
+                icon: 'error',
+                title: 'Something went wrong !'
+            })
+        });
+
+    };
+
+    // Add New skicenter
+    $scope.submit = () => {
+
+        $scope.subway.longitude = "" + airport_marker.position.lng();
+
+        $scope.subway.latitude = "" + airport_marker.position.lat();
+
+        // $scope.subway.TEL = $scope.subway.TEL.toString();
+        $('.dimmer').show();
+        // var postData = $.param($scope.subway);
+        console.log($scope.subway);
+        $http.post('https://livecamsapi.herokuapp.com/subways/create-subway', $scope.subway).then(function (response) {
+
+            if (response.data.success) {
+                $scope.subway._id = response.data.Data._id;
+                $scope.subways.push($scope.subway);
+                // alert(response.data.message);
+                $scope.subway = null;
+                airport_marker.setMap(null);
+                airport_marker = null;
+                Toast.fire({
+                    icon: 'success',
+                    title: response.data.message
+                });
+                scrollto('subway-listing-table');
+            } else {
+                alert(response.data.message);
+            }
+            $('.dimmer').hide();
+        }, function (response) {
+            console.log(response);
+            $('.dimmer').hide();
+        });
+
+
+    };
+
+
+
+    // Fetch Live Hospitals On Content Load
+    $scope.$on('$viewContentLoaded', function () {
+        //Here your view content is fully loaded !!
+        $http.get('https://livecamsapi.herokuapp.com/subways/get-all-subways', {}).then(function (response) {
+            if (response.data.success) {
+                $scope.subways = response.data.Data;
+
+                initMapAirport('subway-map-container-google');
+                initMapAirportUpdate('update-subway-map-container-google');
+                jQuery(document).ready(function ($) {
+                    $('#subway-listing-table').DataTable();
+                });
+            } else {
+                Toast.fire({
+                    icon: 'success',
+                    title: response.data.message
+                });
+            }
+            $('.dimmer').hide();
+        }, function (response) {
+            Toast.fire({
+                icon: 'success',
+                title: 'Something went wrong !'
+            });
+            $('.dimmer').hide();
+        });
+
+    });
+
 
 });
 
-app.controller('moonCtrl', function ($scope, $http) {
+app.controller('moonCtrl', function ($scope, $rootScope, $http, fileUpload) {
+    $rootScope.lan = lan;
 
-    console.log('App Initialized');
+    $scope.$on('$viewContentLoaded', function () {
+        //Here your view content is fully loaded !!
+        $http.get('https://livecamsapi.herokuapp.com/moon-calendar/get-all-moon-calendars', {}).then(function (response) {
+            if (response.data.success) {
+                $scope.moons = response.data.Data;
+                $('.dropify').dropify();
+            } else {
+                console.log(message);
+            }
+            $('.dimmer').hide();
+        }, function (response) {
+            console.log('something went wrong', response);
+            $('.dimmer').hide();
+        });
+
+
+    });
+
+    $scope.submit = () => {
+
+        var file = $scope.myFile;
+        if (!file) {
+
+            Toast.fire({
+                icon: 'error',
+                title: 'Plz Select a image'
+            });
+        }
+        $('.dimmer').show();
+        var uploadUrl = "https://livecamsapi.herokuapp.com/moon-calendar/upload-moon-calendar-image";
+        resp = fileUpload.uploadFileToUrl(file, uploadUrl);
+        $(".dropify-clear").trigger("click");
+        $('.dimmer').hide();
+        $scope.refresh();
+
+    };
+
+    $scope.refresh = () => {
+        $('.dimmer').show();
+        $http.get('https://livecamsapi.herokuapp.com/moon-calendar/get-all-moon-calendars', {}).then(function (response) {
+            if (response.data.success) {
+                $scope.moons = response.data.Data;
+                // $('.dropify').dropify();
+            } else {
+                console.log(message);
+            }
+            $('.dimmer').hide();
+        }, function (response) {
+            console.log('something went wrong', response);
+            $('.dimmer').hide();
+        });
+    };
 
 });
 
-app.controller('slipwaysCtrl', function ($scope, $http) {
+app.controller('slipwaysCtrl', function ($scope, $rootScope, $http, fileUpload) {
+    $rootScope.lan = lan;
+    $('.dimmer').show();
+    $scope.page_title = '';
+    airport_marker = null;
+    marker_airport_update = null;
 
-    console.log('App Initialized');
+    $scope.hide = (id) => {
+        $('#' + id).hide();
+        console.log('hiding');
+        scrollto('slipway-listing-table');
+    };
+
+
+    $scope.edit = (index, slipway) => {
+        $scope.editing = angular.copy(slipway);
+        $scope.editing_slipway_index = index;
+
+        newlatlng = new google.maps.LatLng(parseFloat(slipway.latitude), parseFloat(slipway.longitude));
+        // console.log(newlatlng);
+        if (marker_airport_update != null && typeof marker_airport_update != 'undefined') {
+            marker_airport_update.setPosition(newlatlng);
+        } else {
+            // Add Marker
+            marker_airport_update = new google.maps.Marker({
+                position: { lat: parseFloat(slipway.latitude), lng: parseFloat(slipway.longitude) },
+                map: airport_map_update
+            });
+        }
+
+        airport_map_update.setCenter({ lat: parseFloat(slipway.latitude), lng: parseFloat(slipway.longitude) });
+
+        $('#updateslipway').show();
+        scrollto('updateslipway');
+
+    };
+
+    $scope.save = function () {
+
+        // Sending PUT Request for update
+        $('.dimmer').show();
+        // var postData = $.param($scope.camera);
+        // console.log($scope.camera);
+        $id = angular.copy($scope.editing._id);
+
+        $scope.editing.longitude = "" + marker_airport_update.position.lng();
+
+        $scope.editing.latitude = "" + marker_airport_update.position.lat();
+
+        // delete $scope.editing._id;
+        $http.patch('https://livecamsapi.herokuapp.com/slipways/' + $id, $scope.editing).then(function (response) {
+
+            if (response.data.success) {
+                $scope.slipways[$scope.editing_slipway_index] = angular.copy($scope.editing);
+                $scope.slipways[$scope.editing_slipway_index]._id = $id;
+                marker_airport_update.setMap(null);
+                marker_airport_update = null;
+
+                var file = $scope.myFile;
+                if (file) {
+                    var uploadUrl = "https://livecamsapi.herokuapp.com/slipways/upload-slipway-image/" + $id;
+                    fileUpload.uploadFileToUrl(file, uploadUrl)
+                }
+
+
+                $scope.hide();
+
+                Toast.fire({
+                    icon: 'success',
+                    title: 'Slipway updated successfully'
+                });
+
+                $scope.refresh();
+            } else {
+                // alert(response.data.message);
+                Toast.fire({
+                    icon: 'error',
+                    title: response.data.message
+                });
+            }
+            $('.dimmer').hide();
+        }, function (response) {
+            Toast.fire({
+                icon: 'error',
+                title: 'Something went wrong !'
+            })
+            $('.dimmer').hide();
+        });
+
+    };
+
+    // Delete airport
+    $scope.delete = (index, slipway) => {
+
+        $('.dimmer').show();
+
+        $http.delete('https://livecamsapi.herokuapp.com/slipways/' + slipway._id, {}).then(function (response) {
+
+            if (response.data.success) {
+                $scope.slipways.splice(index, 1);
+                Toast.fire({
+                    icon: 'success',
+                    title: response.data.message
+                })
+            } else {
+                Toast.fire({
+                    icon: 'error',
+                    title: response.data.message
+                });
+            }
+            $('.dimmer').hide();
+        }, function (response) {
+            Toast.fire({
+                icon: 'error',
+                title: 'Something went wrong !'
+            })
+        });
+
+    };
+
+    // Add New Airport
+    $scope.submit = () => {
+
+        $scope.slipway.longitude = "" + airport_marker.position.lng();
+
+        $scope.slipway.latitude = "" + airport_marker.position.lat();
+        var file = $scope.myFile;
+        if (!file) {
+            Toast.fire({
+                icon: 'error',
+                title: 'Plz Select a image'
+            });
+        }
+        // $scope.airport.TEL = $scope.airport.TEL.toString();
+        $('.dimmer').show();
+        // var postData = $.param($scope.airport);
+        console.log($scope.slipway);
+        $http.post('https://livecamsapi.herokuapp.com/slipways/create-slipway', $scope.slipway).then(function (response) {
+
+            if (response.data.success) {
+
+
+                console.log('file is ');
+                // $('.dimmer').hide();
+                var uploadUrl = "https://livecamsapi.herokuapp.com/slipways/upload-slipway-image/" + response.data.Data._id;
+                fileUpload.uploadFileToUrl(file, uploadUrl);
+                // fileUpload.uploadFileToUrl(file, uploadUrl)
+                $scope.slipway._id = response.data.Data._id;
+                $scope.slipways.push($scope.slipway);
+                // alert(response.data.message);
+                $scope.slipway = null;
+                airport_marker.setMap(null);
+                airport_marker = null;
+                Toast.fire({
+                    icon: 'success',
+                    title: response.data.message
+                });
+                scrollto('slipway-listing-table');
+                $scope.refresh();
+            } else {
+                alert(response.data.message);
+            }
+            $('.dimmer').hide();
+        }, function (response) {
+            console.log(response);
+            $('.dimmer').hide();
+        });
+
+
+    };
+
+
+    $scope.refresh = function () {
+        //Here your view content is fully loaded !!
+        $http.get('https://livecamsapi.herokuapp.com/slipways/get-all-slipways', {}).then(function (response) {
+            if (response.data.success) {
+                $scope.slipways = response.data.Data;
+
+                // $.noConflict();
+                jQuery(document).ready(function ($) {
+                    $('#slipway-listing-table').DataTable();
+                });
+                // $('.dropify').dropify();
+                // initMapAirport('slipway-map-container-google');
+                // initMapAirportUpdate('update-slipway-map-container-google');
+            } else {
+                Toast.fire({
+                    icon: 'success',
+                    title: response.data.message
+                });
+            }
+            $('.dimmer').hide();
+        }, function (response) {
+            Toast.fire({
+                icon: 'success',
+                title: 'Something went wrong !'
+            });
+            $('.dimmer').hide();
+        });
+
+    };
+
+
+    // Fetch Live Hospitals On Content Load
+    $scope.$on('$viewContentLoaded', function () {
+        //Here your view content is fully loaded !!
+        $http.get('https://livecamsapi.herokuapp.com/slipways/get-all-slipways', {}).then(function (response) {
+            if (response.data.success) {
+                $scope.slipways = response.data.Data;
+                $('.dropify').dropify();
+                initMapAirport('slipway-map-container-google');
+                initMapAirportUpdate('update-slipway-map-container-google');
+                // $.noConflict();
+                jQuery(document).ready(function ($) {
+                    $('#slipway-listing-table').DataTable();
+                });
+            } else {
+                Toast.fire({
+                    icon: 'success',
+                    title: response.data.message
+                });
+            }
+            $('.dimmer').hide();
+        }, function (response) {
+            Toast.fire({
+                icon: 'success',
+                title: 'Something went wrong !'
+            });
+            $('.dimmer').hide();
+        });
+
+    });
+
 
 });
 
-app.controller('passengerCtrl', function ($scope, $http) {
+app.controller('passengerCtrl', function ($scope, $rootScope, $http) {
+    $rootScope.lan = lan;
+    $('.dimmer').show();
+    $scope.page_title = '';
+    pport_marker = null;
+    marker_pport_update = null;
+
+    $scope.hide = (id) => {
+        $('#' + id).hide();
+        console.log('hiding');
+        scrollto('pport_listing_table');
+    };
 
 
+    $scope.edit = (index, pport) => {
+        $scope.editing = angular.copy(pport);
+        $scope.editing_pport_index = index;
+
+
+
+        newlatlng = new google.maps.LatLng(parseFloat(pport.latitude), parseFloat(pport.longitude));
+        // console.log(newlatlng);
+        if (marker_pport_update != null && typeof marker_pport_update != 'undefined') {
+            marker_pport_update.setPosition(newlatlng);
+        } else {
+            // Add Marker
+            marker_pport_update = new google.maps.Marker({
+                position: { lat: parseFloat(pport.latitude), lng: parseFloat(pport.longitude) },
+                map: pport_map_update
+            });
+        }
+
+        pport_map_update.setCenter({ lat: parseFloat(pport.latitude), lng: parseFloat(pport.longitude) });
+
+        $('#updatepport').show();
+        scrollto('updatepport');
+
+    };
+
+    $scope.save = function () {
+
+        // Sending PUT Request for update
+        $('.dimmer').show();
+        // var postData = $.param($scope.camera);
+        // console.log($scope.camera);
+        $id = angular.copy($scope.editing._id);
+
+        $scope.editing.longitude = "" + marker_pport_update.position.lng();
+
+        $scope.editing.latitude = "" + marker_pport_update.position.lat();
+
+        // delete $scope.editing._id;
+        $http.patch('https://livecamsapi.herokuapp.com/passenger-ports/' + $id, $scope.editing).then(function (response) {
+
+            if (response.data.success) {
+                $scope.pports[$scope.editing_pport_index] = angular.copy($scope.editing);
+                $scope.pports[$scope.editing_pport_index]._id = $id;
+                marker_pport_update.setMap(null);
+                marker_pport_update = null;
+                $scope.hide('updatepport');
+
+                Toast.fire({
+                    icon: 'success',
+                    title: 'Camera updated successfully'
+                });
+
+            } else {
+                // alert(response.data.message);
+                Toast.fire({
+                    icon: 'error',
+                    title: response.data.message
+                });
+            }
+            $('.dimmer').hide();
+        }, function (response) {
+            Toast.fire({
+                icon: 'error',
+                title: 'Something went wrong !'
+            })
+            $('.dimmer').hide();
+        });
+
+    };
+
+    // Delete airport
+    $scope.delete = (index, pport) => {
+
+        $('.dimmer').show();
+
+        $http.delete('https://livecamsapi.herokuapp.com/passenger-ports/' + pport._id, {}).then(function (response) {
+
+            if (response.data.success) {
+                $scope.pports.splice(index, 1);
+                Toast.fire({
+                    icon: 'success',
+                    title: response.data.message
+                })
+            } else {
+                Toast.fire({
+                    icon: 'error',
+                    title: response.data.message
+                });
+            }
+            $('.dimmer').hide();
+        }, function (response) {
+            Toast.fire({
+                icon: 'error',
+                title: 'Something went wrong !'
+            })
+        });
+
+    };
+
+    // Add New Airport
+    $scope.submit = () => {
+
+        $scope.pport.longitude = "" + pport_marker.position.lng();
+
+        $scope.pport.latitude = "" + pport_marker.position.lat();
+
+        // $scope.pport.TEL = $scope.pport.TEL.toString();
+        $('.dimmer').show();
+        // var postData = $.param($scope.pport);
+        console.log($scope.pport);
+        $http.post('https://livecamsapi.herokuapp.com/passenger-ports/create-passenger-port', $scope.pport).then(function (response) {
+
+            if (response.data.success) {
+                $scope.pport._id = response.data.Data._id;
+                $scope.pports.push($scope.pport);
+                // alert(response.data.message);
+                $scope.pport = null;
+                pport_marker.setMap(null);
+                pport_marker = null;
+                Toast.fire({
+                    icon: 'success',
+                    title: response.data.message
+                });
+                scrollto('pport_listing_table');
+            } else {
+                alert(response.data.message);
+            }
+            $('.dimmer').hide();
+        }, function (response) {
+            console.log(response);
+            $('.dimmer').hide();
+        });
+
+
+    };
+
+
+
+    // Fetch Live PPort On Content Load
+    $scope.$on('$viewContentLoaded', function () {
+        //Here your view content is fully loaded !!
+        $http.get('https://livecamsapi.herokuapp.com/passenger-ports/get-all-passenger-ports', {}).then(function (response) {
+            if (response.data.success) {
+                $scope.pports = response.data.Data;
+
+                initMapPport('pport-map-container-google');
+                initMapPportUpdate('update-pport-map-container-google');
+                jQuery(document).ready(function ($) {
+                    $('#pport_listing_table').DataTable();
+                });
+            } else {
+                Toast.fire({
+                    icon: 'success',
+                    title: response.data.message
+                });
+            }
+            $('.dimmer').hide();
+        }, function (response) {
+            Toast.fire({
+                icon: 'success',
+                title: 'Something went wrong !'
+            });
+            $('.dimmer').hide();
+        });
+
+    });
 
 });
 
-app.controller('weatherstationCtrl', function ($scope, $http) {
+app.controller('weatherstationCtrl', function ($scope, $rootScope, $http) {
+    $rootScope.lan = lan;
 
-    console.log('App Initialized');
+    $('.dimmer').show();
+    $scope.page_title = '';
+    wstation_marker = null;
+    marker_wstation_update = null;
+
+    $scope.hide = (id) => {
+        $('#' + id).hide();
+        console.log('hiding');
+        scrollto('wstation_listing_table');
+    };
+
+
+    $scope.edit = (index, wstation) => {
+        $scope.editing = angular.copy(wstation);
+        $scope.editing_wstation_index = index;
+
+
+
+        newlatlng = new google.maps.LatLng(parseFloat(wstation.latitude), parseFloat(wstation.longitude));
+        // console.log(newlatlng);
+        if (marker_wstation_update != null && typeof marker_wstation_update != 'undefined') {
+            marker_wstation_update.setPosition(newlatlng);
+        } else {
+            // Add Marker
+            marker_wstation_update = new google.maps.Marker({
+                position: { lat: parseFloat(wstation.latitude), lng: parseFloat(wstation.longitude) },
+                map: wstation_map_update
+            });
+        }
+
+        wstation_map_update.setCenter({ lat: parseFloat(wstation.latitude), lng: parseFloat(wstation.longitude) });
+
+        $('#updatewstation').show();
+        scrollto('updatewstation');
+
+    };
+
+    $scope.save = function () {
+
+        // Sending PUT Request for update
+        $('.dimmer').show();
+        // var postData = $.param($scope.camera);
+        // console.log($scope.camera);
+        $id = angular.copy($scope.editing._id);
+
+        $scope.editing.longitude = "" + marker_wstation_update.position.lng();
+
+        $scope.editing.latitude = "" + marker_wstation_update.position.lat();
+
+        // delete $scope.editing._id;
+        $http.patch('https://livecamsapi.herokuapp.com/weather-stations/' + $id, $scope.editing).then(function (response) {
+
+            if (response.data.success) {
+                $scope.wstations[$scope.editing_wstation_index] = angular.copy($scope.editing);
+                $scope.wstations[$scope.editing_wstation_index]._id = $id;
+                marker_wstation_update.setMap(null);
+                marker_wstation_update = null;
+                $scope.hide();
+
+                Toast.fire({
+                    icon: 'success',
+                    title: 'Camera updated successfully'
+                });
+
+            } else {
+                // alert(response.data.message);
+                Toast.fire({
+                    icon: 'error',
+                    title: response.data.message
+                });
+            }
+            $('.dimmer').hide();
+        }, function (response) {
+            Toast.fire({
+                icon: 'error',
+                title: 'Something went wrong !'
+            })
+            $('.dimmer').hide();
+        });
+
+    };
+
+    // Delete airport
+    $scope.delete = (index, airport) => {
+
+        $('.dimmer').show();
+
+        $http.delete('https://livecamsapi.herokuapp.com/airports/' + airport._id, {}).then(function (response) {
+
+            if (response.data.success) {
+                $scope.airports.splice(index, 1);
+                Toast.fire({
+                    icon: 'success',
+                    title: response.data.message
+                })
+            } else {
+                Toast.fire({
+                    icon: 'error',
+                    title: response.data.message
+                });
+            }
+            $('.dimmer').hide();
+        }, function (response) {
+            Toast.fire({
+                icon: 'error',
+                title: 'Something went wrong !'
+            })
+        });
+
+    };
+
+    // Add New Wstation
+    $scope.submit = () => {
+
+        $scope.wstation.longitude = "" + wstation_marker.position.lng();
+
+        $scope.wstation.latitude = "" + wstation_marker.position.lat();
+
+        // $scope.wstation.TEL = $scope.wstation.TEL.toString();
+        $('.dimmer').show();
+        // var postData = $.param($scope.wstation);
+        console.log($scope.wstation);
+        $http.post('https://livecamsapi.herokuapp.com/weather-stations/create-weather-station', $scope.wstation).then(function (response) {
+
+            if (response.data.success) {
+                $scope.wstation._id = response.data.Data._id;
+                $scope.wstations.push($scope.wstation);
+                // alert(response.data.message);
+                $scope.wstation = null;
+                wstation_marker.setMap(null);
+                wstation_marker = null;
+                Toast.fire({
+                    icon: 'success',
+                    title: response.data.message
+                });
+                scrollto('wstation_listing_table');
+            } else {
+                alert(response.data.message);
+            }
+            $('.dimmer').hide();
+        }, function (response) {
+            console.log(response);
+            $('.dimmer').hide();
+        });
+
+
+    };
+
+
+
+    $scope.delete = (index, wstation) => {
+
+        $('.dimmer').show();
+
+        $http.delete('https://livecamsapi.herokuapp.com/weather-stations/' + wstation._id, {}).then(function (response) {
+
+            if (response.data.success) {
+                $scope.wstations.splice(index, 1);
+                Toast.fire({
+                    icon: 'success',
+                    title: response.data.message
+                })
+            } else {
+                Toast.fire({
+                    icon: 'error',
+                    title: response.data.message
+                });
+            }
+            $('.dimmer').hide();
+        }, function (response) {
+            Toast.fire({
+                icon: 'error',
+                title: 'Something went wrong !'
+            });
+            $('.dimmer').hide();
+        });
+
+    };
+
+
+    $scope.$on('$viewContentLoaded', function () {
+        //Here your view content is fully loaded !!
+        $http.get('https://livecamsapi.herokuapp.com/weather-stations/get-all-weather-stations', {}).then(function (response) {
+            if (response.data.success) {
+                $scope.wstations = response.data.Data;
+
+                initMapWstation('wstation-map-container-google');
+                initMapWstationUpdate('update-wstation-map-container');
+                // $.noConflict();
+                jQuery(document).ready(function ($) {
+                    $('#wstation_listing_table').DataTable();
+                });
+            } else {
+                Toast.fire({
+                    icon: 'success',
+                    title: response.data.message
+                });
+            }
+            $('.dimmer').hide();
+        }, function (response) {
+            Toast.fire({
+                icon: 'success',
+                title: 'Something went wrong !'
+            });
+            $('.dimmer').hide();
+        });
+
+    });
 
 });
 
-app.controller('airportCtrl', function ($scope, $http) {
-
+app.controller('airportCtrl', function ($scope, $rootScope, $http) {
+    $rootScope.lan = lan;
     $('.dimmer').show();
     $scope.page_title = '';
     airport_marker = null;
@@ -1400,6 +3296,11 @@ app.controller('airportCtrl', function ($scope, $http) {
 
                 initMapAirport('airport-map-container-google');
                 initMapAirportUpdate('update-airport-map-container');
+
+                // $.noConflict();
+                jQuery(document).ready(function ($) {
+                    $('#airport_listing_table').DataTable();
+                });
             } else {
                 Toast.fire({
                     icon: 'success',
@@ -1419,8 +3320,8 @@ app.controller('airportCtrl', function ($scope, $http) {
 
 });
 
-app.controller('hospitalCtrl', function ($scope, $http) {
-
+app.controller('hospitalCtrl', function ($scope, $rootScope, $http) {
+    $rootScope.lan = lan;
 
     $('.dimmer').show();
     $scope.page_title = '';
@@ -1443,13 +3344,12 @@ app.controller('hospitalCtrl', function ($scope, $http) {
         $http.get('https://livecamsapi.herokuapp.com/hospitals/get-all-hospitals', {}).then(function (response) {
             if (response.data.success) {
                 $scope.hospitals = response.data.Data;
-
                 initMapHospital('hospital-map-container-google');
-
-                // Hospitalss-update-map-container
-
                 initMapHospitalUpdate('hospital-map-container-google-u');
-
+                // $.noConflict();
+                jQuery(document).ready(function ($) {
+                    $('#hospital_listing_table').DataTable();
+                });
             } else {
                 console.log(message);
             }
@@ -1605,8 +3505,8 @@ app.controller('hospitalCtrl', function ($scope, $http) {
 
 });
 
-app.controller('camerasCtrl', function ($scope, $http) {
-
+app.controller('camerasCtrl', function ($scope, $rootScope, $http, fileUpload) {
+    $rootScope.lan = lan;
     $('.dimmer').show();
     $scope.page_title = '';
     marker = null;
@@ -1665,6 +3565,18 @@ app.controller('camerasCtrl', function ($scope, $http) {
                 $scope.cameras[$scope.editing_camera_index] = angular.copy($scope.editing_camera);
                 $scope.cameras[$scope.editing_camera_index]._id = $id;
 
+
+                var file = $scope.myFile;
+                if (file) {
+                    Toast.fire({
+                        icon: 'error',
+                        title: 'Plz Select a image'
+                    });
+                    var uploadUrl = "https://livecamsapi.herokuapp.com/livecamera/upload-live-camera-image/" + response.data.Data._id;
+                    fileUpload.uploadFileToUrl(file, uploadUrl);
+                }
+
+
                 $scope.hide();
 
                 Toast.fire({
@@ -1696,6 +3608,11 @@ app.controller('camerasCtrl', function ($scope, $http) {
         $http.get('https://livecamsapi.herokuapp.com/livecamera/get-all-livecameras', {}).then(function (response) {
             if (response.data.success) {
                 $scope.cameras = response.data.Data;
+                $('.dropify').dropify();
+                // $.noConflict();
+                jQuery(document).ready(function ($) {
+                    $('#camera_listing_table').DataTable();
+                });
             } else {
                 console.log(message);
             }
@@ -1742,11 +3659,24 @@ app.controller('camerasCtrl', function ($scope, $http) {
 
     $scope.submit = () => {
 
+        // https://livecamsapi.herokuapp.com/livecamera/upload-live-camera-image/:liveCameraId
+
         $scope.camera.longitude = "" + marker.position.lng();
 
         $scope.camera.latitude = "" + marker.position.lat();
 
         $scope.camera.TEL = $scope.camera.TEL.toString();
+
+        var file = $scope.myFile;
+        if (!file) {
+            Toast.fire({
+                icon: 'error',
+                title: 'Plz Select a image'
+            });
+            return;
+        }
+
+
         $('.dimmer').show();
         // var postData = $.param($scope.camera);
         console.log($scope.camera);
@@ -1754,6 +3684,10 @@ app.controller('camerasCtrl', function ($scope, $http) {
 
             if (response.data.success) {
                 $scope.camera._id = response.data.Data._id;
+
+                var uploadUrl = "https://livecamsapi.herokuapp.com/livecamera/upload-live-camera-image/" + response.data.Data._id;
+                fileUpload.uploadFileToUrl(file, uploadUrl)
+
                 $scope.cameras.push($scope.camera);
                 // alert(response.data.message);
                 $scope.camera = null;
