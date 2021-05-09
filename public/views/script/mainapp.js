@@ -200,7 +200,7 @@ function scrollto($document_id) {
 function initMapCamera($id) {
 
     map = new google.maps.Map(document.getElementById($id), {
-        center: { lat: 40.7590403, lng: -74.0392714 },
+        center: { lat: 39.0742, lng: 21.8243 },
         zoom: 8,
     });
 
@@ -215,7 +215,7 @@ function initMapCamera($id) {
 function initMapCameraUpdate($id) {
 
     camera_map_update = new google.maps.Map(document.getElementById($id), {
-        center: { lat: 40.7590403, lng: -74.0392714 },
+        center: { lat: 39.0742, lng: 21.8243 },
         zoom: 8,
     });
 
@@ -265,7 +265,7 @@ function placeMarkerCameraUpdate(location) {
 function initMapHospital($id) {
 
     hospital_map = new google.maps.Map(document.getElementById($id), {
-        center: { lat: 40.7590403, lng: -74.0392714 },
+        center: { lat: 39.0742, lng: 21.8243 },
         zoom: 8,
     });
 
@@ -280,7 +280,7 @@ function initMapHospital($id) {
 function initMapHospitalUpdate($id) {
 
     hospital_map_update = new google.maps.Map(document.getElementById($id), {
-        center: { lat: 40.7590403, lng: -74.0392714 },
+        center: { lat: 39.0742, lng: 21.8243 },
         zoom: 8,
     });
 
@@ -330,7 +330,7 @@ function placeMarkerHospitalUpdate(location) {
 function initMapAirport($id) {
 
     airport_map = new google.maps.Map(document.getElementById($id), {
-        center: { lat: 40.7590403, lng: -74.0392714 },
+        center: { lat: 39.0742, lng: 21.8243 },
         zoom: 8,
     });
 
@@ -345,7 +345,7 @@ function initMapAirport($id) {
 function initMapAirportUpdate($id) {
 
     airport_map_update = new google.maps.Map(document.getElementById($id), {
-        center: { lat: 40.7590403, lng: -74.0392714 },
+        center: { lat: 39.0742, lng: 21.8243 },
         zoom: 8,
     });
 
@@ -397,7 +397,7 @@ function placeMarkerAirportUpdate(location) {
 function initMapPort_auth($id) {
 
     port_auth_map = new google.maps.Map(document.getElementById($id), {
-        center: { lat: 40.7590403, lng: -74.0392714 },
+        center: { lat: 39.0742, lng: 21.8243 },
         zoom: 8,
     });
 
@@ -412,7 +412,7 @@ function initMapPort_auth($id) {
 function initMapPort_authUpdate($id) {
 
     port_auth_map_update = new google.maps.Map(document.getElementById($id), {
-        center: { lat: 40.7590403, lng: -74.0392714 },
+        center: { lat: 39.0742, lng: 21.8243 },
         zoom: 8,
     });
 
@@ -465,7 +465,7 @@ function placeMarkerPort_authUpdate(location) {
 function initMapFs($id) {
 
     fs_map = new google.maps.Map(document.getElementById($id), {
-        center: { lat: 40.7590403, lng: -74.0392714 },
+        center: { lat: 39.0742, lng: 21.8243 },
         zoom: 8,
     });
 
@@ -480,7 +480,7 @@ function initMapFs($id) {
 function initMapFsUpdate($id) {
 
     fs_map_update = new google.maps.Map(document.getElementById($id), {
-        center: { lat: 40.7590403, lng: -74.0392714 },
+        center: { lat: 39.0742, lng: 21.8243 },
         zoom: 8,
     });
 
@@ -532,7 +532,7 @@ function placeMarkerFsUpdate(location) {
 function initMapCamp($id) {
 
     camp_map = new google.maps.Map(document.getElementById($id), {
-        center: { lat: 40.7590403, lng: -74.0392714 },
+        center: { lat: 39.0742, lng: 21.8243 },
         zoom: 8,
     });
 
@@ -547,7 +547,7 @@ function initMapCamp($id) {
 function initMapCampUpdate($id) {
 
     camp_map_update = new google.maps.Map(document.getElementById($id), {
-        center: { lat: 40.7590403, lng: -74.0392714 },
+        center: { lat: 39.0742, lng: 21.8243 },
         zoom: 8,
     });
 
@@ -604,7 +604,7 @@ function placeMarkerCampUpdate(location) {
 function initMapKite($id) {
 
     kite_map = new google.maps.Map(document.getElementById($id), {
-        center: { lat: 40.7590403, lng: -74.0392714 },
+        center: { lat: 39.0742, lng: 21.8243 },
         zoom: 8,
     });
 
@@ -619,7 +619,7 @@ function initMapKite($id) {
 function initMapKiteUpdate($id) {
 
     kite_map_update = new google.maps.Map(document.getElementById($id), {
-        center: { lat: 40.7590403, lng: -74.0392714 },
+        center: { lat: 39.0742, lng: 21.8243 },
         zoom: 8,
     });
 
@@ -671,7 +671,7 @@ function placeMarkerKiteUpdate(location) {
 function initMapWstation($id) {
 
     wstation_map = new google.maps.Map(document.getElementById($id), {
-        center: { lat: 40.7590403, lng: -74.0392714 },
+        center: { lat: 39.0742, lng: 21.8243 },
         zoom: 8,
     });
 
@@ -686,7 +686,7 @@ function initMapWstation($id) {
 function initMapWstationUpdate($id) {
 
     wstation_map_update = new google.maps.Map(document.getElementById($id), {
-        center: { lat: 40.7590403, lng: -74.0392714 },
+        center: { lat: 39.0742, lng: 21.8243 },
         zoom: 8,
     });
 
@@ -918,7 +918,7 @@ app.controller('portsCtrl', function ($scope, $rootScope, $http) {
 function initMapPport($id) {
 
     pport_map = new google.maps.Map(document.getElementById($id), {
-        center: { lat: 40.7590403, lng: -74.0392714 },
+        center: { lat: 39.0742, lng: 21.8243 },
         zoom: 8,
     });
 
@@ -933,7 +933,7 @@ function initMapPport($id) {
 function initMapPportUpdate($id) {
 
     pport_map_update = new google.maps.Map(document.getElementById($id), {
-        center: { lat: 40.7590403, lng: -74.0392714 },
+        center: { lat: 39.0742, lng: 21.8243 },
         zoom: 8,
     });
 
