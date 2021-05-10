@@ -5,7 +5,7 @@
         position: relative;
         height: 0;
     }
-    
+
     .map-container iframe {
         left: 0;
         top: 0;
@@ -59,7 +59,10 @@
                                                 <div class="row">
                                                     <div class="col-sm-12 col-md-12 col-lg-12">
                                                         <h2><b>Live Slip Way Location</b></h2>
-                                                        <button data-toggle="tab" href="#addnew" class=" text-center btn btn-info " style="margin-top: 20px;"><i class="fa fa-plus" style="padding: 3px;"></i>Add New</button>
+                                                        <button data-toggle="tab" href="#addnew"
+                                                            class=" text-center btn btn-info "
+                                                            style="margin-top: 20px;"><i class="fa fa-plus"
+                                                                style="padding: 3px;"></i>Add New</button>
 
                                                     </div>
 
@@ -78,13 +81,26 @@
                                                 </thead>
                                                 <tbody>
                                                     <tr data-ng-repeat="slipway in slipways">
-                                                        <td><img src="https://livecamsapi.herokuapp.com/{{slipway.image}}" style="height: 50px;" /></td>
+                                                        <td>
+                                                            <a href="https://livecamsapi.herokuapp.com/{{slipway.image}}"
+                                                                data-lightbox="image-{{$index+1}}"
+                                                                data-title="{{wstation.name}}"><img
+                                                                    src="https://livecamsapi.herokuapp.com/{{slipway.image}}"
+                                                                    alt="https://livecamsapi.herokuapp.com/{{slipway.image}}"
+                                                                    class="img-thumbnail"></a>
+
+                                                            <!-- <img src="https://livecamsapi.herokuapp.com/{{slipway.image}}" style="height: 50px;" /></td> -->
                                                         <td>{{slipway.name}}</td>
                                                         <td>{{slipway.latitude}}°</td>
                                                         <td>{{slipway.longitude}}°</td>
                                                         <td>
-                                                            <a class="text-danger" data-ng-click="delete($index,slipway)" title="Delete" data-toggle="tooltip"><i class="material-icons">&#xE872;</i></a>
-                                                            <a data-toggle="tab" data-ng-click="edit($index,slipway)" title="Edit" class="edit"><i class="fa fa-pencil material-icons"></i></a>
+                                                            <a class="text-danger"
+                                                                data-ng-click="delete($index,slipway)" title="Delete"
+                                                                data-toggle="tooltip"><i
+                                                                    class="material-icons">&#xE872;</i></a>
+                                                            <a data-toggle="tab" data-ng-click="edit($index,slipway)"
+                                                                title="Edit" class="edit"><i
+                                                                    class="fa fa-pencil material-icons"></i></a>
 
                                                         </td>
                                                     </tr>
@@ -118,14 +134,16 @@
                             <div class="row clearfix">
                                 <div class="col-12">
                                     <div class="form-group">
-                                        <input type="text" class="form-control" data-ng-model="slipway.name" placeholder="Slipways Location Name">
+                                        <input type="text" class="form-control" data-ng-model="slipway.name"
+                                            placeholder="Slipways Location Name">
                                     </div>
                                 </div>
 
 
                                 <div class="col-md-12 col-sm-12">
-                                    <div id="slipway-map-container-google" class="z-depth-1-half map-container" style="height: 500px;">
-                                        
+                                    <div id="slipway-map-container-google" class="z-depth-1-half map-container"
+                                        style="height: 500px;">
+
                                     </div>
                                 </div>
 
@@ -141,13 +159,15 @@
                                 <div class="col-md-4" style="margin-top: 10px;">
                                     <div class="form-group">
                                         <label>Longitude</label>
-                                        <input type="text" class="form-control" readonly data-ng-model="slipway.longitude">
+                                        <input type="text" class="form-control" id="airport_longitude" readonly
+                                            data-ng-model="slipway.longitude">
                                     </div>
                                 </div>
                                 <div class="col-md-4" style="margin-top: 10px;">
                                     <div class="form-group">
                                         <label>Latitude</label>
-                                        <input type="text" class="form-control" readonly data-ng-model="slipway.latitude">
+                                        <input type="text" class="form-control" id="airport_latitude" readonly
+                                            data-ng-model="slipway.latitude">
                                     </div>
                                 </div>
 
@@ -157,14 +177,16 @@
 
                                 <div class="col-sm-6">
                                     <div class="form-group mt-3">
-                                        <button type="submit" data-ng-click="submit()" class="btn btn-success">Submit</button>
+                                        <button type="submit" data-ng-click="submit()"
+                                            class="btn btn-success">Submit</button>
                                     </div>
                                 </div>
 
 
                                 <div class="col-sm-6">
                                     <div class="form-group mt-3" style="margin-left: 400px;">
-                                        <button type="submit" onclick="scrollto('subway-listing-table')" class="btn btn-success">Cancel</button>
+                                        <button type="submit" onclick="scrollto('subway-listing-table')"
+                                            class="btn btn-success">Cancel</button>
                                     </div>
                                 </div>
 
@@ -191,14 +213,16 @@
                             <div class="row clearfix">
                                 <div class="col-12">
                                     <div class="form-group">
-                                        <input type="text" class="form-control" data-ng-model="editing.name" placeholder="Slipways Location Name">
+                                        <input type="text" class="form-control" data-ng-model="editing.name"
+                                            placeholder="Slipways Location Name">
                                     </div>
                                 </div>
 
 
                                 <div class="col-md-12 col-sm-12">
-                                    <div id="update-slipway-map-container-google" class="z-depth-1-half map-container" style="height: 500px;">
-                                        
+                                    <div id="update-slipway-map-container-google" class="z-depth-1-half map-container"
+                                        style="height: 500px;">
+
                                     </div>
                                 </div>
 
@@ -214,30 +238,30 @@
                                 <div class="col-md-4" style="margin-top: 10px;">
                                     <div class="form-group">
                                         <label>Longitude</label>
-                                        <input type="text" class="form-control" readonly data-ng-model="editing.longitude">
+                                        <input type="text" class="form-control" id="editing_airport_longitude" readonly
+                                            data-ng-model="editing.longitude">
                                     </div>
                                 </div>
                                 <div class="col-md-4" style="margin-top: 10px;">
                                     <div class="form-group">
                                         <label>Latitude</label>
-                                        <input type="text" class="form-control" readonly data-ng-model="editing.latitude">
+                                        <input type="text" class="form-control" id="editing_airport_latitude" readonly
+                                            data-ng-model="editing.latitude">
                                     </div>
                                 </div>
 
-
-
-
-
                                 <div class="col-sm-6">
                                     <div class="form-group mt-3">
-                                        <button type="submit" data-ng-click="save()" class="btn btn-success">Save</button>
+                                        <button type="submit" data-ng-click="save()"
+                                            class="btn btn-success">Save</button>
                                     </div>
                                 </div>
 
 
                                 <div class="col-sm-6">
                                     <div class="form-group mt-3" style="margin-left: 400px;">
-                                        <button type="submit" onclick="scrollto('subway-listing-table')" class="btn btn-success">Cancel</button>
+                                        <button type="submit" onclick="scrollto('subway-listing-table')"
+                                            class="btn btn-success">Cancel</button>
                                     </div>
                                 </div>
 

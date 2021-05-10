@@ -81,12 +81,21 @@
                                                 </thead>
                                                 <tbody>
                                                     <tr data-ng-repeat="wstation in wstations">
-                                                        <td>{{wstation.url}}</td>
+                                                        <td>
+                                                            <a href="{{wstation.url}}"
+                                                                data-lightbox="image-{{$index+1}}"
+                                                                data-title="{{wstation.name}}"><img
+                                                                    src="{{wstation.url}}" alt="{{wstation.url}}"
+                                                                    class="img-thumbnail"></a>
+                                                            <!--  -->
+                                                        </td>
                                                         <td>{{wstation.name}}</td>
                                                         <td>{{wstation.latitude}}°</td>
                                                         <td>{{wstation.longitude}}°</td>
                                                         <td>
-                                                            <a class="text-danger" data-ng-click="delete($index,wstation)" title="Delete" data-toggle="tooltip"><i
+                                                            <a class="text-danger"
+                                                                data-ng-click="delete($index,wstation)" title="Delete"
+                                                                data-toggle="tooltip"><i
                                                                     class="material-icons">&#xE872;</i></a>
                                                             <a data-toggle="tab" title="Edit" class="edit"
                                                                 data-ng-click="edit($index,wstation)"><i
@@ -140,7 +149,7 @@
                                 <div class="col-md-12 col-sm-12">
                                     <div id="wstation-map-container-google" class="z-depth-1-half map-container"
                                         style="height: 500px;">
-                                       
+
                                     </div>
                                 </div>
 
@@ -149,13 +158,15 @@
                                 <div class="col-md-6" style="margin-top: 10px;">
                                     <div class="form-group">
                                         <label>Longitude</label>
-                                        <input type="text" class="form-control" data-ng-model="wstation.longitude" readonly>
+                                        <input type="text" class="form-control" id="wstation_in_lng"
+                                            data-ng-model="wstation.longitude" readonly>
                                     </div>
                                 </div>
                                 <div class="col-md-6" style="margin-top: 10px;">
                                     <div class="form-group">
                                         <label>Latitude</label>
-                                        <input type="text" class="form-control" data-ng-model="wstation.latitude" readonly>
+                                        <input type="text" class="form-control" id="wstation_in_lat"
+                                            data-ng-model="wstation.latitude" readonly>
                                     </div>
                                 </div>
 
@@ -165,14 +176,16 @@
 
                                 <div class="col-sm-6">
                                     <div class="form-group mt-3">
-                                        <button data-ng-click="submit()" type="submit" class="btn btn-success">Submit</button>
+                                        <button data-ng-click="submit()" type="submit"
+                                            class="btn btn-success">Submit</button>
                                     </div>
                                 </div>
 
 
                                 <div class="col-sm-6">
                                     <div class="form-group mt-3" style="margin-left: 400px;">
-                                        <button type="submit" data-ng-click="scrollto('addnew')" class="btn btn-success">Cancel</button>
+                                        <button type="submit" data-ng-click="scrollto('addnew')"
+                                            class="btn btn-success">Cancel</button>
                                     </div>
                                 </div>
 
@@ -215,7 +228,7 @@
                                 <div class="col-md-12 col-sm-12">
                                     <div id="update-wstation-map-container" class="z-depth-1-half map-container"
                                         style="height: 500px;">
-                                       
+
                                     </div>
                                 </div>
 
@@ -224,30 +237,30 @@
                                 <div class="col-md-6" style="margin-top: 10px;">
                                     <div class="form-group">
                                         <label>Longitude</label>
-                                        <input type="text" class="form-control" data-ng-model="editing.longitude" readonly>
+                                        <input type="text" class="form-control" id="wstation_ed_lng"
+                                            data-ng-model="editing.longitude" readonly>
                                     </div>
                                 </div>
                                 <div class="col-md-6" style="margin-top: 10px;">
                                     <div class="form-group">
                                         <label>Latitude</label>
-                                        <input type="text" class="form-control" data-ng-model="editing.latitude" readonly>
+                                        <input type="text" class="form-control" id="wstation_ed_lat"
+                                            data-ng-model="editing.latitude" readonly>
                                     </div>
                                 </div>
 
-
-
-
-
                                 <div class="col-sm-6">
                                     <div class="form-group mt-3">
-                                        <button data-ng-click="save()" type="submit" class="btn btn-success">Submit</button>
+                                        <button data-ng-click="save()" type="submit"
+                                            class="btn btn-success">Submit</button>
                                     </div>
                                 </div>
 
 
                                 <div class="col-sm-6">
                                     <div class="form-group mt-3" style="margin-left: 400px;">
-                                        <button type="submit" data-ng-click="scrollto('addnew')" class="btn btn-success">Cancel</button>
+                                        <button type="submit" data-ng-click="scrollto('addnew')"
+                                            class="btn btn-success">Cancel</button>
                                     </div>
                                 </div>
 

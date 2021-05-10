@@ -162,14 +162,14 @@
                                 <div class="col-md-6" style="margin-top: 10px;">
                                     <div class="form-group">
                                         <label>Longitude</label>
-                                        <input readonly type="text" class="form-control"
+                                        <input readonly id="airport_longitude" type="text" class="form-control"
                                             data-ng-model="skicenter.longitude">
                                     </div>
                                 </div>
                                 <div class="col-md-6" style="margin-top: 10px;">
                                     <div class="form-group">
                                         <label>Latitude</label>
-                                        <input readonly type="text" class="form-control"
+                                        <input readonly id="airport_latitude" type="text" class="form-control"
                                             data-ng-model="skicenter.latitude">
                                     </div>
                                 </div>
@@ -254,14 +254,14 @@
                                 <div class="col-md-6" style="margin-top: 10px;">
                                     <div class="form-group">
                                         <label>Longitude</label>
-                                        <input readonly type="text" class="form-control"
+                                        <input readonly id="editing_airport_longitude" type="text" class="form-control"
                                             data-ng-model="editing.longitude">
                                     </div>
                                 </div>
                                 <div class="col-md-6" style="margin-top: 10px;">
                                     <div class="form-group">
                                         <label>Latitude</label>
-                                        <input readonly type="text" class="form-control"
+                                        <input readonly id="editing_airport_latitude" type="text" class="form-control"
                                             data-ng-model="editing.latitude">
                                     </div>
                                 </div>
@@ -290,8 +290,8 @@
 
                                 <div class="col-sm-6">
                                     <div class="form-group mt-3" style="margin-left: 400px;">
-                                        <button type="submit"
-                                            class="btn btn-success" data-ng-click="hide()">Cancel</button>
+                                        <button type="submit" class="btn btn-success"
+                                            data-ng-click="hide()">Cancel</button>
                                     </div>
                                 </div>
 

@@ -85,8 +85,16 @@
                                                 <tbody>
                                                     <tr data-ng-repeat="camera in cameras">
                                                         <td>{{camera.city}}</td>
-                                                        <td><img src="https://livecamsapi.herokuapp.com/{{camera.image}}"
-                                                                alt="" srcset=""></td>
+                                                        <td>
+                                                            <a href="https://livecamsapi.herokuapp.com/{{camera.image}}"
+                                                                data-lightbox="image-{{$index+1}}"
+                                                                data-title="{{wstation.name}}"><img
+                                                                    src="https://livecamsapi.herokuapp.com/{{camera.image}}"
+                                                                    alt="https://livecamsapi.herokuapp.com/{{camera.image}}"
+                                                                    class="img-thumbnail"></a>
+                                                            <!-- <img src="https://livecamsapi.herokuapp.com/{{camera.image}}"
+                                                                alt="" srcset=""> -->
+                                                        </td>
                                                         <td>{{camera.hosting}}</td>
                                                         <td>{{camera.TEL}}</td>
                                                         <td>{{camera.site}}</td>
@@ -133,8 +141,8 @@
                             <div class="row clearfix">
                                 <div class="col-12">
                                     <div class="form-group">
-                                        <input type="text" class="form-control" id="exampleInputPassword1"
-                                            data-ng-model="editing_camera.city" placeholder="Enter City Name">
+                                        <input type="text" class="form-control" data-ng-model="editing_camera.city"
+                                            placeholder="Enter City Name">
                                     </div>
 
                                     <div class="form-group">
@@ -143,13 +151,12 @@
                                     </div>
 
                                     <div class="form-group">
-                                        <input type="text" class="form-control" id="exampleInputPassword1"
-                                            data-ng-model="editing_camera.hosting" placeholder="Hosting URL">
+                                        <input type="text" class="form-control" data-ng-model="editing_camera.hosting"
+                                            placeholder="Hosting URL">
                                     </div>
 
                                     <div class="form-group">
-                                        <input type="text" class="form-control" id="exampleInputPassword1"
-                                            data-ng-model="editing_camera.site"
+                                        <input type="text" class="form-control" data-ng-model="editing_camera.site"
                                             placeholder="Enter Hospital Website Address">
                                     </div>
                                 </div>
@@ -239,7 +246,7 @@
                                     </div>
                                     <div class="form-group">
                                         <input type="text" class="form-control" id="exampleInputPassword1"
-                                            data-ng-model="camera.countryName" placeholder="Enter Country Name Name">
+                                            data-ng-model="camera.countryName" placeholder="Enter Country Name">
                                     </div>
 
                                     <div class="form-group">
@@ -272,8 +279,8 @@
                                 <div class="col-md-3" style="margin-top: 10px;">
                                     <div class="form-group">
                                         <label>Longitude</label>
-                                        <input type="text" readonly class="form-control longitude_input"
-                                            data-ng-model="camera.longitude">
+                                        <input type="text" id="camera_longitude" readonly
+                                            class="form-control longitude_input" data-ng-model="camera.longitude">
                                     </div>
                                 </div>
 
@@ -289,8 +296,8 @@
                                 <div class="col-md-3" style="margin-top: 10px;">
                                     <div class="form-group">
                                         <label>Latitude</label>
-                                        <input type="text" readonly class="form-control latitude_input"
-                                            data-ng-model="camera.latitude">
+                                        <input type="text" id="camera_latitude" readonly
+                                            class="form-control latitude_input" data-ng-model="camera.latitude">
                                     </div>
                                 </div>
 

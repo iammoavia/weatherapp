@@ -30,12 +30,14 @@
                         <div class="row">
                             <div class="col-lg-6 col-md-4 col-sm-12">
                                 <div class="input-group mb-1">
-                                    <input type="text" class="form-control" placeholder="Search By Name">
+                                    <input type="text" data-ng-model="comp_c" class="form-control"
+                                        placeholder="Search By Name">
                                 </div>
                             </div>
 
                             <div class="col-lg-6 col-md-4 col-sm-12">
-                                <a href="javascript:void(0);" class="btn btn-primary btn-block mb-1" title="">Search</a>
+                                <a href="javascript:void(0);" class="btn btn-primary btn-block mb-1"
+                                    data-ng-click="applyfilter()" title="">Search</a>
                             </div>
                         </div>
                     </div>
@@ -49,14 +51,14 @@
         <div class="tab-content">
             <div class="tab-pane fade show active" id="list" role="tabpanel">
                 <div class="row clearfix">
-                    
-                    <div class="col-xl-4 col-lg-4 col-md-6" data-ng-repeat="user in users">
+
+                    <div class="col-xl-4 col-lg-4 col-md-6" data-ng-repeat="user in users | filter: comp">
                         <div class="card">
                             <div class="card-body text-center ribbon">
                                 <h6 class="mt-3 mb-0">{{user.firstname}}&nbsp;{{user.lastname}}</h6>
                                 <span>{{user.email}}</span>
                                 <div class="col-12 mt 12" style="margin-top: 20px;">
-                                    <button data-ng-click='unblock($index,user)' class="btn-danger btn">UnBlock</button>
+                                    <button data-ng-click='unblock(user,$index)' class="btn-danger btn">Unblock</button>
 
                                 </div>
                             </div>

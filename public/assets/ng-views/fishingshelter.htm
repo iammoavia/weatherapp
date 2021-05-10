@@ -83,7 +83,13 @@
                                                 <tbody>
                                                     <tr data-ng-repeat="f in fss">
                                                         <td>{{f.name}}</td>
-                                                        <td><img src="{{URL}}/{{f.image}}" style="height: 50px;" /></td>
+                                                        <td>
+                                                            <a href="{{URL}}/{{f.image}}"
+                                                                data-lightbox="image-{{$index+1}}"
+                                                                data-title="{{f.name}}"><img src="{{URL}}/{{f.image}}"
+                                                                    alt="{{URL}}/{{f.image}}" class="img-thumbnail"></a>
+                                                            <!-- <img src="{{URL}}/{{f.image}}" style="height: 50px;" /> -->
+                                                        </td>
                                                         <td>{{f.latitude}}°</td>
                                                         <td>{{f.longitude}}°</td>
                                                         <td>
@@ -154,13 +160,13 @@
                                 <div class="col-md-4" style="margin-top: 10px;">
                                     <div class="form-group">
                                         <label>Longitude</label>
-                                        <input type="text" class="form-control" readonly>
+                                        <input type="text" id="fs_longitude" class="form-control" readonly>
                                     </div>
                                 </div>
                                 <div class="col-md-4" style="margin-top: 10px;">
                                     <div class="form-group">
                                         <label>Latitude</label>
-                                        <input type="text" class="form-control" readonly>
+                                        <input type="text" id="fs_latitude" class="form-control" readonly>
                                     </div>
                                 </div>
 
@@ -231,13 +237,13 @@
                                 <div class="col-md-4" style="margin-top: 10px;">
                                     <div class="form-group">
                                         <label>Longitude</label>
-                                        <input type="text" class="form-control" readonly>
+                                        <input type="text" id="editing_fs_longitude" class="form-control" readonly>
                                     </div>
                                 </div>
                                 <div class="col-md-4" style="margin-top: 10px;">
                                     <div class="form-group">
                                         <label>Latitude</label>
-                                        <input type="text" class="form-control" readonly>
+                                        <input type="text" id="editing_fs_latitude" class="form-control" readonly>
                                     </div>
                                 </div>
 

@@ -238,7 +238,8 @@ function placeMarkerCamera(location) {
         });
     }
 
-    console.log('Init. Marker Function');
+    $('#camera_latitude').val(location.lat());
+    $('#camera_longitude').val(location.lng());
 
 }
 
@@ -257,7 +258,7 @@ function placeMarkerCameraUpdate(location) {
     $('#editing_camera_longitude').val(location.lng());
 
 
-    console.log('Init. Marker Function (update)');
+    // console.log('Init. Marker Function (update)');
 
 }
 
@@ -303,7 +304,8 @@ function placeMarkerHospital(location) {
         });
     }
 
-    console.log('Init. Marker Function');
+    $('#hospital_latitude').val(location.lat());
+    $('#hospital_longitude').val(location.lng());
 
 }
 
@@ -322,7 +324,7 @@ function placeMarkerHospitalUpdate(location) {
     $('#editing_hospital_longitude').val(location.lng());
 
 
-    console.log('Init. Marker Function (update)');
+    // console.log('Init. Marker Function (update)');
 
 }
 
@@ -338,7 +340,6 @@ function initMapAirport($id) {
         placeMarkerAirport(event.latLng);
     });
 
-    console.log('Init. Google Map (airport)');
 }
 
 
@@ -368,7 +369,12 @@ function placeMarkerAirport(location) {
         });
     }
 
-    console.log('Init. Marker Function');
+    try {
+        $('#airport_latitude').val(location.lat());
+        $('#airport_longitude').val(location.lng());
+    } catch (error) {
+        console.log(error);
+    }
 
 }
 
@@ -435,7 +441,8 @@ function placeMarkerPort_auth(location) {
         });
     }
 
-    console.log('Init. Marker Function');
+    $('#port_auth_latitude').val(location.lat());
+    $('#port_auth_longitude').val(location.lng());
 
 }
 
@@ -503,7 +510,8 @@ function placeMarkerFs(location) {
         });
     }
 
-    console.log('Init. Marker Function');
+    $('#fs_latitude').val(location.lat());
+    $('#fs_longitude').val(location.lng());
 
 }
 
@@ -642,7 +650,8 @@ function placeMarkerKite(location) {
         });
     }
 
-    console.log('Init. Marker Function');
+    $('#kite_latitude').val(location.lat());
+    $('#kite_longitude').val(location.lng());
 
 }
 
@@ -709,6 +718,9 @@ function placeMarkerWstation(location) {
         });
     }
 
+    $('#wstation_in_lng').val(wstation_marker.position.lng());
+    $('#wstation_in_lat').val(wstation_marker.position.lat());
+
     console.log('Init. Marker Function');
 
 }
@@ -724,8 +736,8 @@ function placeMarkerWstationUpdate(location) {
         });
     }
 
-    $('#editing_wstation_latitude').val(location.lat());
-    $('#editing_wstation_longitude').val(location.lng());
+    $('#wstation_ed_lat').val(location.lat());
+    $('#wstation_ed_lng').val(location.lng());
 
 
     console.log('Init. Marker Function (update)');
@@ -956,7 +968,8 @@ function placeMarkerPport(location) {
         });
     }
 
-    console.log('Init. Marker Function');
+    $('#pport_latitude').val(location.lat());
+    $('#pport_longitude').val(location.lng());
 
 }
 
@@ -1175,13 +1188,19 @@ app.controller('settingsCtrl', function ($scope, $rootScope, $http) {
 });
 
 app.controller('blockuserCtrl', function ($scope, $rootScope, $http) {
+
     $rootScope.lan = lan;
+
+    $scope.applyfilter = () => {
+        $scope.comp = angular.copy($scope.comp_c);
+    };
+
     $scope.$on('$viewContentLoaded', function () {
         $('.dimmer').show();
         $http.get('https://livecamsapi.herokuapp.com/user/get-block-users', {}).then(function (response) {
             if (response.data.success) {
-                $scope.users = response.data.data;
-
+                $scope.users = response.data.Data;
+                console.log($scope.users);
             } else {
                 console.log(response.data);
             }
@@ -1192,6 +1211,32 @@ app.controller('blockuserCtrl', function ($scope, $rootScope, $http) {
         });
 
     });
+
+
+
+    $scope.unblock = (user, index) => {
+
+        $('.dimmer').show();
+        $http.patch('https://livecamsapi.herokuapp.com/user/unblock-user/' + user._id, {}).then(function (response) {
+            if (response.data.success) {
+
+                $scope.users.splice(index, 1);
+
+                Toast.fire({
+                    icon: 'success',
+                    title: 'user is active now'
+                });
+
+            } else {
+                console.log(response.data);
+            }
+            $('.dimmer').hide();
+        }, function (response) {
+            console.log('something went wrong', response);
+            $('.dimmer').hide();
+        });
+
+    };
 
 });
 
@@ -2446,6 +2491,7 @@ app.controller('subwayCtrl', function ($scope, $rootScope, $http) {
 
 app.controller('moonCtrl', function ($scope, $rootScope, $http, fileUpload) {
     $rootScope.lan = lan;
+    $scope.months = ["January", "February", "March", "April", "May", "June", "July", "August", "September", "October", "November", "December"];
 
     $scope.$on('$viewContentLoaded', function () {
         //Here your view content is fully loaded !!
@@ -2465,9 +2511,57 @@ app.controller('moonCtrl', function ($scope, $rootScope, $http, fileUpload) {
 
     });
 
+    $scope.refresh = function () {
+        //Here your view content is fully loaded !!
+        $http.get('https://livecamsapi.herokuapp.com/moon-calendar/get-all-moon-calendars', {}).then(function (response) {
+            if (response.data.success) {
+                $scope.moons = response.data.Data;
+                $('.dropify').dropify();
+            } else {
+                console.log(message);
+            }
+            $('.dimmer').hide();
+        }, function (response) {
+            console.log('something went wrong', response);
+            $('.dimmer').hide();
+        });
+
+
+    };
+
+    $scope.delete = ($index) => {
+        $scope.delete = (index) => {
+
+            $('.dimmer').show();
+
+            $http.delete('https://livecamsapi.herokuapp.com/moon-calendar/' + $scope.moons[$index]._id, {}).then(function (response) {
+                if (response.data.success) {
+                    $scope.moons.splice(index, 1);
+                    Toast.fire({
+                        icon: 'success',
+                        title: response.data.message
+                    })
+                } else {
+                    Toast.fire({
+                        icon: 'error',
+                        title: response.data.message
+                    });
+                }
+                $('.dimmer').hide();
+            }, function (response) {
+                Toast.fire({
+                    icon: 'error',
+                    title: 'Something went wrong !'
+                })
+            });
+
+        };
+    }
+
     $scope.submit = () => {
 
         var file = $scope.myFile;
+        var uploadUrl = "https://livecamsapi.herokuapp.com/moon-calendar/upload-moon-calendar-image";
         if (!file) {
 
             Toast.fire({
@@ -2476,8 +2570,44 @@ app.controller('moonCtrl', function ($scope, $rootScope, $http, fileUpload) {
             });
         }
         $('.dimmer').show();
-        var uploadUrl = "https://livecamsapi.herokuapp.com/moon-calendar/upload-moon-calendar-image";
-        resp = fileUpload.uploadFileToUrl(file, uploadUrl);
+
+
+        var fd = new FormData();
+        fd.append('image', file);
+        fd.append('month', $scope.moonc.month);
+        fd.append('year', $scope.moonc.year);
+
+
+        $http.post(uploadUrl, fd, {
+            transformRequest: angular.identity,
+            headers: { 'Content-Type': undefined }
+        })
+            .then(function (response) {
+
+                if (!response.data.success) {
+                    Toast.fire({
+                        icon: 'error',
+                        title: response.data.message
+                    });
+                } else {
+                    scrollto('moon_listing_table');
+                }
+
+                $scope.refresh();
+                $('.dimmer').hide();
+                return true;
+            }, function () {
+                Toast.fire({
+                    icon: 'error',
+                    title: "Error uploading attachment !"
+                });
+                $('.dimmer').hide();
+                return false;
+            });
+
+
+
+
         $(".dropify-clear").trigger("click");
         $('.dimmer').hide();
         $scope.refresh();

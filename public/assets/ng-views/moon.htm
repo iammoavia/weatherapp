@@ -1,34 +1,5 @@
 <div class="section-body mt-3">
     <div class="container-fluid">
-        <div class="row clearfix">
-            <div class="col-lg-12">
-                <div class="card">
-                    <div class="card-body">
-                        <div class="d-md-flex justify-content-between mb-2">
-                            <ul class="nav nav-tabs b-none">
-                                <li class="nav-item"><a class="nav-link active" data-toggle="tab" href="#list"><i
-                                            class="fa fa-list-ul"></i> Moon Calender Phases List</a></li>
-                            </ul>
-                        </div>
-                        <div class="row">
-                            <div class="col-lg-8 col-md-8 col-sm-12">
-                                <div class="input-group mb-1">
-                                    <input type="text" class="form-control" placeholder="Search by Moon Title">
-                                </div>
-                            </div>
-                            <div class="col-lg-4 col-md-4 col-sm-12">
-                                <a href="javascript:void(0);" class="btn btn-primary btn-block mb-1" title="">Search</a>
-                            </div>
-                        </div>
-                    </div>
-                </div>
-            </div>
-        </div>
-    </div>
-</div>
-
-<div class="section-body">
-    <div class="container-fluid">
         <div class="tab-content">
             <div class="tab-pane fade show active" id="list" role="tabpanel">
                 <div class="row clearfix">
@@ -52,24 +23,43 @@
                                                 </div>
                                             </div>
                                             <div class="row clearfix row-deck" style="margin-top: 20px;">
-                                                <div class="col-xl-12 col-lg-12 col-md-12"
-                                                    data-ng-repeat="moon in moons">
+                                                <table class="table table-bordered">
+                                                    <thead>
+                                                        <tr>
+                                                            <th>Image</th>
+                                                            <th>Month</th>
+                                                            <th>Year</th>
+                                                            <th>Action</th>
 
-                                                    <div class="card">
-                                                        <div class="card-body">
-                                                            <img
-                                                                src="https://livecamsapi.herokuapp.com/{{moon.image}}" />
-                                                        </div>
+                                                        </tr>
+                                                    </thead>
+                                                    <tbody>
+                                                        <tr data-ng-repeat="moon in moons" id="moon_listing_table">
+                                                            <td>
 
-                                                    </div>
+                                                                <a href="https://livecamsapi.herokuapp.com/{{moon.image}}"
+                                                                    data-lightbox="image-{{$index+1}}"
+                                                                    data-title="{{wstation.name}}"><img
+                                                                        src="https://livecamsapi.herokuapp.com/{{moon.image}}"
+                                                                        alt="https://livecamsapi.herokuapp.com/{{moon.image}}"
+                                                                        class="img-thumbnail"></a>
 
-                                                </div>
+                                                                <!-- <img src="images/slipways.png " /> -->
 
 
+                                                            </td>
+                                                            <td>{{months[moon.month-1]}}</td>
+                                                            <td>{{moon.year}}</td>
+                                                            <td>
+                                                                <a class="text-danger" data-ng-click="delete($index)"
+                                                                    title="Delete" data-toggle="tooltip"><i
+                                                                        class="material-icons">&#xE872;</i>
+                                                                </a>
+                                                            </td>
+                                                        </tr>
+                                                    </tbody>
+                                                </table>
                                             </div>
-
-
-
                                         </div>
                                     </div>
                                 </div>
@@ -94,12 +84,44 @@
                             </div>
                             <form class="card-body">
                                 <div class="row clearfix">
-                                    <div class="col-md-12 col-sm-12">
+                                    <div class="col-md-6 col-sm-6">
                                         <div class="form-group mt-2 mb-3">
                                             <input type="file" class="dropify" file-model="myFile">
                                             <small id="fileHelp" class="form-text text-muted">Upload
                                                 Moon Images</small>
                                         </div>
+                                    </div>
+
+                                    <div class="col-md-6 col-sm-6">
+
+                                        <div class="row">
+                                            <div class="form-group">
+                                                <label>Enter Year</label>
+                                                <input type="number" min="1980" max="2060" class="form-control"
+                                                    data-ng-model="moonc.year">
+                                            </div>
+                                        </div>
+
+                                        <div class="row">
+                                            <div class="form-group">
+                                                <label>Select Month</label>
+                                                <select class="custom-select" data-ng-model="moonc.month">
+                                                    <option value="1" selected>January</option>
+                                                    <option value="2">February</option>
+                                                    <option value="3">March</option>
+                                                    <option value="4">April</option>
+                                                    <option value="5">May</option>
+                                                    <option value="6">June</option>
+                                                    <option value="7">July</option>
+                                                    <option value="8">August</option>
+                                                    <option value="9">September</option>
+                                                    <option value="10">October</option>
+                                                    <option value="11">November</option>
+                                                    <option value="12">December</option>
+                                                </select>
+                                            </div>
+                                        </div>
+
                                     </div>
 
 
