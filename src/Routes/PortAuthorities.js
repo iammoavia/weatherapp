@@ -1,0 +1,10 @@
+const {createPortAuthority,getAllPortAuthorities,getPortAuthority,deletePortAuthority,updatePortAuthority} = require('../Controllers/PortAuthorities');
+const express = require("express");
+const router = express.Router();
+router.use(express.json());
+router.post('/create-port-authority',createPortAuthority);
+router.get('/get-all-port-authorites',getAllPortAuthorities);
+router.get('/:id',getPortAuthority);
+router.delete('/:id',deletePortAuthority);
+router.patch('/:id',updatePortAuthority);
+module.exports = router;

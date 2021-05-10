@@ -1,0 +1,10 @@
+const {createWeatherStation,getAllWeatherStations,getWeatherStation,updateWeatherStation,deleteWeatherStation} = require('../Controllers/WeatherStations');
+const express = require("express");
+const router = express.Router();
+router.use(express.json());
+router.post('/create-weather-station',createWeatherStation);
+router.get('/get-all-weather-stations',getAllWeatherStations);
+router.get('/:id',getWeatherStation);
+router.delete('/:id',deleteWeatherStation);
+router.patch('/:id',updateWeatherStation);
+module.exports = router;

@@ -1,0 +1,39 @@
+const mongoose = require('mongoose');
+const LiveCamera = new mongoose.Schema({
+latitude:{
+    type:String,
+    required:true
+},
+longitude:{
+    type:String,
+    required:true
+},
+  addedOn:{
+      type:Date,
+  },
+  city:{
+      type:String,
+      required:true
+  },
+  hosting:{
+      type:String,
+      required:true
+  },
+  TEL:{
+      type:String,
+      required:true
+  },
+  site:{
+      type:String,
+      required:true
+  },
+  image:{
+      type:String,
+      default:'...'
+  },
+  countryName:{
+      type:String,
+      required:true
+  }
+})
+module.exports = mongoose.model('LiveCamera',LiveCamera);

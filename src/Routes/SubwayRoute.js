@@ -1,0 +1,10 @@
+const {createSubway,getAllSubways,getSubway,deleteSubways,updateSubways} = require('../Controllers/SubwayController');
+const express = require("express");
+const router = express.Router();
+router.use(express.json());
+router.post('/create-subway',createSubway);
+router.get('/get-all-subways',getAllSubways);
+router.get('/:id',getSubway);
+router.delete('/:id',deleteSubways);
+router.patch('/:id',updateSubways);
+module.exports = router;

@@ -1,0 +1,10 @@
+const {createHospital,getAllHospitals,getHospital,updateAHospital,deleteHospital} = require('../Controllers/Hospitals');
+const express = require("express");
+const router = express.Router();
+router.use(express.json());
+router.post('/create-hospital',createHospital);
+router.get('/get-all-hospitals',getAllHospitals);
+router.get('/:id',getHospital);
+router.delete('/:id',deleteHospital);
+router.patch('/:id',updateAHospital);
+module.exports = router;

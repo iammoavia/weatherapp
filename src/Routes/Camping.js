@@ -1,0 +1,10 @@
+const {createCampingPoint,getAllCampingPoints,getCampingPoint,deleteCampingPoint,updateACampingPoint} = require('../Controllers/Camping');
+const express = require("express");
+const router = express.Router();
+router.use(express.json());
+router.post('/create-camping-point',createCampingPoint);
+router.get('/get-all-camping-points',getAllCampingPoints);
+router.get('/:id',getCampingPoint);
+router.delete('/:id',deleteCampingPoint);
+router.patch('/:id',updateACampingPoint);
+module.exports = router;

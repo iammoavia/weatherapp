@@ -1,0 +1,10 @@
+const {createKiteSurfing,getAllKiteSurfings,getKiteSurfing,deleteKiteSurfing,updateKiteSurfing} = require('../Controllers/KiteSurfing');
+const express = require("express");
+const router = express.Router();
+router.use(express.json());
+router.post('/create-kitesurfing',createKiteSurfing);
+router.get('/get-all-kitesurfings',getAllKiteSurfings);
+router.get('/:id',getKiteSurfing);
+router.delete('/:id',deleteKiteSurfing);
+router.patch('/:id',updateKiteSurfing);
+module.exports = router;

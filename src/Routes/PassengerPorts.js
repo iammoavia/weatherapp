@@ -1,0 +1,10 @@
+const {createPassengerPort,getAllPassengerPorts,getPassengerPort,deletePassengerPort,updatePassengerPort} = require('../Controllers/PassengerPorts');
+const express = require("express");
+const router = express.Router();
+router.use(express.json());
+router.post('/create-passenger-port',createPassengerPort);
+router.get('/get-all-passenger-ports',getAllPassengerPorts);
+router.get('/:id',getPassengerPort);
+router.delete('/:id',deletePassengerPort);
+router.patch('/:id',updatePassengerPort);
+module.exports = router;
