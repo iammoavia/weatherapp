@@ -27,4 +27,3 @@ const TrialSchema = new mongoose.Schema({
 })
 TrialSchema.index({addedOn:1},{expireAfterSeconds:172800});
 module.exports = mongoose.model('TrialSchema',TrialSchema);
-

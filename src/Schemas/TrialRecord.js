@@ -1,5 +1,5 @@
 const mongoose = require('mongoose');
-const TrialSchema = new mongoose.Schema({
+const TrialRecord = new mongoose.Schema({
   userId:{
       type:String,
       required:true
@@ -25,6 +25,5 @@ const TrialSchema = new mongoose.Schema({
     default:new Date()
   }
 })
-TrialSchema.index({addedOn:1},{expireAfterSeconds:172800});
-module.exports = mongoose.model('TrialSchema',TrialSchema);
+module.exports = mongoose.model('TrialRecord',TrialRecord);
 

@@ -8,7 +8,6 @@ const { LoginValidation } = require("../Configuration/Validation/Validation");
 const multer = require('multer');
 const Users = require('../Schemas/UserSchema');
 const Trial = require('../Schemas/TrialSchema');
-const TrialRecord = require('../Schemas/TrialRecord');
 router.use(express.json());
 const passport = require('passport');
 const moment = require('moment');
@@ -331,6 +330,9 @@ router.post("/signup", async (req, res, next) => {
       };
       user.save(async(err) => {
         if (err) return next(err);
+        // res.setHeader("content-type", "application/json");
+        // res.statusCode = 200;
+        res.json({ success: true, message: "Signup successfully",data:[user] });
         var now = new Date();
         var duedate = new Date(now);
         duedate.setDate(now.getDate() + 2);
@@ -343,18 +345,7 @@ router.post("/signup", async (req, res, next) => {
           user:user,
           trialExpiration:formattedExpiry
         })
-        const newTrialRecord = new TrialRecord({
-          userId:user._id,
-          trailStartedOn:formattedStarted,
-          user:user,
-          trialExpiration:formattedExpiry
-        })
        await newTrial.save();
-       await newTrialRecord.save();
-        // res.setHeader("content-type", "application/json");
-        // res.statusCode = 200;
-        res.json({ success: true, message: "Signup successfully",data:[user],trial:newTrialRecord });
-      
       });
     }
   );

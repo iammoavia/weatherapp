@@ -55,7 +55,6 @@
 const Payment = require('../Schemas/PaymentSchema');
 const User = require('../Schemas/UserSchema');
 const Trial = require('../Schemas/TrialSchema');
-const TrialRecords = require('../Schemas/TrialRecord');
 const moment = require('moment');
 exports.createPayment = async (req, res) => {
     try {
@@ -156,7 +155,7 @@ exports.getPaymentStatus = async (req, res) => {
 exports.getPayments = async (req, res) => {
     try {
         const payment = await Payment.find();
-        const Trials = await TrialRecords.find();
+        const Trials = await Trial.find();
         res.status(200).json({
             success: true,
             payments: payment,
