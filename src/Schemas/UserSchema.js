@@ -69,6 +69,17 @@ const userSchema = new Schema({
  verified:{
    type:Boolean,
    default:false
+ },
+ alreadyLoggedIn:{
+   type:Boolean,
+ },
+ loggedInDeviceName:{
+   type:String,
+   required:true
+ },
+ IP_ADDRESS:{
+   type:String,
+   required:true
  }
 });
 const isProduction = process.env.NODE_ENV === 'production';

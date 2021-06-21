@@ -50,7 +50,7 @@ app.config(function ($routeProvider) {
         }).when("/payment", {
             templateUrl: "assets/ng-views/payment.htm",
             controller: "paymentCtrl"
-        }).when("/userprofiles", {
+        }).when("/userprofiles/:userProfile?", {
             templateUrl: "assets/ng-views/userprofiles.htm",
             controller: "userprofilesCtrl"
         }).when("/blockuser", {
@@ -799,7 +799,7 @@ app.controller('portsCtrl', function ($scope, $rootScope, $http) {
         $scope.editing.latitude = "" + marker_port_auth_update.position.lat();
 
         // delete $scope.editing._id;
-        $http.patch('http://116.203.99.209:7000/port-authorities/' + $id, $scope.editing).then(function (response) {
+        $http.patch('https://www.meteologyapp.site/port-authorities/' + $id, $scope.editing).then(function (response) {
 
             if (response.data.success) {
                 $scope.port_auths[$scope.editing_port_auth_index] = angular.copy($scope.editing);
@@ -839,7 +839,7 @@ app.controller('portsCtrl', function ($scope, $rootScope, $http) {
 
         $('.dimmer').show();
 
-        $http.delete('http://116.203.99.209:7000/port-authorities/' + port_auth._id, {}).then(function (response) {
+        $http.delete('https://www.meteologyapp.site/port-authorities/' + port_auth._id, {}).then(function (response) {
 
             if (response.data.success) {
                 $scope.port_auths.splice(index, 1);
@@ -874,7 +874,7 @@ app.controller('portsCtrl', function ($scope, $rootScope, $http) {
         $('.dimmer').show();
         // var postData = $.param($scope.port_auth);
         console.log($scope.port_auth);
-        $http.post('http://116.203.99.209:7000/port-authorities/create-port-authority', $scope.port_auth).then(function (response) {
+        $http.post('https://www.meteologyapp.site/port-authorities/create-port-authority', $scope.port_auth).then(function (response) {
 
             if (response.data.success) {
                 $scope.port_auth._id = response.data.Data._id;
@@ -903,7 +903,7 @@ app.controller('portsCtrl', function ($scope, $rootScope, $http) {
 
     $scope.$on('$viewContentLoaded', function () {
         //Here your view content is fully loaded !!
-        $http.get('http://116.203.99.209:7000/port-authorities/get-all-port-authorites', {}).then(function (response) {
+        $http.get('https://www.meteologyapp.site/port-authorities/get-all-port-authorites', {}).then(function (response) {
             if (response.data.success) {
                 $scope.port_auths = response.data.Data;
                 initMapPort_auth('port_auth-map-container-google');
@@ -1056,10 +1056,14 @@ app.controller('dashboardCtrl', function ($scope, $rootScope, $http) {
     $rootScope.lan = lan;
     $scope.$on('$viewContentLoaded', function () {
         //Here your view content is fully loaded !!
-        $http.get('http://116.203.99.209:7000/get-counts', {}).then(function (response) {
+        $http.get('https://www.meteologyapp.site/get-counts', {}).then(function (response) {
             if (response.data.success) {
                 $scope.dashboard = response.data;
                 $scope.dashboard_loaded = true;
+
+                setTimeout(function () { $('.counter').counterUp();; }, 200);
+
+
             } else {
                 console.log(message);
             }
@@ -1197,7 +1201,7 @@ app.controller('blockuserCtrl', function ($scope, $rootScope, $http) {
 
     $scope.$on('$viewContentLoaded', function () {
         $('.dimmer').show();
-        $http.get('http://116.203.99.209:7000/user/get-block-users', {}).then(function (response) {
+        $http.get('https://www.meteologyapp.site/user/get-block-users', {}).then(function (response) {
             if (response.data.success) {
                 $scope.users = response.data.Data;
                 console.log($scope.users);
@@ -1217,7 +1221,7 @@ app.controller('blockuserCtrl', function ($scope, $rootScope, $http) {
     $scope.unblock = (user, index) => {
 
         $('.dimmer').show();
-        $http.patch('http://116.203.99.209:7000/user/unblock-user/' + user._id, {}).then(function (response) {
+        $http.patch('https://www.meteologyapp.site/user/unblock-user/' + user._id, {}).then(function (response) {
             if (response.data.success) {
 
                 $scope.users.splice(index, 1);
@@ -1240,7 +1244,7 @@ app.controller('blockuserCtrl', function ($scope, $rootScope, $http) {
 
 });
 
-app.controller('userprofilesCtrl', function ($scope, $rootScope, $http) {
+app.controller('userprofilesCtrl', function ($scope, $rootScope, $http, $routeParams) {
     $rootScope.lan = lan;
 
     $scope.block = (ind, user) => {
@@ -1263,7 +1267,7 @@ app.controller('userprofilesCtrl', function ($scope, $rootScope, $http) {
                         title: 'Plz provide proper reason'
                     });
                 } else {
-                    $http.patch('http://116.203.99.209:7000/user/block-user/' + user._id, { reason: result.value }).then(function (response) {
+                    $http.patch('https://www.meteologyapp.site/user/block-user/' + user._id, { reason: result.value }).then(function (response) {
                         if (response.data.success) {
 
                             $scope.users[ind].status = 'BLOCKED';
@@ -1290,7 +1294,7 @@ app.controller('userprofilesCtrl', function ($scope, $rootScope, $http) {
 
     $scope.unblock = (ind, user) => {
         $('.dimmer').show();
-        $http.patch('http://116.203.99.209:7000/user/unblock-user/' + user._id, {}).then(function (response) {
+        $http.patch('https://www.meteologyapp.site/user/unblock-user/' + user._id, {}).then(function (response) {
             if (response.data.success) {
                 $scope.users[ind].status = 'ACTIVE';
 
@@ -1311,9 +1315,16 @@ app.controller('userprofilesCtrl', function ($scope, $rootScope, $http) {
     $scope.$on('$viewContentLoaded', function () {
         $('.dimmer').show();
         $('.dropify').dropify();
-        $http.get('http://116.203.99.209:7000/user/users', {}).then(function (response) {
+        $http.get('https://www.meteologyapp.site/user/users', {}).then(function (response) {
             if (response.data.status == 'Success') {
                 $scope.users = response.data.data;
+
+                // Check & Scroll
+                if ($routeParams.userProfile) {
+                    // console.log("Scrolling to ",$routeParams.userProfile);
+                    setTimeout(function () { scrollto($routeParams.userProfile); }, 1000);
+
+                }
 
             } else {
                 console.log(message);
@@ -1334,13 +1345,14 @@ app.controller('paymentCtrl', function ($scope, $rootScope, $http) {
     // Fetch  FS On Content Load
     $scope.$on('$viewContentLoaded', function () {
 
-        $http.get('http://116.203.99.209:7000/payment/get-payments', {}).then(function (response) {
+        $http.get('https://www.meteologyapp.site/payment/get-payments', {}).then(function (response) {
             if (response.data.success) {
                 $scope.payments = response.data.payments;
                 $scope.trials = response.data.trials;
                 // $.noConflict();
                 jQuery(document).ready(function ($) {
-                    $('#fs_listing_table').DataTable();
+$('.dt-responsive').DataTable();
+                    //$('#fs_listing_table').DataTable();
                 });
             } else {
                 console.log(message);
@@ -1356,7 +1368,7 @@ app.controller('paymentCtrl', function ($scope, $rootScope, $http) {
 
 app.controller('fishingshelterCtrl', function ($scope, $rootScope, fileUpload, $http) {
     $rootScope.lan = lan;
-    $scope.URL = 'http://116.203.99.209:7000';
+    $scope.URL = 'https://www.meteologyapp.site';
     $('.dimmer').show();
     $scope.page_title = '';
 
@@ -1407,7 +1419,7 @@ app.controller('fishingshelterCtrl', function ($scope, $rootScope, fileUpload, $
         $scope.editing.latitude = "" + marker_fs_update.position.lat();
 
         // delete $scope.editing._id;
-        $http.patch('http://116.203.99.209:7000/fishing-shelters/' + $id, $scope.editing).then(function (response) {
+        $http.patch('https://www.meteologyapp.site/fishing-shelters/' + $id, $scope.editing).then(function (response) {
 
             if (response.data.success) {
                 $scope.fss[$scope.editing_fs_index] = angular.copy($scope.editing);
@@ -1418,7 +1430,7 @@ app.controller('fishingshelterCtrl', function ($scope, $rootScope, fileUpload, $
 
                     console.log('file is ');
                     $('.dimmer').hide();
-                    var uploadUrl = "http://116.203.99.209:7000/fishing-shelters/upload-fishing-shelter-image/" + response.data.Data._id;
+                    var uploadUrl = "https://www.meteologyapp.site/fishing-shelters/upload-fishing-shelter-image/" + response.data.Data._id;
                     fileUpload.uploadFileToUrl(file, uploadUrl);
 
                 }
@@ -1456,7 +1468,7 @@ app.controller('fishingshelterCtrl', function ($scope, $rootScope, fileUpload, $
 
         $('.dimmer').show();
 
-        $http.delete('http://116.203.99.209:7000/fishing-shelters/' + fs._id, {}).then(function (response) {
+        $http.delete('https://www.meteologyapp.site/fishing-shelters/' + fs._id, {}).then(function (response) {
 
             if (response.data.success) {
                 $scope.fss.splice(index, 1);
@@ -1488,14 +1500,14 @@ app.controller('fishingshelterCtrl', function ($scope, $rootScope, fileUpload, $
         $('.dimmer').show();
         // var postData = $.param($scope.fs);
         console.log($scope.fs);
-        $http.post('http://116.203.99.209:7000/fishing-shelters/create-fishing-shelter', $scope.fs).then(function (response) {
+        $http.post('https://www.meteologyapp.site/fishing-shelters/create-fishing-shelter', $scope.fs).then(function (response) {
 
             if (response.data.success) {
 
                 var file = $scope.myFile;
                 console.log('file is ');
                 $('.dimmer').hide();
-                var uploadUrl = "http://116.203.99.209:7000/fishing-shelters/upload-fishing-shelter-image/" + response.data.Data._id;
+                var uploadUrl = "https://www.meteologyapp.site/fishing-shelters/upload-fishing-shelter-image/" + response.data.Data._id;
                 fileUpload.uploadFileToUrl(file, uploadUrl);
 
                 $scope.fs._id = response.data.Data._id;
@@ -1529,7 +1541,7 @@ app.controller('fishingshelterCtrl', function ($scope, $rootScope, fileUpload, $
         initMapFs('fs-map-container-google');
         initMapFsUpdate('update-fs-map-container');
         $('.dropify').dropify();
-        $http.get('http://116.203.99.209:7000/fishing-shelters/get-all-fishing-shelters', {}).then(function (response) {
+        $http.get('https://www.meteologyapp.site/fishing-shelters/get-all-fishing-shelters', {}).then(function (response) {
             if (response.data.success) {
                 $scope.fss = response.data.Data;
                 // $.noConflict();
@@ -1602,7 +1614,7 @@ app.controller('campingCtrl', function ($scope, $rootScope, $http) {
         $scope.editing.latitude = "" + marker_camp_update.position.lat();
 
         // delete $scope.editing._id;
-        $http.patch('http://116.203.99.209:7000/camping/' + $id, $scope.editing).then(function (response) {
+        $http.patch('https://www.meteologyapp.site/camping/' + $id, $scope.editing).then(function (response) {
 
             if (response.data.success) {
                 $scope.campings[$scope.editing_camping_index] = angular.copy($scope.editing);
@@ -1639,7 +1651,7 @@ app.controller('campingCtrl', function ($scope, $rootScope, $http) {
 
         $('.dimmer').show();
 
-        $http.delete('http://116.203.99.209:7000/camping/' + camping._id, {}).then(function (response) {
+        $http.delete('https://www.meteologyapp.site/camping/' + camping._id, {}).then(function (response) {
 
             if (response.data.success) {
                 $scope.campings.splice(index, 1);
@@ -1672,7 +1684,7 @@ app.controller('campingCtrl', function ($scope, $rootScope, $http) {
         $('.dimmer').show();
         // var postData = $.param($scope.camping);
         console.log($scope.camping);
-        $http.post('http://116.203.99.209:7000/camping/create-camping-point', $scope.camping).then(function (response) {
+        $http.post('https://www.meteologyapp.site/camping/create-camping-point', $scope.camping).then(function (response) {
 
             if (response.data.success) {
                 $scope.camping._id = response.data.Data._id;
@@ -1702,7 +1714,7 @@ app.controller('campingCtrl', function ($scope, $rootScope, $http) {
     // Fetch Live Hospitals On Content Load
     $scope.$on('$viewContentLoaded', function () {
         //Here your view content is fully loaded !!
-        $http.get('http://116.203.99.209:7000/camping/get-all-camping-points', {}).then(function (response) {
+        $http.get('https://www.meteologyapp.site/camping/get-all-camping-points', {}).then(function (response) {
             if (response.data.success) {
                 $scope.campings = response.data.Data;
 
@@ -1732,7 +1744,18 @@ app.controller('mountainCtrl', function ($scope, $rootScope, $http, fileUpload) 
     $scope.page_title = '';
     marker = null;
     marker_camera_update = null;
+    // Check If valid URL
+    $scope.is_url = (string) => {
+        let url;
 
+        try {
+            url = new URL(string);
+        } catch (_) {
+            return false;
+        }
+
+        return url.protocol === "http:" || url.protocol === "https:";
+    };
 
 
     $scope.hide = (id) => {
@@ -1769,6 +1792,8 @@ app.controller('mountainCtrl', function ($scope, $rootScope, $http, fileUpload) 
 
     $scope.save = function () {
 
+
+
         // Sending PUT Request for update
         $('.dimmer').show();
         // var postData = $.param($scope.camera);
@@ -1780,22 +1805,17 @@ app.controller('mountainCtrl', function ($scope, $rootScope, $http, fileUpload) 
         $scope.editing.latitude = "" + marker_camera_update.position.lat();
 
         // delete $scope.editing_camera._id;
-        $http.patch('http://116.203.99.209:7000/mount-shelters/' + $id, $scope.editing).then(function (response) {
+        $http.patch('https://www.meteologyapp.site/mount-shelters/' + $id, $scope.editing).then(function (response) {
 
             if (response.data.success) {
                 $scope.mountains[$scope.editing_mountain_index] = angular.copy($scope.editing);
                 $scope.mountains[$scope.editing_mountain_index]._id = $id;
 
-
-                // var file = $scope.myFile;
-                // if (file) {
-                //     Toast.fire({
-                //         icon: 'error',
-                //         title: 'Plz Select a image'
-                //     });
-                //     var uploadUrl = "http://116.203.99.209:7000/livecamera/upload-live-camera-image/" + response.data.Data._id;
-                //     fileUpload.uploadFileToUrl(file, uploadUrl);
-                // }
+                var file = $scope.myFileU;
+                if (file) {
+                    var uploadUrl = "https://www.meteologyapp.site/mount-shelters/upload-mount-shelter-image/" + $scope.editing.Data._id;
+                    fileUpload.uploadFileToUrl(file, uploadUrl);
+                }
 
 
                 $scope.hide();
@@ -1828,7 +1848,7 @@ app.controller('mountainCtrl', function ($scope, $rootScope, $http, fileUpload) 
     // Fetch Live Camera's On Content Load
     $scope.$on('$viewContentLoaded', function () {
         //Here your view content is fully loaded !!
-        $http.get('http://116.203.99.209:7000/mount-shelters/get-all-mount-shelters', {}).then(function (response) {
+        $http.get('https://www.meteologyapp.site/mount-shelters/get-all-mount-shelters', {}).then(function (response) {
             if (response.data.success) {
                 $scope.mountains = response.data.Data;
                 $('.dropify').dropify();
@@ -1860,7 +1880,7 @@ app.controller('mountainCtrl', function ($scope, $rootScope, $http, fileUpload) 
 
         $('.dimmer').show();
 
-        $http.delete('http://116.203.99.209:7000/mount-shelters/' + mountain._id, {}).then(function (response) {
+        $http.delete('https://www.meteologyapp.site/mount-shelters/' + mountain._id, {}).then(function (response) {
 
             if (response.data.success) {
                 $scope.mountains.splice(index, 1);
@@ -1883,7 +1903,7 @@ app.controller('mountainCtrl', function ($scope, $rootScope, $http, fileUpload) 
 
     $scope.submit = () => {
 
-        // http://116.203.99.209:7000/livecamera/upload-live-camera-image/:liveCameraId
+        // https://www.meteologyapp.site/livecamera/upload-live-camera-image/:liveCameraId
 
         $scope.mountain.longitude = "" + marker.position.lng();
 
@@ -1891,26 +1911,26 @@ app.controller('mountainCtrl', function ($scope, $rootScope, $http, fileUpload) 
 
         $scope.mountain.TEL = $scope.mountain.TEL.toString();
 
-        // var file = $scope.myFile;
-        // if (!file) {
-        //     Toast.fire({
-        //         icon: 'error',
-        //         title: 'Plz Select a image'
-        //     });
-        //     return;
-        // }
+        var file = $scope.myFile;
+        if (!file) {
+            Toast.fire({
+                icon: 'error',
+                title: 'Plz Select a image'
+            });
+            return;
+        }
 
 
         $('.dimmer').show();
         // var postData = $.param($scope.mountain);
         console.log($scope.mountain);
-        $http.post('http://116.203.99.209:7000/mount-shelters/create-mount-shelter', $scope.mountain).then(function (response) {
+        $http.post('https://www.meteologyapp.site/mount-shelters/create-mount-shelter', $scope.mountain).then(function (response) {
 
             if (response.data.success) {
                 $scope.mountain._id = response.data.Data._id;
 
-                // var uploadUrl = "http://116.203.99.209:7000/mount-shelters/upload-mount-shelter-image/" + response.data.Data._id;
-                // fileUpload.uploadFileToUrl(file, uploadUrl)
+                var uploadUrl = "https://www.meteologyapp.site/mount-shelters/upload-mount-shelter-image/" + response.data.Data._id;
+                fileUpload.uploadFileToUrl(file, uploadUrl);
 
                 $scope.mountains.push($scope.mountain);
                 // alert(response.data.message);
@@ -1934,7 +1954,7 @@ app.controller('mountainCtrl', function ($scope, $rootScope, $http, fileUpload) 
 
 });
 
-app.controller('kiteCtrl', function ($scope, $rootScope, $http) {
+app.controller('kiteCtrl', function ($scope, $rootScope, $http, fileUpload) {
     $rootScope.lan = lan;
 
     $('.dimmer').show();
@@ -1952,8 +1972,6 @@ app.controller('kiteCtrl', function ($scope, $rootScope, $http) {
     $scope.edit = (index, kite) => {
         $scope.editing = angular.copy(kite);
         $scope.editing_kite_index = index;
-
-
 
         newlatlng = new google.maps.LatLng(parseFloat(kite.latitude), parseFloat(kite.longitude));
         // console.log(newlatlng);
@@ -1987,7 +2005,7 @@ app.controller('kiteCtrl', function ($scope, $rootScope, $http) {
         $scope.editing.latitude = "" + marker_kite_update.position.lat();
 
         // delete $scope.editing._id;
-        $http.patch('http://116.203.99.209:7000/kite-surfings/' + $id, $scope.editing).then(function (response) {
+        $http.patch('https://www.meteologyapp.site/kite-surfings/' + $id, $scope.editing).then(function (response) {
 
             if (response.data.success) {
                 $scope.kites[$scope.editing_kite_index] = angular.copy($scope.editing);
@@ -1995,6 +2013,12 @@ app.controller('kiteCtrl', function ($scope, $rootScope, $http) {
                 marker_kite_update.setMap(null);
                 marker_kite_update = null;
                 $scope.hide();
+
+                var file = $scope.myFileU;
+                if (file) {
+                    var uploadUrl = "https://www.meteologyapp.site/kite-surfings/upload-kite-surfing-image/" + $id;
+                    fileUpload.uploadFileToUrl(file, uploadUrl)
+                }
 
                 Toast.fire({
                     icon: 'success',
@@ -2027,7 +2051,7 @@ app.controller('kiteCtrl', function ($scope, $rootScope, $http) {
 
         $('.dimmer').show();
 
-        $http.delete('http://116.203.99.209:7000/kite-surfings/' + kite._id, {}).then(function (response) {
+        $http.delete('https://www.meteologyapp.site/kite-surfings/' + kite._id, {}).then(function (response) {
 
             if (response.data.success) {
                 $scope.kites.splice(index, 1);
@@ -2054,6 +2078,13 @@ app.controller('kiteCtrl', function ($scope, $rootScope, $http) {
 
     // Add New port_auth
     $scope.submit = () => {
+        var file = $scope.myFile;
+        if (!file) {
+            Toast.fire({
+                icon: 'error',
+                title: 'Plz Select a image'
+            });
+        }
 
         $scope.kite.longitude = "" + kite_marker.position.lng();
 
@@ -2061,7 +2092,7 @@ app.controller('kiteCtrl', function ($scope, $rootScope, $http) {
 
         $('.dimmer').show();
         console.log($scope.kite);
-        $http.post('http://116.203.99.209:7000/kite-surfings/create-kitesurfing', $scope.kite).then(function (response) {
+        $http.post('https://www.meteologyapp.site/kite-surfings/create-kitesurfing', $scope.kite).then(function (response) {
 
             if (response.data.success) {
                 $scope.kite._id = response.data.Data._id;
@@ -2070,6 +2101,13 @@ app.controller('kiteCtrl', function ($scope, $rootScope, $http) {
                 $scope.kite = null;
                 kite_marker.setMap(null);
                 kite_marker = null;
+
+
+                // if (file) {
+                var uploadUrl = "https://www.meteologyapp.site/kite-surfings/upload-kite-surfing-image/" + response.data.Data._id;
+                fileUpload.uploadFileToUrl(file, uploadUrl)
+                // }
+
                 Toast.fire({
                     icon: 'success',
                     title: response.data.message
@@ -2090,13 +2128,13 @@ app.controller('kiteCtrl', function ($scope, $rootScope, $http) {
 
     $scope.$on('$viewContentLoaded', function () {
         //Here your view content is fully loaded !!
-        $http.get('http://116.203.99.209:7000/kite-surfings/get-all-kitesurfings', {}).then(function (response) {
+        $http.get('https://www.meteologyapp.site/kite-surfings/get-all-kitesurfings', {}).then(function (response) {
             if (response.data.success) {
 
                 $scope.kites = response.data.Data;
                 initMapKite('kite-map-container-google');
                 initMapKiteUpdate('editing-kite-map-container-google');
-
+                $('.dropify').dropify();
                 // $.noConflict();
                 jQuery(document).ready(function ($) {
                     $('#kite_listing_table').DataTable();
@@ -2168,7 +2206,7 @@ app.controller('skicenterCtrl', function ($scope, $rootScope, $http) {
         $scope.editing.latitude = "" + marker_airport_update.position.lat();
 
         // delete $scope.editing._id;
-        $http.patch('http://116.203.99.209:7000/ski-centers/' + $id, $scope.editing).then(function (response) {
+        $http.patch('https://www.meteologyapp.site/ski-centers/' + $id, $scope.editing).then(function (response) {
 
             if (response.data.success) {
                 $scope.skicenters[$scope.editing_skicenter_index] = angular.copy($scope.editing);
@@ -2205,7 +2243,7 @@ app.controller('skicenterCtrl', function ($scope, $rootScope, $http) {
 
         $('.dimmer').show();
 
-        $http.delete('http://116.203.99.209:7000/ski-centers/' + skicenter._id, {}).then(function (response) {
+        $http.delete('https://www.meteologyapp.site/ski-centers/' + skicenter._id, {}).then(function (response) {
 
             if (response.data.success) {
                 $scope.skicenters.splice(index, 1);
@@ -2241,7 +2279,7 @@ app.controller('skicenterCtrl', function ($scope, $rootScope, $http) {
         $('.dimmer').show();
         // var postData = $.param($scope.skicenter);
         console.log($scope.skicenter);
-        $http.post('http://116.203.99.209:7000/ski-centers/create-skicenter', $scope.skicenter).then(function (response) {
+        $http.post('https://www.meteologyapp.site/ski-centers/create-skicenter', $scope.skicenter).then(function (response) {
 
             if (response.data.success) {
                 $scope.skicenter._id = response.data.Data._id;
@@ -2272,7 +2310,7 @@ app.controller('skicenterCtrl', function ($scope, $rootScope, $http) {
     // Fetch Live Hospitals On Content Load
     $scope.$on('$viewContentLoaded', function () {
         //Here your view content is fully loaded !!
-        $http.get('http://116.203.99.209:7000/ski-centers/get-all-skicenters', {}).then(function (response) {
+        $http.get('https://www.meteologyapp.site/ski-centers/get-all-skicenters', {}).then(function (response) {
             if (response.data.success) {
                 $scope.skicenters = response.data.Data;
 
@@ -2358,7 +2396,7 @@ app.controller('subwayCtrl', function ($scope, $rootScope, $http) {
         $scope.editing.latitude = "" + marker_airport_update.position.lat();
 
         // delete $scope.editing._id;
-        $http.patch('http://116.203.99.209:7000/subways/' + $id, $scope.editing).then(function (response) {
+        $http.patch('https://www.meteologyapp.site/subways/' + $id, $scope.editing).then(function (response) {
 
             if (response.data.success) {
                 $scope.subways[$scope.editing_subway_index] = angular.copy($scope.editing);
@@ -2393,7 +2431,7 @@ app.controller('subwayCtrl', function ($scope, $rootScope, $http) {
     // Delete skicenter
     $scope.delete = (index, subway) => {
         $('.dimmer').show();
-        $http.delete('http://116.203.99.209:7000/subways/' + subway._id, {}).then(function (response) {
+        $http.delete('https://www.meteologyapp.site/subways/' + subway._id, {}).then(function (response) {
 
             if (response.data.success) {
                 $scope.subways.splice(index, 1);
@@ -2429,7 +2467,7 @@ app.controller('subwayCtrl', function ($scope, $rootScope, $http) {
         $('.dimmer').show();
         // var postData = $.param($scope.subway);
         console.log($scope.subway);
-        $http.post('http://116.203.99.209:7000/subways/create-subway', $scope.subway).then(function (response) {
+        $http.post('https://www.meteologyapp.site/subways/create-subway', $scope.subway).then(function (response) {
 
             if (response.data.success) {
                 $scope.subway._id = response.data.Data._id;
@@ -2460,7 +2498,7 @@ app.controller('subwayCtrl', function ($scope, $rootScope, $http) {
     // Fetch Live Hospitals On Content Load
     $scope.$on('$viewContentLoaded', function () {
         //Here your view content is fully loaded !!
-        $http.get('http://116.203.99.209:7000/subways/get-all-subways', {}).then(function (response) {
+        $http.get('https://www.meteologyapp.site/subways/get-all-subways', {}).then(function (response) {
             if (response.data.success) {
                 $scope.subways = response.data.Data;
 
@@ -2495,7 +2533,7 @@ app.controller('moonCtrl', function ($scope, $rootScope, $http, fileUpload) {
 
     $scope.$on('$viewContentLoaded', function () {
         //Here your view content is fully loaded !!
-        $http.get('http://116.203.99.209:7000/moon-calendar/get-all-moon-calendars', {}).then(function (response) {
+        $http.get('https://www.meteologyapp.site/moon-calendar/get-all-moon-calendars', {}).then(function (response) {
             if (response.data.success) {
                 $scope.moons = response.data.Data;
                 $('.dropify').dropify();
@@ -2513,7 +2551,7 @@ app.controller('moonCtrl', function ($scope, $rootScope, $http, fileUpload) {
 
     $scope.refresh = function () {
         //Here your view content is fully loaded !!
-        $http.get('http://116.203.99.209:7000/moon-calendar/get-all-moon-calendars', {}).then(function (response) {
+        $http.get('https://www.meteologyapp.site/moon-calendar/get-all-moon-calendars', {}).then(function (response) {
             if (response.data.success) {
                 $scope.moons = response.data.Data;
                 $('.dropify').dropify();
@@ -2534,7 +2572,7 @@ app.controller('moonCtrl', function ($scope, $rootScope, $http, fileUpload) {
 
             $('.dimmer').show();
 
-            $http.delete('http://116.203.99.209:7000/moon-calendar/' + $scope.moons[$index]._id, {}).then(function (response) {
+            $http.delete('https://www.meteologyapp.site/moon-calendar/' + $scope.moons[$index]._id, {}).then(function (response) {
                 if (response.data.success) {
                     $scope.moons.splice(index, 1);
                     Toast.fire({
@@ -2561,7 +2599,7 @@ app.controller('moonCtrl', function ($scope, $rootScope, $http, fileUpload) {
     $scope.submit = () => {
 
         var file = $scope.myFile;
-        var uploadUrl = "http://116.203.99.209:7000/moon-calendar/upload-moon-calendar-image";
+        var uploadUrl = "https://www.meteologyapp.site/moon-calendar/upload-moon-calendar-image";
         if (!file) {
 
             Toast.fire({
@@ -2616,7 +2654,7 @@ app.controller('moonCtrl', function ($scope, $rootScope, $http, fileUpload) {
 
     $scope.refresh = () => {
         $('.dimmer').show();
-        $http.get('http://116.203.99.209:7000/moon-calendar/get-all-moon-calendars', {}).then(function (response) {
+        $http.get('https://www.meteologyapp.site/moon-calendar/get-all-moon-calendars', {}).then(function (response) {
             if (response.data.success) {
                 $scope.moons = response.data.Data;
                 // $('.dropify').dropify();
@@ -2682,7 +2720,7 @@ app.controller('slipwaysCtrl', function ($scope, $rootScope, $http, fileUpload) 
         $scope.editing.latitude = "" + marker_airport_update.position.lat();
 
         // delete $scope.editing._id;
-        $http.patch('http://116.203.99.209:7000/slipways/' + $id, $scope.editing).then(function (response) {
+        $http.patch('https://www.meteologyapp.site/slipways/' + $id, $scope.editing).then(function (response) {
 
             if (response.data.success) {
                 $scope.slipways[$scope.editing_slipway_index] = angular.copy($scope.editing);
@@ -2692,7 +2730,7 @@ app.controller('slipwaysCtrl', function ($scope, $rootScope, $http, fileUpload) 
 
                 var file = $scope.myFile;
                 if (file) {
-                    var uploadUrl = "http://116.203.99.209:7000/slipways/upload-slipway-image/" + $id;
+                    var uploadUrl = "https://www.meteologyapp.site/slipways/upload-slipway-image/" + $id;
                     fileUpload.uploadFileToUrl(file, uploadUrl)
                 }
 
@@ -2728,7 +2766,7 @@ app.controller('slipwaysCtrl', function ($scope, $rootScope, $http, fileUpload) 
 
         $('.dimmer').show();
 
-        $http.delete('http://116.203.99.209:7000/slipways/' + slipway._id, {}).then(function (response) {
+        $http.delete('https://www.meteologyapp.site/slipways/' + slipway._id, {}).then(function (response) {
 
             if (response.data.success) {
                 $scope.slipways.splice(index, 1);
@@ -2769,14 +2807,14 @@ app.controller('slipwaysCtrl', function ($scope, $rootScope, $http, fileUpload) 
         $('.dimmer').show();
         // var postData = $.param($scope.airport);
         console.log($scope.slipway);
-        $http.post('http://116.203.99.209:7000/slipways/create-slipway', $scope.slipway).then(function (response) {
+        $http.post('https://www.meteologyapp.site/slipways/create-slipway', $scope.slipway).then(function (response) {
 
             if (response.data.success) {
 
 
                 console.log('file is ');
                 // $('.dimmer').hide();
-                var uploadUrl = "http://116.203.99.209:7000/slipways/upload-slipway-image/" + response.data.Data._id;
+                var uploadUrl = "https://www.meteologyapp.site/slipways/upload-slipway-image/" + response.data.Data._id;
                 fileUpload.uploadFileToUrl(file, uploadUrl);
                 // fileUpload.uploadFileToUrl(file, uploadUrl)
                 $scope.slipway._id = response.data.Data._id;
@@ -2806,7 +2844,7 @@ app.controller('slipwaysCtrl', function ($scope, $rootScope, $http, fileUpload) 
 
     $scope.refresh = function () {
         //Here your view content is fully loaded !!
-        $http.get('http://116.203.99.209:7000/slipways/get-all-slipways', {}).then(function (response) {
+        $http.get('https://www.meteologyapp.site/slipways/get-all-slipways', {}).then(function (response) {
             if (response.data.success) {
                 $scope.slipways = response.data.Data;
 
@@ -2838,7 +2876,7 @@ app.controller('slipwaysCtrl', function ($scope, $rootScope, $http, fileUpload) 
     // Fetch Live Hospitals On Content Load
     $scope.$on('$viewContentLoaded', function () {
         //Here your view content is fully loaded !!
-        $http.get('http://116.203.99.209:7000/slipways/get-all-slipways', {}).then(function (response) {
+        $http.get('https://www.meteologyapp.site/slipways/get-all-slipways', {}).then(function (response) {
             if (response.data.success) {
                 $scope.slipways = response.data.Data;
                 $('.dropify').dropify();
@@ -2920,7 +2958,7 @@ app.controller('passengerCtrl', function ($scope, $rootScope, $http) {
         $scope.editing.latitude = "" + marker_pport_update.position.lat();
 
         // delete $scope.editing._id;
-        $http.patch('http://116.203.99.209:7000/passenger-ports/' + $id, $scope.editing).then(function (response) {
+        $http.patch('https://www.meteologyapp.site/passenger-ports/' + $id, $scope.editing).then(function (response) {
 
             if (response.data.success) {
                 $scope.pports[$scope.editing_pport_index] = angular.copy($scope.editing);
@@ -2957,7 +2995,7 @@ app.controller('passengerCtrl', function ($scope, $rootScope, $http) {
 
         $('.dimmer').show();
 
-        $http.delete('http://116.203.99.209:7000/passenger-ports/' + pport._id, {}).then(function (response) {
+        $http.delete('https://www.meteologyapp.site/passenger-ports/' + pport._id, {}).then(function (response) {
 
             if (response.data.success) {
                 $scope.pports.splice(index, 1);
@@ -2992,7 +3030,7 @@ app.controller('passengerCtrl', function ($scope, $rootScope, $http) {
         $('.dimmer').show();
         // var postData = $.param($scope.pport);
         console.log($scope.pport);
-        $http.post('http://116.203.99.209:7000/passenger-ports/create-passenger-port', $scope.pport).then(function (response) {
+        $http.post('https://www.meteologyapp.site/passenger-ports/create-passenger-port', $scope.pport).then(function (response) {
 
             if (response.data.success) {
                 $scope.pport._id = response.data.Data._id;
@@ -3023,7 +3061,7 @@ app.controller('passengerCtrl', function ($scope, $rootScope, $http) {
     // Fetch Live PPort On Content Load
     $scope.$on('$viewContentLoaded', function () {
         //Here your view content is fully loaded !!
-        $http.get('http://116.203.99.209:7000/passenger-ports/get-all-passenger-ports', {}).then(function (response) {
+        $http.get('https://www.meteologyapp.site/passenger-ports/get-all-passenger-ports', {}).then(function (response) {
             if (response.data.success) {
                 $scope.pports = response.data.Data;
 
@@ -3104,7 +3142,7 @@ app.controller('weatherstationCtrl', function ($scope, $rootScope, $http) {
         $scope.editing.latitude = "" + marker_wstation_update.position.lat();
 
         // delete $scope.editing._id;
-        $http.patch('http://116.203.99.209:7000/weather-stations/' + $id, $scope.editing).then(function (response) {
+        $http.patch('https://www.meteologyapp.site/weather-stations/' + $id, $scope.editing).then(function (response) {
 
             if (response.data.success) {
                 $scope.wstations[$scope.editing_wstation_index] = angular.copy($scope.editing);
@@ -3141,7 +3179,7 @@ app.controller('weatherstationCtrl', function ($scope, $rootScope, $http) {
 
         $('.dimmer').show();
 
-        $http.delete('http://116.203.99.209:7000/airports/' + airport._id, {}).then(function (response) {
+        $http.delete('https://www.meteologyapp.site/airports/' + airport._id, {}).then(function (response) {
 
             if (response.data.success) {
                 $scope.airports.splice(index, 1);
@@ -3176,7 +3214,7 @@ app.controller('weatherstationCtrl', function ($scope, $rootScope, $http) {
         $('.dimmer').show();
         // var postData = $.param($scope.wstation);
         console.log($scope.wstation);
-        $http.post('http://116.203.99.209:7000/weather-stations/create-weather-station', $scope.wstation).then(function (response) {
+        $http.post('https://www.meteologyapp.site/weather-stations/create-weather-station', $scope.wstation).then(function (response) {
 
             if (response.data.success) {
                 $scope.wstation._id = response.data.Data._id;
@@ -3208,7 +3246,7 @@ app.controller('weatherstationCtrl', function ($scope, $rootScope, $http) {
 
         $('.dimmer').show();
 
-        $http.delete('http://116.203.99.209:7000/weather-stations/' + wstation._id, {}).then(function (response) {
+        $http.delete('https://www.meteologyapp.site/weather-stations/' + wstation._id, {}).then(function (response) {
 
             if (response.data.success) {
                 $scope.wstations.splice(index, 1);
@@ -3236,7 +3274,7 @@ app.controller('weatherstationCtrl', function ($scope, $rootScope, $http) {
 
     $scope.$on('$viewContentLoaded', function () {
         //Here your view content is fully loaded !!
-        $http.get('http://116.203.99.209:7000/weather-stations/get-all-weather-stations', {}).then(function (response) {
+        $http.get('https://www.meteologyapp.site/weather-stations/get-all-weather-stations', {}).then(function (response) {
             if (response.data.success) {
                 $scope.wstations = response.data.Data;
 
@@ -3317,7 +3355,7 @@ app.controller('airportCtrl', function ($scope, $rootScope, $http) {
         $scope.editing.latitude = "" + marker_airport_update.position.lat();
 
         // delete $scope.editing._id;
-        $http.patch('http://116.203.99.209:7000/airports/' + $id, $scope.editing).then(function (response) {
+        $http.patch('https://www.meteologyapp.site/airports/' + $id, $scope.editing).then(function (response) {
 
             if (response.data.success) {
                 $scope.airports[$scope.editing_airport_index] = angular.copy($scope.editing);
@@ -3354,7 +3392,7 @@ app.controller('airportCtrl', function ($scope, $rootScope, $http) {
 
         $('.dimmer').show();
 
-        $http.delete('http://116.203.99.209:7000/airports/' + airport._id, {}).then(function (response) {
+        $http.delete('https://www.meteologyapp.site/airports/' + airport._id, {}).then(function (response) {
 
             if (response.data.success) {
                 $scope.airports.splice(index, 1);
@@ -3389,7 +3427,7 @@ app.controller('airportCtrl', function ($scope, $rootScope, $http) {
         $('.dimmer').show();
         // var postData = $.param($scope.airport);
         console.log($scope.airport);
-        $http.post('http://116.203.99.209:7000/airports/create-airport', $scope.airport).then(function (response) {
+        $http.post('https://www.meteologyapp.site/airports/create-airport', $scope.airport).then(function (response) {
 
             if (response.data.success) {
                 $scope.airport._id = response.data.Data._id;
@@ -3420,7 +3458,7 @@ app.controller('airportCtrl', function ($scope, $rootScope, $http) {
     // Fetch Live Hospitals On Content Load
     $scope.$on('$viewContentLoaded', function () {
         //Here your view content is fully loaded !!
-        $http.get('http://116.203.99.209:7000/airports/get-all-airports', {}).then(function (response) {
+        $http.get('https://www.meteologyapp.site/airports/get-all-airports', {}).then(function (response) {
             if (response.data.success) {
                 $scope.airports = response.data.Data;
 
@@ -3471,7 +3509,7 @@ app.controller('hospitalCtrl', function ($scope, $rootScope, $http) {
     // Fetch Live Hospitals On Content Load
     $scope.$on('$viewContentLoaded', function () {
         //Here your view content is fully loaded !!
-        $http.get('http://116.203.99.209:7000/hospitals/get-all-hospitals', {}).then(function (response) {
+        $http.get('https://www.meteologyapp.site/hospitals/get-all-hospitals', {}).then(function (response) {
             if (response.data.success) {
                 $scope.hospitals = response.data.Data;
                 initMapHospital('hospital-map-container-google');
@@ -3531,7 +3569,7 @@ app.controller('hospitalCtrl', function ($scope, $rootScope, $http) {
         $scope.editing.latitude = "" + marker_hospital_update.position.lat();
 
         // delete $scope.editing._id;
-        $http.patch('http://116.203.99.209:7000/hospitals/' + $id, $scope.editing).then(function (response) {
+        $http.patch('https://www.meteologyapp.site/hospitals/' + $id, $scope.editing).then(function (response) {
 
             if (response.data.success) {
                 $scope.hospitals[$scope.editing_hospital_index] = angular.copy($scope.editing);
@@ -3571,7 +3609,7 @@ app.controller('hospitalCtrl', function ($scope, $rootScope, $http) {
 
         $('.dimmer').show();
 
-        $http.delete('http://116.203.99.209:7000/hospitals/' + hospital._id, {}).then(function (response) {
+        $http.delete('https://www.meteologyapp.site/hospitals/' + hospital._id, {}).then(function (response) {
 
             if (response.data.success) {
                 $scope.hospitals.splice(index, 1);
@@ -3607,7 +3645,7 @@ app.controller('hospitalCtrl', function ($scope, $rootScope, $http) {
         $('.dimmer').show();
         // var postData = $.param($scope.hospital);
         console.log($scope.hospital);
-        $http.post('http://116.203.99.209:7000/hospitals//create-hospital', $scope.hospital).then(function (response) {
+        $http.post('https://www.meteologyapp.site/hospitals//create-hospital', $scope.hospital).then(function (response) {
 
             if (response.data.success) {
                 $scope.hospital._id = response.data.Data._id;
@@ -3689,7 +3727,7 @@ app.controller('camerasCtrl', function ($scope, $rootScope, $http, fileUpload) {
         $scope.editing_camera.latitude = "" + marker_camera_update.position.lat();
 
         // delete $scope.editing_camera._id;
-        $http.patch('http://116.203.99.209:7000/livecamera/update-live-camera/' + $id, $scope.editing_camera).then(function (response) {
+        $http.patch('https://www.meteologyapp.site/livecamera/update-live-camera/' + $id, $scope.editing_camera).then(function (response) {
 
             if (response.data.success) {
                 $scope.cameras[$scope.editing_camera_index] = angular.copy($scope.editing_camera);
@@ -3702,7 +3740,7 @@ app.controller('camerasCtrl', function ($scope, $rootScope, $http, fileUpload) {
                         icon: 'error',
                         title: 'Plz Select a image'
                     });
-                    var uploadUrl = "http://116.203.99.209:7000/livecamera/upload-live-camera-image/" + response.data.Data._id;
+                    var uploadUrl = "https://www.meteologyapp.site/livecamera/upload-live-camera-image/" + response.data.Data._id;
                     fileUpload.uploadFileToUrl(file, uploadUrl);
                 }
 
@@ -3735,7 +3773,7 @@ app.controller('camerasCtrl', function ($scope, $rootScope, $http, fileUpload) {
     // Fetch Live Camera's On Content Load
     $scope.$on('$viewContentLoaded', function () {
         //Here your view content is fully loaded !!
-        $http.get('http://116.203.99.209:7000/livecamera/get-all-livecameras', {}).then(function (response) {
+        $http.get('https://www.meteologyapp.site/livecamera/get-all-livecameras', {}).then(function (response) {
             if (response.data.success) {
                 $scope.cameras = response.data.Data;
                 $('.dropify').dropify();
@@ -3767,7 +3805,7 @@ app.controller('camerasCtrl', function ($scope, $rootScope, $http, fileUpload) {
 
         $('.dimmer').show();
 
-        $http.delete('http://116.203.99.209:7000/livecamera/delete-livecamera/' + camera._id, {}).then(function (response) {
+        $http.delete('https://www.meteologyapp.site/livecamera/delete-livecamera/' + camera._id, {}).then(function (response) {
 
             if (response.data.success) {
                 $scope.cameras.splice(index, 1);
@@ -3789,7 +3827,7 @@ app.controller('camerasCtrl', function ($scope, $rootScope, $http, fileUpload) {
 
     $scope.submit = () => {
 
-        // http://116.203.99.209:7000/livecamera/upload-live-camera-image/:liveCameraId
+        // https://www.meteologyapp.site/livecamera/upload-live-camera-image/:liveCameraId
 
         $scope.camera.longitude = "" + marker.position.lng();
 
@@ -3810,12 +3848,12 @@ app.controller('camerasCtrl', function ($scope, $rootScope, $http, fileUpload) {
         $('.dimmer').show();
         // var postData = $.param($scope.camera);
         console.log($scope.camera);
-        $http.post('http://116.203.99.209:7000/livecamera/create-live-camera', $scope.camera).then(function (response) {
+        $http.post('https://www.meteologyapp.site/livecamera/create-live-camera', $scope.camera).then(function (response) {
 
             if (response.data.success) {
                 $scope.camera._id = response.data.Data._id;
 
-                var uploadUrl = "http://116.203.99.209:7000/livecamera/upload-live-camera-image/" + response.data.Data._id;
+                var uploadUrl = "https://www.meteologyapp.site/livecamera/upload-live-camera-image/" + response.data.Data._id;
                 fileUpload.uploadFileToUrl(file, uploadUrl)
 
                 $scope.cameras.push($scope.camera);

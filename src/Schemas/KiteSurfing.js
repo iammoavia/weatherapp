@@ -31,6 +31,9 @@ longitude:{
   site:{
       type:String,
       required:true
+  },
+  image:{
+      type:String,
   }
 
 })

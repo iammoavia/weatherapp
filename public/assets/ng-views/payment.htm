@@ -1,4 +1,3 @@
-
 <div class="section-body mt-3">
     <div class="container-fluid" id="subscruberduserdetail">
         <div class="row clearfix">
@@ -9,10 +8,14 @@
                     </div>
                     <div class="card-body">
                         <div class="table-responsive">
-                            <table class="table table-hover table-striped text-nowrap table-vcenter mb-0" id='payment-table-1'>
+                            <table datatable="ng"
+                                class="table dt-responsive table-hover table-striped text-nowrap table-vcenter mb-0"
+                                id='payment-table-1'>
                                 <thead>
                                     <tr>
+                                        <th class="text-center">Payment ID</th>
                                         <th>User Name</th>
+                                        <th>Method</th>
                                         <th style="text-align: center;">Subscription Date</th>
                                         <th style="text-align: center;">Expiration Date</th>
 
@@ -21,9 +24,13 @@
                                 <tbody>
 
                                     <tr data-ng-repeat="pt in payments">
-                                        <td>{{pt.user.firstname}}&nbsp;{{pt.user.lastname}}</td>
+                                        <td class="text-left">{{pt.paymentId}}</td>
+                                        <td class="text-center"><a
+                                                href="#!userprofiles/{{pt.user[0]._id}}">{{pt.user[0].firstname}}&nbsp;{{pt.user[0].lastname}}</a>
+                                        </td>
+                                        <td>{{pt.paymentMethod}}</td>
                                         <td style="text-align: center;">{{pt.paidOn}}</td>
-                                        <td style="text-align: center;">{{pt.expireAt}}</td>
+                                        <td style="text-align: center;">{{pt.expirationDate}}</td>
                                     </tr>
 
                                 </tbody>
@@ -42,18 +49,24 @@
                     </div>
                     <div class="card-body">
                         <div class="table-responsive">
-                            <table class="table table-hover table-striped text-nowrap table-vcenter mb-0">
+                            <table datatable class="table dt-responsive table-hover table-striped text-nowrap table-vcenter mb-0">
                                 <thead>
                                     <tr>
                                         <th>User Name</th>
-                                        <th style="text-align: center;">Subscription Date</th>
+                                        <th>Email</th>
+                                        <th style="text-align: center;">Trial Date</th>
+                                        <th style="text-align: center;">Expire Date</th>
+
                                     </tr>
                                 </thead>
                                 <tbody>
                                     <tr data-ng-repeat="ptt in trials">
-                                        <td>{{pt.user.firstname}}&nbsp;{{ptt.user.lastname}}</td>
+                                        <td class='text-center'><a
+                                                href="#!userprofiles/{{ptt.user._id}}">{{ptt.user.firstname}}&nbsp;{{ptt.user.lastname}}</a>
+                                        </td>
+                                        <td class='text-center'>{{ptt.user.email}}</td>
                                         <td style="text-align: center;">{{ptt.trailStartedOn}}</td>
-                                        <!-- <td style="text-align: center;">{{ptt.trialExpiration}}</td> -->
+                                        <td style="text-align: center;">{{ptt.trialExpiration}}</td>
                                     </tr>
                                 </tbody>
                             </table>

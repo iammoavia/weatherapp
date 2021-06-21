@@ -14,11 +14,25 @@ const PaymentSchema = new mongoose.Schema({
   },
   user:{
     type:Object,
-    required:true
   },
   expirationDate:{
     type:String,
     required:true
+  },
+  paymentMethod:{
+    type:String,
+    required:true
+  },
+  amountPaid:{
+    type:String,
+    required:true
+  },
+  paymentId:{
+    type:String,
+    required:true
   }
+
 })
+PaymentSchema.index({paidOn:1},{expireAfterSeconds:31536000});
+
 module.exports = mongoose.model('PaymentSchema',PaymentSchema);

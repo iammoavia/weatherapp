@@ -12,6 +12,7 @@ router.use(express.json());
 const passport = require('passport');
 const moment = require('moment');
 const session = require('express-session');
+const nodemailer = require('nodemailer');
 require('../Configuration/passport')(passport);
 
 router.use(passport.initialize());
@@ -69,12 +70,38 @@ router.route('/block-user/:userId').patch(async(req,res) => {
   },{
     new:true
   });
+  var transporter = nodemailer.createTransport({
+    host: 'meteology-livecams.com',
+    // name:'smtp.meteology-livecams.com',
+    port: 465,
+    secure: true,
+    auth: {
+        user: 'info@meteology-livecams.com',
+        pass: 'pnEy65$3'
+    }
+});
+const mailOptions = {
+  from: 'info@meteology-livecams.com',
+  to: blockedUser.email,
+  subject: 'METEOLOGY ACCOUNT BLOCKED.',
+  text:reason
+};
+
+transporter.sendMail(mailOptions, (error, data) => {
+if (error) {
+    console.log(error)
+    return
+}
+console.log("Sent!",data)
+});
+
   res.status(200).json({
     success:true,
     Message:'The user was successfully blocked.',
     Data:blockedUser
   })
   } catch (error) {
+    console.log(error);
     res.status(400).json({
       success:false,
       Message:'An error occured while blocking the user. Try again please.'
@@ -105,11 +132,38 @@ router.route('/unblock-user/:userId').patch(async(req,res) => {
   const unblockedUser = await AuthSchema.findByIdAndUpdate(req.params.userId,{
     status:'ACTIVE'
   });
+  console.log(unblockedUser);
+  var transporter = nodemailer.createTransport({
+    host: 'meteology-livecams.com',
+    // name:'smtp.meteology-livecams.com',
+    port: 465,
+    secure: true,
+    auth: {
+        user: 'info@meteology-livecams.com',
+        pass: 'pnEy65$3'
+    }
+});
+const mailOptions = {
+  from: 'info@meteology-livecams.com',
+  to: unblockedUser.email,
+  subject: 'METEOLOGY ACCOUNT UNBLOCKED',
+  text:`Hey Dear user, as your meteology account was recently blocked because of some reasons, now it has been successfully unblocked by the admin.`
+};
+
+transporter.sendMail(mailOptions, (error, data) => {
+if (error) {
+    console.log(error)
+    return
+}
+console.log("Sent!",data)
+});
+
   res.status(200).json({
     success:true,
     Message:'The user was successfully unblocked.'
   })
   } catch (error) {
+    console.log(error);
     res.status(400).json({
       success:false,
       Message:'An error occured while unblocking the user. Try again please.'
@@ -129,6 +183,31 @@ router.route('/generate-otp').post(async(req,res) => {
   let code = Math.floor(1000 + Math.random() * 9000);
   const existingUser = await Users.findOne({ phone: Phone });
   if (existingUser) {
+    var transporter = nodemailer.createTransport({
+      host: 'meteology-livecams.com',
+      // name:'smtp.meteology-livecams.com',
+      port: 465,
+      secure: true,
+      auth: {
+          user: 'info@meteology-livecams.com',
+          pass: 'pnEy65$3'
+      }
+  });
+  const mailOptions = {
+    from: 'info@meteology-livecams.com',
+    to: req.body.email,
+    subject: 'Forgot password otp code',
+    text:`Your meteology account was logged in right now from the device ${req.body.loggedInDeviceName} and the IP address was ${req.body.IP_ADDRESS}`
+};
+
+transporter.sendMail(mailOptions, (error, data) => {
+  if (error) {
+      console.log(error)
+      return
+  }
+  console.log("Sent!",data)
+});
+
    res.status(200).json({
      success:true,
      message:'The otp has been sent to your contact',
@@ -231,7 +310,7 @@ router.route('/edit-profile/:id').patch(async(req,res) => {
     }
 })
 router.post("/signup", async (req, res, next) => {
-  const { email, password, firstname, lastname, status, phone,verified } = req.body;
+  const { email, password, firstname, lastname, status, phone,verified ,loggedInDeviceName,IP_ADDRESS} = req.body;
   const existingUser = await Users.findOne({ email: email });
   const existingPhone = await Users.findOne({phone:phone});
   if(existingPhone) {
@@ -242,7 +321,7 @@ router.post("/signup", async (req, res, next) => {
   }
 
   Users.register(
-    new Users({verified:false,profile:null,firstname:firstname,lastname:lastname,status:'ACTIVE',phone:phone,email: email, provider: 'email', username: 'user' + Math.floor(Math.random() * 6) }),
+    new Users({verified:false,profile:null,firstname:firstname,lastname:lastname,status:'ACTIVE',phone:phone,email: email, provider: 'email',alreadyLoggedIn:false,loggedInDeviceName:loggedInDeviceName,IP_ADDRESS:IP_ADDRESS, username: 'user' + Math.floor(Math.random() * 6) }),
     password,
     (err, user) => {
       if (err) {
@@ -278,7 +357,66 @@ router
   .delete(AuthController.deleteAccount)
   .patch(AuthController.EditAccount)
 
- 
+router.post('/logout/:userId',async(req,res) => {
+  try {
+    const userId = req.params.userId;
+    if(!userId || userId === '' || userId == null) {
+      res.status(404).json({
+        success:false,
+        Message:'User id not found.'
+      });
+      return;
+    }
+    const userExists = await Users.find({_id:userId});
+    if(!userExists) {
+      res.status(404).json({
+        success:false,
+        Message:'No user found with given Id'
+      });
+      return;
+    }
+    const logoutUser = await Users.findByIdAndUpdate(userId,{
+      alreadyLoggedIn:false
+    },{
+      new:true
+    });
+    res.status(200).json({
+      success:true,
+      Message:'User successfully loggedout'
+    })
+  } catch(e) {
+    res.status(400).json({
+      success:false,
+      Message:'An error occured while logging you out.',
+      Error:e
+    })
+  }
+})
+router.post('/change-device/:id',async(req,res) => {
+  try 
+  {
+   const userId = req.params.id;
+   const {loggedInDeviceName,IP_ADDRESS} = req.body;
+   const updatedUser = await Users.findByIdAndUpdate(userId,{
+     loggedInDeviceName:loggedInDeviceName,
+     IP_ADDRESS:IP_ADDRESS
+   },{
+     new:true
+   });
+   res.status(200).json({
+     success:true,
+     message:'Device updated successfully.',
+     user:updatedUser
+   });
+  }
+   catch
+   {
+    res.status(400).json({
+      success:false,
+      message:'Device didnt update successfully.'
+    });
+   }
+})
 router.post("/login", async(req, res, next) => {
   passport.authenticate("local", async(err, user, info) => {
 
@@ -302,26 +440,94 @@ router.post("/login", async(req, res, next) => {
       const token = req.user.generateJWT();
       const user = await Users.find({email:req.body.email});
       if(user[0].verified == null || user[0].verified === false) {
-        res.json({
+        res.status(403).json({
           success:false,
           message:'Your account isnt verified please verify it to get ahead',
-          code:'ACCOUNT_NOT_VERIFIED'
+          code:'ACCOUNT_NOT_VERIFIED',
+          user:user
         });
         return;
       } else if (user[0].status === 'BLOCKED') {
-        res.json({
+        res.status(202).json({
           success:false,
           message:'Your account was blocked by admin for some reason. Contact the customer support.',
           code:'ACCOUNT_BLOCKED'
         });
         return;
       }
-      res.json({ success: true, message: "Login Successfull", token,data:user });
+      if(user[0].alreadyLoggedIn == true) {
+        console.log('entered line 459 here');
+       if(user[0].loggedInDeviceName !== req.body.loggedInDeviceName) {
+        console.log('line 435 called')
+        console.log(user[0].alreadyLoggedIn);
+        res.status(205).json({
+          success:false,
+          message:'Your account is already logged in on another device. Please verify yourself to get ahead.',
+          code:'ACCOUNT_ALREADY_LOGGEDIN',
+          data:user[0],
+          token
+        });
+        return;
+       }
+  
+      }
+      console.log('this here',user[0].alreadyLoggedIn,user[0].IP_ADDRESS,user[0].loggedInDeviceName);
+      const updateUser = await Users.findByIdAndUpdate(user[0]._id,{
+        alreadyLoggedIn:true,
+        loggedInDeviceName:req.body.loggedInDeviceName,
+        IP_ADDRESS:req.body.IP_ADDRESS
+      },{
+        new:true
+      });
+
+      var transporter = nodemailer.createTransport({
+        host: 'meteology-livecams.com',
+        // name:'smtp.meteology-livecams.com',
+        port: 465,
+        secure: true,
+        auth: {
+            user: 'info@meteology-livecams.com',
+            pass: 'pnEy65$3'
+        }
+    });
+    const mailOptions = {
+      from: 'info@meteology-livecams.com',
+      to: req.body.email,
+      subject: 'A new login.',
+      text:`Your meteology account was logged in right now from the device ${req.body.loggedInDeviceName} and the IP address was ${req.body.IP_ADDRESS}`
+  };
+
+  transporter.sendMail(mailOptions, (error, data) => {
+    if (error) {
+        console.log(error)
+        return
+    }
+    console.log("Sent!",data)
+});
+
+      res.json({ success: true, message: "Login Successfull", token,data:updateUser });
 
     });
   })(req, res, next);
 });
 
-
+router.patch('/update-user-login-status/:id',async(req,res) => {
+  try {
+   const updatedUser = await Users.findByIdAndUpdate(req.params.id,{
+     alreadyLoggedIn:true
+   },{
+     new:true
+   });
+   req.status(200).json({
+     sucess:true,
+     Message:'The users status was updated',
+   });
+  } catch(e) {
+    req.status(400).json({
+      sucess:true,
+      Message:'The users status couldnt be updated!',
+    });
+  }
+})
 
 module.exports = router;

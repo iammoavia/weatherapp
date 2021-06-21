@@ -2,14 +2,38 @@ const Users = require('../Schemas/UserSchema');
 var nodemailer = require('nodemailer');
 exports.generateCode = async (req, res) => {
     const { email } = req.body
-    let code = Math.floor(1000 + Math.random() * 9000);
+    let code = Math.floor(100000 + Math.random() * 900000);
     const existingUser = await Users.findOne({ email: email });
     if (existingUser) {
-      res.status(200).json({
-        success:true,
-        message:'The otp has been sent',
-        otp:code
-      })
+      var transporter = nodemailer.createTransport({
+        host: 'meteology-livecams.com',
+        // name:'smtp.meteology-livecams.com',
+        port: 465,
+        secure: true,
+        auth: {
+            user: 'info@meteology-livecams.com',
+            pass: 'pnEy65$3'
+        }
+    });
+    const mailOptions = {
+      from: 'info@meteology-livecams.com',
+      to: email,
+      subject: 'Forgot password activation code',
+      text: `Dear User, This is your forget password verification code, ${code}.`
+  };
+
+  transporter.sendMail(mailOptions, (error, data) => {
+    if (error) {
+        console.log(error)
+        return
+    }
+    console.log("Sent!")
+});
+res.status(200).json({
+  success:true,
+  message:'The otp has been sent',
+  otp:code
+})
     //   var transporter = nodemailer.createTransport({
     //     service: 'gmail',
     //     host: 'smtp.gmail.com',
@@ -22,8 +46,8 @@ exports.generateCode = async (req, res) => {
     // var mailOptions = {
     //     from: 'isamadmemon20@gmail.com',
     //     to: email,
-    //     subject: 'Forgot password activation code',
-    //     text: `Dear User, This is your forget password verification code, ${code}.`
+        // subject: 'Forgot password activation code',
+        // text: `Dear User, This is your forget password verification code, ${code}.`
     //   };
       
     // transporter.sendMail(mailOptions, function(error, info){

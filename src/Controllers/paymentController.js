@@ -65,9 +65,9 @@ exports.createPayment = async (req, res) => {
             });
             return;
         }
-        const userExists = await User.find({userId:req.body.userId});
+        const userExists = await User.find({_id:req.body.userId});
         console.log(userExists);
-        if (!userExists) {
+        if (!userExists || userExists.length === 0 || userExists == null) {
             res.status(400).json({
                 success: false,
                 Message: 'No user exists with this id.'
@@ -89,11 +89,15 @@ exports.createPayment = async (req, res) => {
         const newdate = new Date();
         const formattedExpiry = moment(duedate).format('LLL');
         const formattedStarted = moment(newdate).format('LLL');
+        const removeTrial = await Trial.findOneAndDelete({userId:req.body.userId});
         const newPay = new Payment({
             userId: req.body.userId,
             paidOn: formattedStarted,
             expirationDate: formattedExpiry,
-            user: userExists
+            user: userExists,
+            paymentMethod:req.body.paymentMethod,
+            amountPaid:req.body.amountPaid,
+            paymentId:req.body.paymentId
         })
         await newPay.save();
         res.status(200).json({
@@ -113,31 +117,38 @@ exports.createPayment = async (req, res) => {
 
 exports.getPaymentStatus = async (req, res) => {
     try {
+        const Userr = await User.findById(req.params.userId);
         const payment = await Payment.find({ userId: req.params.userId });
         const Trials = await Trial.find({userId:req.params.userId});
-        if(Trials) {
+        if(Trials != null && Trials.length !== 0 ) {
             res.status(200).json({
                 success: true,
                 status: "TRIAL",
-                Message:'This user is in trial mode.'
+                Message:'This user is in trial mode.',
+                isBlocked:Userr.status === 'ACTIVE' ? false : true
             });
         }
-        if (!payment || payment == null || payment.length === 0) {
+        if (payment != null && payment.length !== 0) {
             res.status(200).json({
                 success: true,
-                Message: 'This user doesnt have subscription.',
-                status: "NO_SUBSCRIPTION"
-            });
+                Message: 'This user has annual subscription plan.',
+                status: "ANNUAL_SUBSCRIBED",
+                isBlocked:Userr.status === 'ACTIVE' ? false : true
+
+            })
         }
         res.status(200).json({
             success: true,
-            Message: 'This user has annual subscription plan.',
-            status: "ANNUAL_SUBSCRIBED"
+            Message: 'This user neither have trial nor he has subscribed to annual plan',
+            status: "NOT_SUBSCRIBED",
+            isBlocked:Userr.status === 'ACTIVE' ? false : true
+
         })
     } catch (e) {
         res.status(400).json({
             success: false,
             Message: 'An error occured while fetching user payment status',
+            
         })
     }
 }
@@ -156,6 +167,29 @@ exports.getPayments = async (req, res) => {
         res.status(400).json({
             success: false,
             Message: 'An error occured while fetching payments',
+        })
+    }
+}
+exports.getPayment = async(req,res) => {
+    try {
+     const userId = req.params.userId;
+     if(!userId || userId === '') {
+         res.status(404).json({
+             sucess:false,
+             Message:'Please provide the user Id'
+         });
+         return;
+     }
+     const userPlan = await Payment.find({userId:req.params.userId});
+     res.status(200).json({
+         sucess:true,
+         plan:userPlan
+     })
+    } catch(e) {
+        res.status(400).json({
+            sucess:false,
+            Message:'An error occured while fetching the current paid plan.',
+            Error:e
         })
     }
 }

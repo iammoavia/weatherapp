@@ -34,6 +34,10 @@ longitude:{
   countryName:{
       type:String,
       required:true
+  },
+  hotel:{
+      type:String,
+      required:true
   }
 })
 module.exports = mongoose.model('LiveCamera',LiveCamera);

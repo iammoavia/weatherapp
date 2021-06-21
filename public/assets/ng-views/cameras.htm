@@ -76,6 +76,7 @@
                                                         <th>Hosting</th>
                                                         <th>Tel</th>
                                                         <th>Site</th>
+                                                        <th>Hotel</th>
                                                         <th>Latitude</th>
                                                         <th>Longitude</th>
                                                         <th>Action</th>
@@ -86,18 +87,19 @@
                                                     <tr data-ng-repeat="camera in cameras">
                                                         <td>{{camera.city}}</td>
                                                         <td>
-                                                            <a href="http://116.203.99.209:7000/{{camera.image}}"
+                                                            <a href="https://www.meteologyapp.site/{{camera.image}}"
                                                                 data-lightbox="image-{{$index+1}}"
                                                                 data-title="{{wstation.name}}"><img
-                                                                    src="http://116.203.99.209:7000/{{camera.image}}"
-                                                                    alt="http://116.203.99.209:7000/{{camera.image}}"
+                                                                    src="https://www.meteologyapp.site/{{camera.image}}"
+                                                                    alt="https://www.meteologyapp.site/{{camera.image}}"
                                                                     class="img-thumbnail"></a>
-                                                            <!-- <img src="http://116.203.99.209:7000/{{camera.image}}"
+                                                            <!-- <img src="https://www.meteologyapp.site/{{camera.image}}"
                                                                 alt="" srcset=""> -->
                                                         </td>
                                                         <td>{{camera.hosting}}</td>
                                                         <td>{{camera.TEL}}</td>
                                                         <td>{{camera.site}}</td>
+                                                        <td>{{camera.hotel}}</td>
                                                         <td>{{camera.latitude}}°</td>
                                                         <td>{{camera.longitude}}°</td>
                                                         <td>
@@ -157,7 +159,12 @@
 
                                     <div class="form-group">
                                         <input type="text" class="form-control" data-ng-model="editing_camera.site"
-                                            placeholder="Enter Hospital Website Address">
+                                            placeholder="Enter Website Address">
+                                    </div>
+
+                                    <div class="form-group">
+                                        <input type="text" class="form-control"
+                                            data-ng-model="editing_camera.hotel" placeholder="Enter Hotel">
                                     </div>
                                 </div>
 
@@ -168,53 +175,59 @@
                                     </div>
                                 </div>
 
-                                <div class="col-md-4" style="margin-top: 10px;">
-                                    <div class="form-group">
-                                        <label>Telphone</label>
-                                        <input type="text" class="form-control" data-ng-model="editing_camera.TEL">
+                                <div class="row">
+                                    <div class="col-md-4" style="margin-top: 10px;">
+                                        <div class="form-group">
+                                            <label>Telphone</label>
+                                            <input type="text" class="form-control" data-ng-model="editing_camera.TEL">
+                                        </div>
                                     </div>
+    
+    
+                                    <div class="col-md-4" style="margin-top: 10px;">
+                                        <div class="form-group">
+                                            <label>Longitude</label>
+                                            <input type="text" readonly class="form-control longitude_input"
+                                                id="editing_camera_longitude" data-ng-model="editing_camera.longitude">
+                                        </div>
+                                    </div>
+    
+                                    <div class="col-md-4" style="margin-top: 10px;">
+                                        <div class="form-group">
+                                            <label>Latitude</label>
+                                            <input type="text" readonly class="form-control latitude_input"
+                                                id="editing_camera_latitude" data-ng-model="editing_camera.latitude">
+                                        </div>
+                                    </div>
+
+                                    <div class="col-md-4" style="margin-top: 10px;">
+    
+                                        <div class="form-group mt-2 mb-3">
+                                            <input type="file" class="dropify" file-model="myFile">
+    
+                                        </div>
+    
+                                    </div>
+    
                                 </div>
 
-                                <div class="col-md-4" style="margin-top: 10px;">
-
-                                    <div class="form-group mt-2 mb-3">
-                                        <input type="file" class="dropify" file-model="myFile">
-
+                              
+                                <div class="row">
+                                    <div class="col-sm-6">
+                                        <div class="form-group mt-3">
+                                            <button type="submit" data-ng-click='save()'
+                                                class="btn btn-success">Save</button>
+                                        </div>
                                     </div>
-
-                                </div>
-
-
-
-                                <div class="col-md-4" style="margin-top: 10px;">
-                                    <div class="form-group">
-                                        <label>Longitude</label>
-                                        <input type="text" readonly class="form-control longitude_input"
-                                            id="editing_camera_longitude" data-ng-model="editing_camera.longitude">
+    
+    
+                                    <div class="col-sm-6">
+                                        <div class="form-group mt-3" style="margin-left: 400px;">
+                                            <button type="submit" class="btn btn-success"
+                                                data-ng-click="hide('updatecamera')">Cancel</button>
+                                        </div>
                                     </div>
-                                </div>
-
-                                <div class="col-md-4" style="margin-top: 10px;">
-                                    <div class="form-group">
-                                        <label>Latitude</label>
-                                        <input type="text" readonly class="form-control latitude_input"
-                                            id="editing_camera_latitude" data-ng-model="editing_camera.latitude">
-                                    </div>
-                                </div>
-
-                                <div class="col-sm-6">
-                                    <div class="form-group mt-3">
-                                        <button type="submit" data-ng-click='save()'
-                                            class="btn btn-success">Save</button>
-                                    </div>
-                                </div>
-
-
-                                <div class="col-sm-6">
-                                    <div class="form-group mt-3" style="margin-left: 400px;">
-                                        <button type="submit" class="btn btn-success"
-                                            data-ng-click="hide('updatecamera')">Cancel</button>
-                                    </div>
+    
                                 </div>
 
                             </div>
@@ -241,22 +254,27 @@
                             <div class="row clearfix">
                                 <div class="col-12">
                                     <div class="form-group">
-                                        <input type="text" class="form-control" id="exampleInputPassword1"
+                                        <input type="text" class="form-control"
                                             data-ng-model="camera.city" placeholder="Enter City Name">
                                     </div>
                                     <div class="form-group">
-                                        <input type="text" class="form-control" id="exampleInputPassword1"
+                                        <input type="text" class="form-control"
                                             data-ng-model="camera.countryName" placeholder="Enter Country Name">
                                     </div>
 
                                     <div class="form-group">
-                                        <input type="text" class="form-control" id="exampleInputPassword1"
+                                        <input type="text" class="form-control"
                                             data-ng-model="camera.hosting" placeholder="Hosting URL">
                                     </div>
 
                                     <div class="form-group">
-                                        <input type="text" class="form-control" id="exampleInputPassword1"
-                                            data-ng-model="camera.site" placeholder="Enter Hospital Website Address">
+                                        <input type="text" class="form-control"
+                                            data-ng-model="camera.site" placeholder="Enter Website Address">
+                                    </div>
+
+                                    <div class="form-group">
+                                        <input type="text" class="form-control"
+                                            data-ng-model="camera.hotel" placeholder="Enter Hotel">
                                     </div>
                                 </div>
 

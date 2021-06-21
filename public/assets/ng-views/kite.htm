@@ -49,7 +49,7 @@
 <div class="section-body mt-3">
     <div class="container-fluid">
         <div class="tab-content">
-            <div class="tab-pane show active"  id="list" role="tabpanel">
+            <div class="tab-pane show active" id="list" role="tabpanel">
                 <div class="row clearfix">
                     <div class="col-xl-12 col-lg-12 col-md-12">
                         <div class="card">
@@ -73,6 +73,7 @@
                                             <table datatable="ng" class="table table-bordered" id="kite_listing_table">
                                                 <thead>
                                                     <tr>
+                                                        <th>Image</th>
                                                         <th>Name</th>
                                                         <th>Address</th>
                                                         <th>Website</th>
@@ -86,6 +87,12 @@
                                                 </thead>
                                                 <tbody>
                                                     <tr data-ng-repeat="kite in kites">
+                                                        <td><a href="https://www.meteologyapp.site/{{kite.image}}"
+                                                            data-lightbox="image-{{$index+1}}"
+                                                            data-title="{{wstation.name}}"><img
+                                                                src="https://www.meteologyapp.site/{{kite.image}}"
+                                                                alt="https://www.meteologyapp.site/{{kite.image}}"
+                                                                class="img-thumbnail"></a></td>
                                                         <td>{{kite.name}}</td>
                                                         <td>{{kite.address}}</td>
                                                         <td>{{kite.site}}</td>
@@ -157,47 +164,59 @@
                                     </div>
                                 </div>
 
+                                <div class="row">
+                                    <div class="col-md-6" style="margin-top: 10px;">
+                                        <div class="form-group">
+                                            <label>Longitude</label>
+                                            <input type="text" id="kite_longitude" class="form-control"
+                                                data-ng-model="kite.longitude" readonly>
+                                        </div>
+                                    </div>
+                                    <div class="col-md-6" style="margin-top: 10px;">
+                                        <div class="form-group">
+                                            <label>Latitude</label>
+                                            <input type="text" id="kite_latitude" class="form-control"
+                                                data-ng-model="kite.latitude" readonly>
+                                        </div>
+                                    </div>
 
-                                <div class="col-md-6" style="margin-top: 10px;">
-                                    <div class="form-group">
-                                        <label>Longitude</label>
-                                        <input type="text" id="kite_longitude" class="form-control" data-ng-model="kite.longitude" readonly>
+                                    <div class="col-md-6" style="margin-top: 10px;">
+                                        <div class="form-group">
+                                            <label>ZipCode</label>
+                                            <input type="text" class="form-control" data-ng-model="kite.zipCode">
+                                        </div>
+                                    </div>
+
+                                    <div class="col-md-6" style="margin-top: 10px;">
+                                        <div class="form-group">
+                                            <label>Telephone Number</label>
+                                            <input type="text" class="form-control" data-ng-model="kite.TEL">
+                                        </div>
+                                    </div>
+                               
+                                    <div class="col-md-6" style="margin-top: 10px;">
+
+                                        <div class="form-group mt-2 mb-3">
+                                            <input type="file" class="dropify" file-model="myFile">
+
+                                        </div>
+
                                     </div>
                                 </div>
-                                <div class="col-md-6" style="margin-top: 10px;">
-                                    <div class="form-group">
-                                        <label>Latitude</label>
-                                        <input type="text" id="kite_latitude" class="form-control" data-ng-model="kite.latitude" readonly>
+
+                                <div class="row">
+                                    <div class="col-sm-6">
+                                        <div class="form-group mt-3">
+                                            <button type="submit" data-ng-click="submit()"
+                                                class="btn btn-success">Submit</button>
+                                        </div>
                                     </div>
-                                </div>
-
-                                <div class="col-md-6" style="margin-top: 10px;">
-                                    <div class="form-group">
-                                        <label>ZipCode</label>
-                                        <input type="text" class="form-control" data-ng-model="kite.zipCode">
-                                    </div>
-                                </div>
-                                <div class="col-md-6" style="margin-top: 10px;">
-                                    <div class="form-group">
-                                        <label>Telephone Number</label>
-                                        <input type="text" class="form-control" data-ng-model="kite.TEL">
-                                    </div>
-                                </div>
-
-
-
-
-                                <div class="col-sm-6">
-                                    <div class="form-group mt-3">
-                                        <button type="submit" data-ng-click="submit()"
-                                            class="btn btn-success">Submit</button>
-                                    </div>
-                                </div>
-
-
-                                <div class="col-sm-6">
-                                    <div class="form-group mt-3" style="margin-left: 400px;">
-                                        <button type="submit" class="btn btn-success">Cancel</button>
+    
+    
+                                    <div class="col-sm-6">
+                                        <div class="form-group mt-3" style="margin-left: 400px;">
+                                            <button type="submit" class="btn btn-success">Cancel</button>
+                                        </div>
                                     </div>
                                 </div>
 
@@ -253,13 +272,15 @@
                                 <div class="col-md-6" style="margin-top: 10px;">
                                     <div class="form-group">
                                         <label>Longitude</label>
-                                        <input type="text" id="editing_kite_longitude" class="form-control" data-ng-model="editing.longitude" readonly>
+                                        <input type="text" id="editing_kite_longitude" class="form-control"
+                                            data-ng-model="editing.longitude" readonly>
                                     </div>
                                 </div>
                                 <div class="col-md-6" style="margin-top: 10px;">
                                     <div class="form-group">
                                         <label>Latitude</label>
-                                        <input type="text" id="editing_kite_latitude" class="form-control" data-ng-model="editing.latitude" readonly>
+                                        <input type="text" id="editing_kite_latitude" class="form-control"
+                                            data-ng-model="editing.latitude" readonly>
                                     </div>
                                 </div>
 
@@ -276,17 +297,28 @@
                                     </div>
                                 </div>
 
-                                <div class="col-sm-6">
-                                    <div class="form-group mt-3">
-                                        <button type="submit" data-ng-click="save()"
-                                            class="btn btn-success">Save</button>
+                                <div class="col-md-6" style="margin-top: 10px;">
+
+                                    <div class="form-group mt-2 mb-3">
+                                        <input type="file" class="dropify" file-model="myFileU">
+
                                     </div>
+
                                 </div>
 
-
-                                <div class="col-sm-6">
-                                    <div class="form-group mt-3" style="margin-left: 400px;">
-                                        <button type="submit" class="btn btn-success">Cancel</button>
+                                <div class="row">
+                                    <div class="col-sm-6">
+                                        <div class="form-group mt-3">
+                                            <button type="submit" data-ng-click="save()"
+                                                class="btn btn-success">Save</button>
+                                        </div>
+                                    </div>
+    
+    
+                                    <div class="col-sm-6">
+                                        <div class="form-group mt-3" style="margin-left: 400px;">
+                                            <button type="submit" class="btn btn-success">Cancel</button>
+                                        </div>
                                     </div>
                                 </div>
 

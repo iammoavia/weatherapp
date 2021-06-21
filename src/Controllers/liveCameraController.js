@@ -4,8 +4,8 @@ const Notification = require('../Schemas/Notification');
 
 exports.createLiveCamera = async (req,res) => {
     try {
-        const {city,hosting,latitude,longitude,TEL,site,countryName} = req.body;
-        if(!city || !hosting || !latitude || !longitude || !TEL || !site || !countryName) {
+        const {city,hosting,latitude,longitude,TEL,site,countryName,hotel} = req.body;
+        if(!city || !hosting || !latitude || !longitude || !TEL || !site || !countryName || !hotel) {
             res.status(400).json({
                 success:false,
                 message:'Please fill the form correctly.',
@@ -21,7 +21,8 @@ exports.createLiveCamera = async (req,res) => {
           site:site,
           TEL:TEL,
           image:'...',
-          countryName:countryName
+          countryName:countryName,
+          hotel:hotel
        }) 
        await newLiveCamera.save();
        const notification_body = {

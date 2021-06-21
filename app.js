@@ -2,6 +2,7 @@ const express = require('express');
 const app = express();
 const mongoose = require('mongoose');
 require('dotenv').config();
+
 const AuthRoute = require('./src/Routes/AuthRoute');
 const forgotPasswordRoute = require('./src/Routes/ForgotPasswordRoute');
 const fishingPointsRoute = require('./src/Routes/FishingPoints');
@@ -60,25 +61,25 @@ const server = app.listen(process.env.PORT || 7000, () => {
 
 
 app.use('/uploads', express.static('uploads'));
-app.use('/user', AuthRoute);
-app.use('/passenger-ports', PassengerPortsRoute);
-app.use('/forget-password', forgotPasswordRoute)
-app.use('/fishing-points', fishingPointsRoute);
-app.use('/hospitals', hospitalsRoute);
-app.use('/airports', AirportsRoute);
-app.use('/camping', CampingRoute);
-app.use('/fishing-shelters', fishing_shelterRoute);
-app.use('/port-authorities', PortAuthoritiesRoute);
-app.use('/mount-shelters', MountSheltersRoute);
-app.use('/livecamera', livecameraRoute);
-app.use('/ski-centers', SkiCentersRoute);
-app.use('/slipways', SlipwaysRoute);
-app.use('/subways', SubwayRoute);
-app.use('/payment', paymentRoute);
-app.use('/notification', NotificationsRoute);
-app.use('/weather-stations', WeatherStationsRoute);
-app.use('/kite-surfings', kiteSurfingRoute);
-app.use('/moon-calendar', MoonCalendarRoute);
+app.use('/user',AuthRoute);
+app.use('/passenger-ports',PassengerPortsRoute);
+app.use('/forget-password',forgotPasswordRoute)
+app.use('/fishing-points',fishingPointsRoute);
+app.use('/hospitals',hospitalsRoute);
+app.use('/airports',AirportsRoute);
+app.use('/camping',CampingRoute);
+app.use('/fishing-shelters',fishing_shelterRoute);
+app.use('/port-authorities',PortAuthoritiesRoute);
+app.use('/mount-shelters',MountSheltersRoute);
+app.use('/livecamera',livecameraRoute);
+app.use('/ski-centers',SkiCentersRoute);
+app.use('/slipways',SlipwaysRoute);
+app.use('/subways',SubwayRoute);
+app.use('/payment',paymentRoute);
+app.use('/notification',NotificationsRoute);
+app.use('/weather-stations',WeatherStationsRoute);
+app.use('/kite-surfings',kiteSurfingRoute);
+app.use('/moon-calendar',MoonCalendarRoute);
 app.use('/get-notifications', async (req, res) => {
     try {
         const allNotifications = await NotificationSchema.find();

@@ -82,14 +82,18 @@
                                                 <tbody>
                                                     <tr data-ng-repeat="slipway in slipways">
                                                         <td>
-                                                            <a href="http://116.203.99.209:7000/{{slipway.image}}"
+                                                            <a data-ng-if="slipway.image!='...'"
+                                                                href="https://www.meteologyapp.site/{{slipway.image}}"
                                                                 data-lightbox="image-{{$index+1}}"
                                                                 data-title="{{wstation.name}}"><img
-                                                                    src="http://116.203.99.209:7000/{{slipway.image}}"
-                                                                    alt="http://116.203.99.209:7000/{{slipway.image}}"
+                                                                    src="https://www.meteologyapp.site/{{slipway.image}}"
+                                                                    alt="https://www.meteologyapp.site/{{slipway.image}}"
                                                                     class="img-thumbnail"></a>
 
-                                                            <!-- <img src="http://116.203.99.209:7000/{{slipway.image}}" style="height: 50px;" /></td> -->
+                                                            <span
+                                                                data-ng-if="slipway.image=='...'">{{slipway.image}}</span>
+
+                                                            <!-- <img src="https://www.meteologyapp.site/{{slipway.image}}" style="height: 50px;" /></td> -->
                                                         <td>{{slipway.name}}</td>
                                                         <td>{{slipway.latitude}}°</td>
                                                         <td>{{slipway.longitude}}°</td>
@@ -171,10 +175,6 @@
                                     </div>
                                 </div>
 
-
-
-
-
                                 <div class="col-sm-6">
                                     <div class="form-group mt-3">
                                         <button type="submit" data-ng-click="submit()"
@@ -211,57 +211,64 @@
                         </div>
                         <form class="card-body">
                             <div class="row clearfix">
-                                <div class="col-12">
-                                    <div class="form-group">
-                                        <input type="text" class="form-control" data-ng-model="editing.name"
-                                            placeholder="Slipways Location Name">
+                                
+                                <div class="row">
+
+                                    <div class="col-12">
+                                        <div class="form-group">
+                                            <input type="text" class="form-control" data-ng-model="editing.name"
+                                                placeholder="Slipways Location Name">
+                                        </div>
                                     </div>
+    
+                                    <div class="col-md-12 col-sm-12">
+                                        <div id="update-slipway-map-container-google" class="z-depth-1-half map-container"
+                                            style="height: 500px;">
+    
+                                        </div>
+                                    </div>
+    
+                                    <div class="col-md-4" style="margin-top: 10px;">
+    
+                                        <div class="form-group mt-2 mb-3">
+                                            <input type="file" class="dropify" file-model="myFile">
+    
+                                        </div>
+    
+                                    </div>
+    
+                                    <div class="col-md-4" style="margin-top: 10px;">
+                                        <div class="form-group">
+                                            <label>Longitude</label>
+                                            <input type="text" class="form-control" id="editing_airport_longitude" readonly
+                                                data-ng-model="editing.longitude">
+                                        </div>
+                                    </div>
+                                    <div class="col-md-4" style="margin-top: 10px;">
+                                        <div class="form-group">
+                                            <label>Latitude</label>
+                                            <input type="text" class="form-control" id="editing_airport_latitude" readonly
+                                                data-ng-model="editing.latitude">
+                                        </div>
+                                    </div>
+
                                 </div>
 
-
-                                <div class="col-md-12 col-sm-12">
-                                    <div id="update-slipway-map-container-google" class="z-depth-1-half map-container"
-                                        style="height: 500px;">
-
+                               
+                                <div class="row">
+                                    <div class="col-sm-6">
+                                        <div class="form-group mt-3">
+                                            <button type="submit" data-ng-click="save()"
+                                                class="btn btn-success">Save</button>
+                                        </div>
                                     </div>
-                                </div>
-
-                                <div class="col-md-4" style="margin-top: 10px;">
-
-                                    <div class="form-group mt-2 mb-3">
-                                        <input type="file" class="dropify" file-model="myFile">
-
-                                    </div>
-
-                                </div>
-
-                                <div class="col-md-4" style="margin-top: 10px;">
-                                    <div class="form-group">
-                                        <label>Longitude</label>
-                                        <input type="text" class="form-control" id="editing_airport_longitude" readonly
-                                            data-ng-model="editing.longitude">
-                                    </div>
-                                </div>
-                                <div class="col-md-4" style="margin-top: 10px;">
-                                    <div class="form-group">
-                                        <label>Latitude</label>
-                                        <input type="text" class="form-control" id="editing_airport_latitude" readonly
-                                            data-ng-model="editing.latitude">
-                                    </div>
-                                </div>
-
-                                <div class="col-sm-6">
-                                    <div class="form-group mt-3">
-                                        <button type="submit" data-ng-click="save()"
-                                            class="btn btn-success">Save</button>
-                                    </div>
-                                </div>
-
-
-                                <div class="col-sm-6">
-                                    <div class="form-group mt-3" style="margin-left: 400px;">
-                                        <button type="submit" onclick="scrollto('subway-listing-table')"
-                                            class="btn btn-success">Cancel</button>
+    
+    
+                                    <div class="col-sm-6">
+                                        <div class="form-group mt-3" style="margin-left: 400px;">
+                                            <button type="submit" onclick="scrollto('subway-listing-table')"
+                                                class="btn btn-success">Cancel</button>
+                                        </div>
                                     </div>
                                 </div>
 
